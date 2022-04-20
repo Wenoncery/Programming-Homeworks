@@ -1,0 +1,305 @@
+/*
+Croitoru Rares, program de calculare a polinomului de grad 3
+14.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+int main()
+{
+	int a, b, c, d;
+	float x;
+
+	printf(" Introduceti coeficientii polinomului de gradul 3 aX^3 + bX^2 + cX^1 + d:");
+	printf("\n Introduceti o valoare pentru a=");
+	scanf_s("%d", &a);
+	printf("\n Introduveti o valoare pentru b=");
+	scanf_s("%d", &b);
+	printf("\n Introduceti o valoare pentru c=");
+	scanf_s("%d", &c);
+	printf("\n Introduceti o valoare pentru d=");
+	scanf_s("%d", &d);
+	printf("\n Polinomul: aX^3 + bX^2 + cX^1 + d");
+	printf("\n Introduceti valoarea X: ");
+	scanf_s("%f", &x);
+	printf(" Rezultatul este:");
+	float rez;
+	rez = a * x * x * x + b * x * x + c * x + d;
+	printf("%f", rez);
+	return 0;
+}
+
+/*
+Croitoru Rares, program de calculare a ariei unui triunghi cunoscand laturile
+14.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+
+double Aria (int a, int b, int c)
+{
+	double x, y, z;
+	double p =(double) a + b + c;
+	p = p / 2.0;//Aflam semiperimetrul
+	x = p - a;
+	y = p - b;
+	z = p - c;
+	double aria;//Calculam aria cu ajutorul formulei lui Heron
+	aria = sqrt(p * x * y * z);//Calculam aria cu ajutorul formulei lui Heron
+	return aria;
+}
+
+int main()
+{
+	int a, b, c;
+	printf("Introduceti prima latura: ");
+	scanf_s("%d", &a);;
+	printf("Introduceti a doua latura: ");
+	scanf_s("%d", &b);
+	printf("Introduceti a treia latura: ");
+	scanf_s("%d", &c);
+	if ((a + b > c && a + c > b && b + c > a))
+		printf("Aria triunghiului este: %.2f", Aria(a, b, c));
+	else printf("Nu este triunghi.");
+	return 0;
+}
+
+/*
+Croitoru Rares, program de afisare a bitilor unui caracter de tip unsigned char
+14.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <iostream>
+
+using namespace std;
+
+/*long conversie(unsigned char x)
+{
+	long n = x;
+	long nr = 0, i = 1;
+	while (n != 0)
+	{
+		nr = (n % 2) *i + nr;
+		n = n/2;
+		i = i*10;
+	}
+	return nr;
+}
+Aici am introdus si un algoritm de calculare a bazei 2 pentru a putea verifica daca valorile bitilor corespund intr-adevar.
+*/
+
+int main()
+{
+	printf("Introduceti un caracter: ");
+	unsigned char n;
+	cin >> n;
+	//printf("codul ASCII este %d\n", n);
+	//printf("Numarul in baza 2 este %d\n", conversie(n));
+	while (n)
+	{
+		printf("%d\n", n % 2);
+		n = n>>1;
+	}
+	return 0;
+}
+
+/*
+Programul a mai fost incarcat o data, dar acela afisa gresit bitii in baza 2, deoarece nu specificasem la cout sa revina la "dec". Aceasta e varianta functionala
+Croitoru Rares, program de obtinere a n bitilor de pe pozitia p
+16.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+unsigned int conversie(unsigned int n);
+unsigned int getsets(unsigned int x, unsigned int p, unsigned int n);
+
+int main()
+{
+	unsigned int a, p, n;
+	cout << "Introduceti un numar";
+	cin >> a;
+	cout << "decimal: " << a << endl;
+	cout << "binary: " << conversie(a) << endl;
+	cout << "hexadecimal: " << hex << uppercase << a << dec << nouppercase << endl;
+	cout << "octal: " << oct << a << endl << dec;
+	cout << "introduceti o pozitie p:";
+	cin >> p;
+	cout << "introduceti o pozitie n:";
+	cin >> n;
+	a = getsets(a, p, n);
+	cout << "decimal: " << a << endl;
+	cout << "binary: " << conversie(a) << endl;
+	cout << "hexadecimal: " << hex << uppercase << a << dec << nouppercase << endl;
+	cout << "octal: " << oct << a << endl << dec;
+	return 0;
+}
+
+unsigned int conversie(unsigned int n)
+{
+	unsigned int nr = 0, i = 1;
+	while (n != 0)
+	{
+		nr = (n % 2) * i + nr;
+		n = n / 2;
+		i = i * 10;
+	}
+	return nr;
+}
+
+unsigned int getsets(unsigned int x, unsigned int p, unsigned int n)
+{
+	for (unsigned int i = 1; i <= p - n; i++)
+		x = x >> 1; // am sters surplusul de biti, adica cei care vin dupa cei n biti de pe pozitia p
+	unsigned int nr = 1;
+	for (unsigned int i = 1; i <= n; i++)
+		nr = nr * 2;
+	nr--;
+	/*intentionam sa obtinem un numar care are ultimii n biti egali cu 1.
+		  De exemplu 3 are ultimii 2 biti egali cu 1, 7 are ultimii 3 biti etc.
+		  Numerele sunt de forma 2^n-1, unde n este nr de biti egali cu 1.
+		  */
+	x = x & nr; //astfel retinem ultimii n biti ai lui x
+	return x;
+}
+
+/*
+Croitoru Rares, program de afisare a numarului de biti egali cu 0 din scrierea unui numar intreg
+14.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+using namespace std;
+
+int main()
+{
+	int x, nr = 0;
+	printf("Introduceti un numar intreg: ");
+	scanf_s("%d", &x);
+	while (x)
+	{
+		x % 2 == 0 ? nr++:true;
+		x >>= 1;
+	}
+	printf("Numarul de biti egali cu 0 este %d\n", nr);
+	return 0;
+}
+
+/*
+Croitoru Rares, program de afisare a octetilor unui numar intreg
+14.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+
+int main()
+{
+    long x, i = 0, nr = 0;
+    printf("Introduceti un numar intreg: ");
+    scanf_s("%d", &x);
+    x == 0 ? printf("00000000") : true;
+    if (x < 0)
+    {
+        printf("Numarul este negativ. Deci primul bit din primul octet va fi 1.\n");
+        x = -x;
+    }
+    printf("Octetii numarului citit sunt (in ordine inversa):\n");
+    while (x != 0)
+    {
+        nr = 0;
+        for (i = 0; i <= 7; i++)
+        {
+            nr = (long)nr + (x % 2) * pow(10, i);
+            x >>= 1;
+        }
+        for (i = 1; i <= 8 - (floor(log10(nr)) + 1); i++)//floor(log10(nr))+1 determina cate cifre are un numar
+            printf("0");
+        printf("%d\n", nr);
+    }
+    return 0;
+}
+
+/*
+Croitoru Rares, program de calculare a sumei, diferentei, produsului si catului
+14.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+int main()
+{
+	cout<<"Introduceti 2 valori: ";
+    float a, b;
+    cin >> a >> b;
+    cout << "Suma este " << a + b<<endl;
+    cout << "Diferenta este " << a - b << endl;
+    cout << "Produsul este " << a * b << endl;
+    cout << "Catul este " << a / b << endl;
+    cout << "Suma este " << (int)a + b << endl;
+    cout << "Diferenta este " << (int)a - b << endl;
+    cout << "Produsul este " << (int)a * b << endl;
+    cout << "Catul este " << (int)a / b << endl;
+    a > b ? cout << "numarul mai mic este " << b : cout << "numarul mai mic este " << a;
+    return 0;
+}
+
+/*
+Croitoru Rares, program de transformare a lowercase in uppercase
+14.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+const int x = 32;
+
+using namespace std;
+
+int main()
+{
+    char a, b, c;
+    printf("introduceti 3 caractere separate: ");
+    cin >> a >> b >> c;
+    //a -= 32;
+    //b -= 32;
+    //c -= 32;
+    a = a & ~x;
+    b = b & ~x;
+    c = c & ~x;
+    cout << a <<endl<< b <<endl<< c;
+    return 0;
+}
+
+/*
+Croitoru Rares, program de calculare a ariei cercului sau a dreptunghiului
+14.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#define PI 3.141
+
+int main()
+{
+    int a, b;
+    double aria;
+    printf("Introduceti 2 numere:");
+    scanf_s("%d", &a);
+    scanf_s("%d", &b);
+    a == b ? aria = (double)PI * a * a : aria = (double)a * b;
+    a == b ? printf("Aria cercului este %f", aria) : printf("Aria dreptunghiului este %f", aria);
+    return 0;
+}

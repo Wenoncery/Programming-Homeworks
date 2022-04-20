@@ -1,0 +1,31 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#define MAX 10/* function to generate and return random numbers */
+
+int* getRandom( );
+
+/* main function to call the getRandom( ) function */
+int main()
+{/* a pointer to an int*/
+	int* p; int i;
+	p = getRandom();
+	for (i = 0; i < MAX; i++)
+		printf("\np[ %d] :  %d", i, p[i]);
+}
+
+int* getRandom()
+{
+	static int r[MAX];
+	//must be static
+	int i;
+	/* set the seed */
+	srand((unsigned)time(NULL));
+	for (i = 0; i < MAX; ++i)
+	{
+		r[i] = rand();
+		//generate random numbers
+		printf("r[%d] = %d\n", i, r[i]);
+	}
+	return r;
+}

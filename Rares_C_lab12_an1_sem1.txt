@@ -1,0 +1,529 @@
+/*
+Croitoru Rares, program care folosind  o structură numita Student,avand campurile {nume, prenume, ţara de origine,
+grupa,  anul  naşterii}, să  determine numărul  de  studenţi  străini dingrupă (grupa  de MAX studenti) şi  
+să  afişeze  toate datele  acestora. Datele  pentru studenţii din grupa  se  citesc delaintrarea  standard,
+până la întâlnirea numelui AAA.
+30.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+const int MAX = 20;
+
+struct Student 
+{
+	char nume[50];
+	char prenume[50];
+	char tara_origine[50];
+	int grupa;
+	int an_nastere;
+};
+
+int citire(Student* b);
+void afisare(Student* b, int n);
+
+int main()
+{
+	Student* p;
+	if (p = new Student[MAX]);
+	else 
+	{
+		printf("Alocare nereusita!");
+		exit(1);
+	}
+	int n = citire(p);
+	afisare(p, n);
+	delete[]p;
+	return 0;
+}
+
+int citire(Student* b)
+{
+	int i = 0;
+	while (true)
+	{
+		printf("\nIntroduceti numele studentlui %d: ", i + 1);
+		scanf("%s", &(b[i].nume));
+		if (strcmp((b[i].nume),"AAA")==NULL)
+			break;
+		printf("Introduceti prenumele studentlui %d: ", i + 1);
+		scanf("%s", &(b[i].prenume));
+		printf("Introduceti tara de origine a studentlui %d: ", i + 1);
+		scanf("%s", &(b[i].tara_origine));
+		printf("Introduceti grupa studentului %d: ", i + 1);
+		scanf_s("%d", &(b[i].grupa));
+		printf("Introduceti anul nasterii studentului %d: ", i + 1);
+		scanf_s("%d", &(b[i].an_nastere));
+		i++;
+	}
+	return i;
+}
+
+void afisare(Student* b, int n)
+{
+	printf("\nElevii straini sunt urmatorii:\n");
+	for (int i = 0; i < n; i++)
+	{
+		if (strcmp((b + i)->tara_origine, "Romania") != NULL)
+		{
+			printf("Numele: %s\n", (b + i)->nume);
+			printf("Prenumele: %s\n", (b + i)->prenume);
+			printf("Tara de origine: %s\n", (b + i)->tara_origine);
+			printf("Grupa: %d\n", (b + i)->grupa);
+			printf("Anul nasterii: %d\n", (b + i)->an_nastere);
+		}
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares, program in care o funcţie returnează  o  structură  de  date adecvată.
+În  acest  fel  vor  fi  returnate  mai  multe  valori. Afişaţi  rezultatul,  valorile iniţiale
+transferate funcţiei (puteţi realiza orice operaţie în cadrul acelei funcţii),cu mesaje adecvate.
+30.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+
+const int MAX = 20;
+
+struct Numere 
+{
+	int nr1;
+	int nr2;
+};
+
+int citire(Numere* b);
+void afisare(Numere* b, int n);
+Numere functie(Numere* p, int n);
+
+int main()
+{
+	Numere* p;
+	if (p = new Numere[MAX]);
+	else
+	{
+		printf("Alocare nereusita!");
+		exit(1);
+	}
+	int n = citire(p);
+	printf("\nVechile numere sunt:\n");
+	afisare(p, n);
+	functie(p, n);
+	printf("\nNoile numere sunt:\n");
+	afisare(p, n);
+	delete[]p;
+	return 0;
+}
+
+Numere functie(Numere* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		(p + i)->nr1++;
+		(p + i)->nr2++;
+	}
+	return *p;
+}
+
+int citire(Numere* b)
+{
+	int n;
+	printf("\nIntroduceti cate serii de numere vor fi:");
+	scanf_s("%d", &n);
+	for (int i = 0; i < n; i++)
+	{
+		printf("\nIntroduceti numarul %d.1: ", i + 1);
+		scanf_s("%d", &(b[i].nr1));
+		printf("Introduceti numarul %d.2: ", i + 1);
+		scanf_s("%d", &(b[i].nr2));
+		putchar('\n');
+	}
+	return n;
+}
+
+void afisare(Numere* b, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("%d.1 = %d\n", i + 1, (b + i)->nr1);
+		printf("%d.2 = %d\n", i + 1, (b + i)->nr2);
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares, program care utilizând o structură de tip Angajat,să afişeze toate datele persoanelor 
+cu ocupaţia inginer dintr-o întreprindere (nume, prenume, ocupaţia, data naşterii, secţia în care lucrează).
+30.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+struct Angajat
+{
+	char nume[50];
+	char prenume[50];
+	char ocupatia[50];
+	char data_nasterii[50];
+	int sectia;
+};
+
+void citire(Angajat* b, int n);
+void afisare(Angajat* b, int n);
+
+int main()
+{
+	int n;
+	printf("\nIntroduceti numarul de angajati: ");
+	scanf_s("%d", &n);
+	Angajat* p;
+	if (p = new Angajat[n]);
+	else
+	{
+		printf("Alocare nereusita!");
+		exit(1);
+	}
+	citire(p, n);
+	afisare(p, n);
+	delete[]p;
+	return 0;
+}
+
+void citire(Angajat* b, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("\nIntroduceti numele angajatului %d: ", i + 1);
+		scanf("%s", &(b[i].nume));
+		printf("Introduceti prenumele angajatului %d: ", i + 1);
+		scanf("%s", &(b[i].prenume));
+		printf("Introduceti ocupatia angajatului %d: ", i + 1);
+		scanf("%s", &(b[i].ocupatia));
+		printf("Introduceti data nasterii %d: ", i + 1);
+		scanf("%s", &(b[i].data_nasterii));
+		printf("Introduceti sectia %d: ", i + 1);
+		scanf_s("%d", &(b[i].sectia));
+	}
+}
+
+void afisare(Angajat* b, int n)
+{
+	printf("\nInginerii sunt urmatorii:\n");
+	for (int i = 0; i < n; i++)
+	{
+		if (strcmp((b + i)->ocupatia, "inginer") == NULL)
+		{
+			printf("Numele: %s\n", (b + i)->nume);
+			printf("Prenumele: %s\n", (b + i)->prenume);
+			printf("Ocupatia: %s\n", (b + i)->ocupatia);
+			printf("Data nasterii: %s\n", (b + i)->data_nasterii);
+			printf("Sectia: %d\n", (b + i)->sectia);
+		}
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares
+Folosind structura  de  la  exemplul  precedent  ,  să  se  scrie  un  program care  citeşte datele
+personale pentru n persoane  (nume,  prenume,  data  naşterii,  codul  numeric personal, data angajării) 
+şi apoi le afişează în ordinea datei angajării.
+30.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+
+struct Employee
+{
+	char nume[50];
+	char prenume[50];
+	struct Date
+	{
+		int month;
+		int day;
+		int year;
+	}data_nasterii, data_angajarii;
+	long CNP;
+};
+
+int compare(Employee* a, Employee* b);
+void sortare(int n, Employee* p);
+void citire(int n, Employee* b);
+void afisare(Employee* b, int n);
+
+int main()
+{
+	int n;
+	printf("\nIntroduceti numarul de angajati: ");
+	scanf_s("%d", &n);
+	Employee* p;
+	if (p = new Employee[50]);
+	else
+	{
+		printf("Alocare nereusita!");
+		exit(1);
+	}
+	citire(n, p);
+	sortare(n, p);
+	afisare(p, n);
+	delete[]p;
+	return 0;
+}
+
+void afisare(Employee* b, int n)
+{
+	printf("\nAngajatii in ordinea angajarii sunt:\n");
+	for (int i = 0; i < n; i++)
+	{
+		printf("Nume: %s\n", (b + i)->nume);
+		printf("Prenume: %s\n", (b + i)->prenume);
+		printf("CNP: %d\n", (b + i)->CNP);
+		printf("Data nasterii: %02d/%02d/%d\n", (b + i)->data_nasterii.day, (b + i)->data_nasterii.month, (b + i)->data_nasterii.year);
+		printf("Data angajarii: %02d/%02d/%d\n", (b + i)->data_angajarii.day, (b + i)->data_angajarii.month, (b + i)->data_angajarii.year);
+		putchar('\n');
+	}
+}
+
+void citire(int n, Employee* b)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("\nIntroduceti numele angajatului %d: ", i + 1);
+		scanf("%s", &(b[i].nume));
+		printf("Introduceti prenumele angajatului %d: ", i + 1);
+		scanf("%s", &(b[i].prenume));
+		printf("Introduceti CNP angajatului %d: ", i + 1);
+		scanf_s("%d", &(b[i].CNP));
+		printf("Introduceti data nasterii (zi/luna/an) angajatului %d: ", i + 1);
+		scanf_s("%d", &(b[i].data_nasterii.day));
+		scanf_s("%d", &(b[i].data_nasterii.month));
+		scanf_s("%d", &(b[i].data_nasterii.year));
+		printf("Introduceti data angajarii (zi/luna/an) angajatului %d: ", i + 1);
+		scanf_s("%d", &(b[i].data_angajarii.day));
+		scanf_s("%d", &(b[i].data_angajarii.month));
+		scanf_s("%d", &(b[i].data_angajarii.year));
+	}
+}
+
+void sortare(int n, Employee* p)
+{
+	for (int i = 0; i < n - 1; i++)
+		for (int j = i; j < n; j++)
+			if (compare((p + i), (p + j)) == 1)
+			{
+				Employee x = *(p + i);
+				*(p + i) = *(p + j);
+				*(p + j) = x;
+			}
+}
+
+int compare(Employee* a, Employee* b)
+{
+	if (a->data_angajarii.year > b->data_angajarii.year)
+		return 1;
+	else if (a->data_angajarii.year < b->data_angajarii.year)
+		return 0;
+	else if (a->data_angajarii.month > b->data_angajarii.month)
+		return 1;
+	else if (a->data_angajarii.month < b->data_angajarii.month)
+		return 0;
+	else if (a->data_angajarii.day > b->data_angajarii.day)
+		return 1;
+	else return 0;
+}
+
+/*
+Croitoru Rares, program care alocă dinamic memorie pentru memorarea datelor a n produse,folosind  o structură Produs,
+cu  câmpurile denumire, pret,  cantitate, citeşte datele pentru fiecare dintre produse si afişează produsul din care
+avem cel mai mult pe stoc. În final va elibera memoria alocată.
+30.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+struct Produs {
+	char denumire[50];
+	float pret;
+	int cantitate;
+};
+
+void citire(int n, Produs* b);
+void afisare(int max, Produs* b, int n);
+
+int main()
+{
+	int n;
+	printf("\nIntroduceti nr de produse:");
+	scanf_s("%d", &n);
+	Produs* p = new Produs[n];
+	citire(n, p);
+	int max = (p->cantitate);
+	for (int i = 1; i < n; i++)
+		(p + i)->cantitate > max ? max = (p + i)->cantitate : true;
+	afisare(max, p, n);
+	delete[]p;
+	return 0;
+}
+
+void citire(int n, Produs* b)
+{
+	for (int i = 0; i < n; i++) 
+	{
+		printf("\nIntroduceti denumirea produsului %d: ", i + 1);
+		scanf("%s", &(b[i].denumire));
+		printf("Introduceti pretul produsului %d: ", i + 1);
+		scanf_s("%f", &(b[i].pret));
+		printf("Introduceti cantitatea produsului %d: ", i + 1);
+		scanf_s("%d", &(b[i].cantitate));
+	}
+}
+
+void afisare(int max, Produs* b, int n)
+{
+	printf("\nProdusele cu cea mai mare cantitate sunt urmatoarele:\n");
+	for (int i = 0; i < n; i++)
+	{
+		if ((b + i)->cantitate == max)
+		{
+			printf("Numele: %s\n", (b + i)->denumire);
+			printf("Pretul acestui produs este: %.2f\n", (b + i)->pret);
+			printf("Cantitatea produsului este: %d\n", (b + i)->cantitate);
+		}
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares, program care defineste o structură cu numele Masina, care are câmpurile producator,
+anul fabrictiei,  capacitatea_cilindrică și culoare. Să se aloce  dinamic  memorie  pentru n date  de
+tip Maşina şi  să  se  citească  informaţiile  pentru  acestea.
+Să se  afişeze inregistrarile maşinilor de culoare roşie, fabricate după anul 2010.
+30.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+struct Masina
+{
+	char producator[50];
+	int anul_fabricatiei;
+	int capacitatea_cilindrică;
+	char culoare[50];
+};
+
+void citire(Masina* b, int n);
+void afisare(Masina* b, int n);
+
+int main()
+{
+	int n;
+	printf("\nIntroduceti numarul de masini: ");
+	scanf_s("%d", &n);
+	Masina* p;
+	if (p = new Masina[n]);
+	else
+	{
+		printf("Alocare nereusita!");
+		exit(1);
+	}
+	citire(p, n);
+	afisare(p, n);
+	delete[]p;
+	return 0;
+}
+
+void citire(Masina* b, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("\nIntroduceti producatorul masinii %d: ", i + 1);
+		scanf("%s", &(b[i].producator));
+		printf("Introduceti anul fabricatiei masinii %d: ", i + 1);
+		scanf_s("%d", &(b[i].anul_fabricatiei));
+		printf("Introduceti capacitatea cilindrica a masinii %d: ", i + 1);
+		scanf_s("%d", &(b[i].capacitatea_cilindrică));
+		printf("Introduceti culoarea masinii %d: ", i + 1);
+		scanf("%s", &(b[i].culoare));
+	}
+}
+
+void afisare(Masina* b, int n)
+{
+	printf("\nMasinile rosii de dupa 2010 sunt:\n");
+	for (int i = 0; i < n; i++)
+	{
+		if (strcmp((b + i)->culoare, "rosie") == NULL && (b + i)->anul_fabricatiei > 2010)
+		{
+			printf("Producator: %s\n", (b + i)->producator);
+			printf("Anul fabricatiei: %d\n", (b + i)->anul_fabricatiei);
+			printf("Capacitatea cilindrica: %d\n", (b + i)->capacitatea_cilindrică);
+			printf("Culoarea: %s\n", (b + i)->culoare);
+		}
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares, program care folosind  structura  de  date  union denumită grupcompusă din diferite câmpuri
+(int, long,  double,char  etc.).Scrieți  o  aplicatie  C/C++ care va iniţializa un  element  de tipul grupde
+la  tastatură.  Este  posibil  să  afişăm  în  acelaşi  timp  toate  câmpurile folosind  pointeri  sau  nume
+calificate?  Afişaţi  ceea  ce  este  posibil  şi  dimensiunea elementului union. Realizaţi aceeaşi operaţie
+considerând o simplă structură struct
+30.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<stdlib.h>
+
+union grup
+{
+	int x;
+	long y;
+	double z;
+	char s;
+};
+
+void citire(grup* b);
+
+int main()
+{
+	grup* p;
+	if (p = new grup);
+	else
+	{
+		printf("Alocare nereusita!");
+		exit(1);
+	}
+	citire(p);
+	printf("\nValorile stocate sunt: %d %d %lf %c,\niar dimensiunea uniunii in memorie este %d\n", p->x, p->y, p->z, p->s, sizeof(grup));
+	delete p;
+	return 0;
+}
+
+void citire(grup* b)
+{
+	printf("\nIntroduceti un int: ");
+	scanf_s("%d", &b->x);
+	printf("Introduceti un long: ");
+	scanf_s("%d", &b->y);
+	printf("Introduceti un double: ");
+	scanf_s("%lf", &b->z);
+	printf("Introduceti un char: ");
+	scanf(" %c", &b->s);
+}

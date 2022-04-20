@@ -1,0 +1,11 @@
+void afisare(int **mat, int n, int m)
+{
+	int *p;
+	for (int i = 0; i < n; i++)
+	{
+		p = *(mat + i);
+		for (int j = 0; j < m; j++)
+			printf("v[%d][%d]= %d\t", i, j, *(p + j));
+		putchar('\n');
+	}
+}

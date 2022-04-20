@@ -1,0 +1,23 @@
+bool prim(int x, int i) //i vine cu valoarea 2 din start
+{
+	if (x == 1 || x == 0)
+		return false;
+	if (x == 2 || i * i > x)
+		return true;
+	if (x % i == 0)
+		return false;
+	if (i == 2)
+		return prim(x, 3);
+	return prim(x, i + 2);
+}
+bool ePrimRecursiv(int div, int n) {
+	if (n == 2)
+		return true;
+	if (n % div == 0 || n == 1)
+		return false;
+	if (div * div > n)
+		return true;
+	if (div == 2)
+		return ePrimRecursiv(3, n);
+	return ePrimRecursiv(div + 2, n);
+}

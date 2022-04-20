@@ -1,0 +1,252 @@
+/*
+Croitoru Rares, 21.05.2021, grupa 2011
+Lab 13 - 1.Să se scrie un program care foloseşte metoda seekg() pentru poziţionare 
+la mijlocul fişierului si apoi afişează conţinutul fişierului începând cu această 
+poziţie. Numele fişierului se citeste din linia de comandă.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<fstream>
+#include<iostream>
+#include <iomanip>
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+	if (argc != 2) 
+	{
+		cout << "Specificati numele fisierului!:) \n";
+		exit(1);
+	}
+	ifstream in;
+	in.open(argv[1]);
+	in.seekg(0, in.end);
+	long lung = in.tellg();
+	in.seekg(lung / 2, in.beg);//pozitionare la mijocul fisierului
+	cout << "Cea de-a doua jumatate a continutului fisierului: ";
+	char* sir = new char[lung];
+	in.read(sir, lung);
+	cout.write(sir, lung);
+	in.close();
+	delete[]sir;
+	return 0;
+}
+
+/*
+Croitoru Rares, 21.05.2021, grupa 2011
+Lab 13 - 2.Scrieţi un program care utilizează metodawrite()pentru a scrie într-un
+fişier şiruri de caractere. Afişaţi apoi conţinutul fişierului folosind metoda get().
+Numele fişierului se va citi de la tastatură. 
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+	char nume_fis[20];
+	cout << "Care este numele fisierului in care se va scrie? ";
+	cin >> nume_fis;
+	char sir[30];
+	cout << "\nIntroduceti sirul care va fi scris in fisier: ";
+	cin >> sir;
+	ofstream out;
+	out.open(nume_fis, ios::out);
+	if (!out)
+	{
+		cout << "\nNu se poate deschide fisierul\n";
+		exit(1);
+	}
+	out.write(sir, strlen(sir));
+	out.close();
+	ifstream in;
+	in.open(nume_fis, ios::in);
+	if (in) {
+		cout << "\nContinutul fisierului este: ";
+		char c;
+		while (in.get(c))
+		{
+			cout << c;
+		}
+	}
+	else
+	{
+		cout << "\nNu se poate deschide fisierul\n";
+		exit(1);
+	}
+	in.close();
+	return 0;
+}
+
+/*
+Croitoru Rares, 21.05.2021, grupa 2011
+Lab 13 - 3.Scrieţi o aplicaţie C++ care citeşte un fişier utilizând metoda read().
+Verificaţi starea sistemului după fiecare operaţie de citire. Numele fişierului se
+va citi din linia de comandă. Afişaţi pe ecran conţinutul fişierului
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <fstream>
+#include <iomanip>
+
+using namespace std;
+
+int main(int argc, char* argv[])
+{
+	if (argc != 2)
+	{
+		cout << "\nNu este introdus numele fisierului\n";
+		exit(1);
+	}
+	ifstream in;
+	in.open(argv[1]);
+	if (in)
+	{
+		in.seekg(0, in.end);
+		int lungime = in.tellg();
+		in.seekg(0, in.beg);
+		char* sir = new char[lungime];
+		in.read(sir, lungime);
+		cout.write(sir, lungime);
+		delete[] sir;
+		in.close();
+	}
+	return 0;
+}
+
+/*
+Croitoru Rares, 21.05.2021, grupa 2011
+Lab 13 - 4.Scrieți o aplicație C++ în care deschideți un fișier în mod binar pentru 
+citire. Afișați un mesaj corespunzator  dacă  fișierul  nu  a  fost  creat  în  
+prealabil  și  cereți  reintroducerea  numelui fișierului. Presupunând că în fișierul
+deschis există înregistrări de tip agendă(nume, localitate, număr de telefon), 
+utilizați supraîncărcarea operatorilor de inserție și extracțiepentru afisarea pe 
+ecran a conținutului fișierului.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<fstream>
+#include<iostream>
+#include "Clasa.h"
+#include <iomanip>
+
+using namespace std;
+
+int main()
+{
+	Data persoana_initiala("Rares", "Croitoru", "0793962532");
+	Data persoana;
+	int nr;
+	cout << "\nCate persoane se vor citi? ";
+	cin >> nr;
+	for (int i = 0; i < nr; i++)
+	{
+		cout << "\nPersoana " << i + 1 << " :";
+		cin >> persoana;
+	}
+	ofstream fout;
+	fout.open("test.txt", ios::out);
+	if (!fout)
+	{
+		cout << "\nFisierul nu se poate deschide\n";
+		exit(1);
+	}
+	fout << persoana;
+	fout.close();
+	ifstream fin;
+	fin.open("cioco.txt", ios::in);
+	if (!fin)
+	{
+		cout << "\nFisierul nu se poate deschide\n";
+		exit(1);
+	}
+	cout << "\nDatele citite din fisier sunt urmatoarele: ";
+	cout << persoana << "\n";
+	fin.close();
+	return 0;
+}
+
+//Clasa.h
+
+#pragma once
+#define _CRT_SECURE_NO_WARNINGS
+#include<fstream>
+#include<iostream>
+#include <iomanip>
+
+using namespace std;
+
+const int dim = 50;
+
+class Data {
+protected:
+	char nume_persoana[dim];
+	char orasul[dim];
+	char nr_tel[10];
+public:
+	Data()
+	{
+		strcpy(nume_persoana, "Necunoscut");
+		strcpy(orasul, "Necunoscut");
+		strcpy(nr_tel, "Necunoscut");
+	}
+	Data(const char* a, const char* b, const char* c)
+	{
+		strcpy(nume_persoana, a);
+		strcpy(orasul, b);
+		strcpy(nr_tel, c);
+	}
+	~Data() {
+		delete[]nume_persoana;
+		delete[]orasul;
+		delete[]nr_tel;
+	}
+	void setNume(char* a)
+	{
+		strcpy(this->nume_persoana, a);
+	}
+	void setOras(char* c)
+	{
+		strcpy(this->orasul, c);
+	}
+	void setNrTel(char* nr)
+	{
+		strcpy(this->nr_tel, nr);
+	}
+	char* getNume()
+	{
+		return nume_persoana;
+	}
+	char* getOras()
+	{
+		return orasul;
+	}
+	char* getNrTel()
+	{
+		return nr_tel;
+	}
+	friend ostream& operator <<(ostream& stream, Data& obc);
+	friend istream& operator >>(istream& stream, Data& obc);
+};
+
+ostream& operator <<(ostream& stream, Data& obc)
+{
+	stream << "\nNumele persoanei din agenda: " << obc.nume_persoana;
+	stream << "\nOrasul persoanei din agenda: " << obc.orasul;
+	stream << "\nNr de tel al persoanei din agenda: " << obc.nr_tel;
+	return stream;
+}
+
+istream& operator >>(istream& stream, Data& obc)
+{
+	cout << "Nume: "; stream >> obc.nume_persoana;
+	cout << "Oras: "; stream >> obc.orasul;
+	cout << "Nr telefon: "; stream >> obc.nr_tel;
+	return stream;
+}

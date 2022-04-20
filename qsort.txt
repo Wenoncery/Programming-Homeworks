@@ -1,0 +1,76 @@
+//sorting array of integers/doubles with qsort( )
+#include <stdio.h>
+#include <stdlib.h>
+const int dim = 10;
+int comp_int(const void* a, const void* b);
+int comp_double(const void* a, const void* b);
+int main()
+{
+	int i_numbers[dim] = { 1892, 45, 200, -98, 4087, 5, -12345, 1087, 88, -100000 };
+	double d_numbers[dim] = { 1892, 45, 200, -98, 4087, 5, -12345, 1087, 88, -100000 };
+	int i;/* Sort descending the int array */
+	qsort(i_numbers, dim, sizeof(int), comp_int);
+	printf("\nOrderingdescending int values:\n");
+	for (i = 0; i < dim; i++)
+		printf("Number = %d\n", i_numbers[i]);
+	/* Sort ascending the double array */
+	qsort(d_numbers, dim, sizeof(double), comp_double);
+	printf("\nOrderingascending double values:\n");
+	for (i = 0; i < dim; i++)
+		printf("Number = %.2lf\n", d_numbers[i]);
+	return 0;
+}
+
+int comp_int(const void* a, const void* b)
+{
+	return (*(int*)b - *(int*)a);
+	//descending 
+}
+
+int comp_double(const void* a, const void* b)
+{
+	if (*(double*)a > *(double*)b)
+		return 1; //ascending
+	else  if (*(double*)a < *(double*)b)
+		return -1;
+	else
+		return 0;
+}
+
+//////////////
+
+
+/*
+Croitoru  Rares,  program  care  ordoneaza  2  vectori  folosind  qsort()
+12.12.2020,  grupa  2011
+*/
+
+#define  _CRT_SECURE_NO_WARNINGS
+#include  <stdio.h>
+#include<stdlib.h>
+const  int  MAX  =  100;
+
+int  compare(const  void*  a,  const  void*  b);
+
+int  main()
+{
+        int  a[MAX]{},  n;
+        int*  p1  =  a;
+        printf("Introduceti  numarul  de  elemente  corespunzator  vectorului  a:  ");
+        scanf_s("%d",  &n);
+        printf("Introduceti  elementele  vectorului  a:  ");
+        for  (int  i  =  0;  i  <  n;  i++)
+        {
+                printf("a[%d]=  ",  i);
+                scanf_s("%d",  (p1  +  i));
+        }
+        qsort(p1,  n,  sizeof(int),  compare);
+        for  (int  i  =  0;  i  <  n;  i++)
+                printf("a[%d]=  %d\n",  i,  *(p1  +  i));
+        return  0;
+}
+
+int  compare(const  void*  a,  const  void*  b)
+{
+        return  (*(int*)a  -  *(int*)b);
+}

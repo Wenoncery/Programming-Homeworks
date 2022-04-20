@@ -1,0 +1,728 @@
+/*
+Croitoru Rares, program care calculeaza media elementelor negative/pozitive dintr-un tablou unidimensional
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+void citire(long& n, long v[50]);
+double media(long n, long v[50]);
+
+int main()
+{
+	long n, v[50];
+	citire(n, v);
+	printf("\nMedia elementelor este %.3lf.\n", media(n, v));
+	return 0;
+}
+
+void citire(long& n, long v[50])
+{
+	printf("\nIntr cate elem vor fi in sir: ");
+	scanf_s("%d", &n);
+	for (long i = 0; i < n; i++)
+	{
+		printf("\nIntr elem cu numarul %d: ", i + 1);
+		scanf_s("%d", &v[i]);
+	}
+}
+
+double media(long n, long v[50])
+{
+	long s = 0, nr = 0;
+	for (long i=0;i<n;i++)
+	{
+		s += v[i];
+		nr++;
+	}
+	return (double)s / nr;
+}
+
+/*
+Croitoru Rares, program care calculeaza minimul pozitiv dintr-un tablou unidimensional
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+void citire(long &n, long v[50]);
+void afisminim(long n, long v[50]);
+
+int main()
+{
+	long v[50], n;
+	citire(n, v);
+	afisminim(n, v);
+	return 0;
+}
+
+void citire(long& n, long v[50])
+{
+	printf("\nIntroduceti dimensiunea tabloului: ");
+	scanf_s("%d", &n);
+	printf("\nIntroduceti elementele tabloului: ");
+	for (long i = 0; i < n; i++) 
+	{
+		printf("v[%d]= ", i);
+		scanf_s("%d", &v[i]);
+	}
+}
+
+void afisminim(long n, long v[50])
+{
+	long min = 1000000000;
+	for (long i = 0; i < n; i++)
+		if (v[i] < min && v[i] >= 0)
+			min = v[i];
+	if (min != 1000000000)
+		printf("\nCel mai mic element pozitiv din tablou: %d", min);
+	else printf("Nu exista elem pozitive in tablou");
+}
+
+/*
+Croitoru Rares, program care ordoneaza crescator si afiseaza un
+tablou unidimensional cu 10 elemente intregi citite de la tastatura
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+void citire(long v[10]);
+void ordonare(long v[10]);
+void afisare(long v[10]);
+
+int main()
+{
+	long v[10];
+	citire(v);
+	ordonare(v);
+	afisare(v);
+	return 0;
+}
+
+void citire(long v[10])
+{
+	printf("\nIntroduceti cele 10 elemente intregi ale tabloului.\n");
+	for (long i = 0; i < 10; i++)
+	{
+		printf("v[%d]= ", i);
+		scanf_s("%d", &v[i]);
+	}
+}
+
+void ordonare(long v[10])
+{
+	for (long i=0;i<9;i++)
+		for (long k=i+1;k<10;k++)
+			if (v[i] > v[k])
+			{
+				v[i] = v[i] ^ v[k];
+				v[k] = v[i] ^ v[k];
+				v[i] = v[i] ^ v[k];
+			}
+}
+
+void afisare(long v[10])
+{
+	printf("\nCele 10 elemente ordonate crescator sunt: \n");
+	for (long i = 0; i < 10; i++)
+		printf("v[%d]= %d\n", i,v[i]);
+}
+
+/*
+Croitoru Rares, program care defineste o parola si citeste siruri de caractere pana la introducerea parolei corecte
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+	char pass[100]="PAROLA1234",attempt[100]="\0";
+	while (strcmp(pass, attempt) != 0)
+	{
+		printf("\nVa rugam introduceti parola:\n");
+		scanf("%s", attempt);
+		if(strcmp(pass, attempt) != 0)
+			printf("\nParola este incorecta.\n");
+	}
+	printf("\nParola este corecta. Acces permis.\n");
+	return 0;
+}
+
+/*
+Croitoru Rares, program care citeste numele si prenumele si le afiseaza cu majuscule, cu tab intre ele
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<string.h>
+
+int main()
+{
+	char nume[100],prenume[100];
+	printf("\nIntroduceti numele: ");
+	scanf("%s", &nume);
+	nume[strlen(nume)] = '\0';
+	printf("\nIntroduceti prenumele: ");
+	scanf("%s", &prenume);
+	prenume[strlen(prenume)] = '\0';
+	for (unsigned int i = 0; i < strlen(nume); i++)
+		if (nume[i] >= 'a' && nume[i] <= 'z')
+			nume[i] -= 32;
+	for (unsigned int i = 0; i < strlen(prenume); i++)
+		if (prenume[i] >= 'a' && prenume[i] <= 'z')
+			prenume[i] -= 32;
+	printf("\n%s\t%s", nume, prenume);
+	return 0;
+}
+
+/*
+Croitoru Rares, program care citeste 2 matrici de la tastatura si realizeaza:
+a) afişează poziţiile elementelor pare din fiecare matrice
+b) afişează suma elementelor impare din ambele matrice
+c) afişează suma matricelor
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(int v[20][20], int n, int m);
+void pare(int v[20][20], int n, int m);
+int impare(int v[20][20], int n, int m);
+void suma(int v[20][20], int w[20][20], int n, int m);
+
+int main()
+{
+	int a[20][20], b[20][20], n, m;
+	printf("\nIntroduceti cele 2 dimensiuni pentru matrici.\n");
+	scanf_s("%d%d", &n, &m);
+	printf("\nIntroduceti elemente pentru prima matrice.\n");
+	citire(a, n, m);
+	printf("\nIntroduceti elemente pentru a doua matrice.\n");
+	citire(b, n, m);
+	printf("\nPozitiile elem pare din prima matrice sunt:\n");
+	pare(a, n, m);
+	printf("\nPozitiile elem pare din a doua matrice sunt:\n");
+	pare(b, n, m);
+	printf("\nSuma elem impare din prima matrice este %d\n", impare(a, n, m));
+	printf("\nSuma elem impare din a doua matrice este %d\n", impare(b, n, m));
+	suma(a, b, n, m);
+	return 0;
+}
+
+void citire(int v[20][20], int n, int m)
+{
+	printf("\nIntroduceti elemente intregi .\n");
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+		{
+			printf("v[%d][%d]= ", i, j);
+			scanf_s("%d", &v[i][j]);
+		}
+}
+
+void pare(int v[20][20], int n, int m)
+{
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			if (v[i][j] % 2 == 0)
+				printf("v[%d][%d] ", i, j);
+}
+
+int impare(int v[20][20], int n, int m)
+{
+	int s = 0;
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			if (v[i][j] % 2 == 1)
+				s += v[i][j];
+	return s;
+}
+
+void suma(int v[20][20], int w[20][20], int n, int m)
+{
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < m; j++)
+			v[i][j] += w[i][j];
+	printf("\nSuma matricelor este egala cu:\n");
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < m; j++)
+			printf("%d ", v[i][j]);
+		printf("\n");
+	}
+}
+
+/*
+Croitoru Rares, program care reordoneaza coloanele unei matrici 
+astfel incat sumele de pe coloane sa fie in ordine crescatoare
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(float a[3][3]);
+float sumacol(float a[3][3], int col);
+void schimbcol(float a[3][3], int x, int y);
+void facere(float a[3][3]);
+void afisare(float a[3][3]);
+
+int main()
+{
+	float a[3][3];
+	citire(a);
+	facere(a);
+	afisare(a);
+	return 0;
+}
+
+void citire(float a[3][3])
+{
+	printf("\nIntroduceti 9 elemente reale pentru matrice.\n");
+	for (int i = 0; i < 3; i++)
+		for (int j = 0; j < 3; j++)
+		{
+			printf("v[%d][%d]= ", i, j);
+			scanf_s("%f", &a[i][j]);
+		}
+}
+
+float sumacol(float a[3][3], int col)
+{
+	return a[0][col] + a[1][col] + a[2][col];
+}
+
+void schimbcol(float a[3][3], int x, int y)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		a[i][x] = a[i][x] + a[i][y];
+		a[i][y] = a[i][x] - a[i][y];
+		a[i][x] = a[i][x] - a[i][y];
+	}
+}
+
+void facere(float a[3][3])
+{
+	if (sumacol(a, 0) > sumacol(a, 1))
+		schimbcol(a, 0, 1);
+	if (sumacol(a, 0) > sumacol(a, 2))
+		schimbcol(a, 0, 2);
+	if (sumacol(a, 1) > sumacol(a, 2))
+		schimbcol(a, 1, 2);
+}
+
+void afisare(float a[3][3])
+{
+	printf("\nMatricea rearanjata este:\n");
+	for (int i = 0; i < 3; i++)
+	{	for (int j = 0; j < 3; j++)
+			printf("%.3f\t", a[i][j]);
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares, program care afiseaza numerele mai mari decat media dintr-un sir de "n" numere reale
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(float a[50], int &n);
+void afisare(float a[50], int n);
+float media(int n, float v[50]);
+
+int main()
+{
+	int n;
+	float a[50];
+	citire(a,n);
+	afisare(a, n);
+	return 0;
+}
+
+void citire(float a[50],int &n)
+{
+	printf("\nIntroduceti cate elem vor fi in sir: ");
+	scanf_s("%d", &n);
+	printf("\nIntroduceti %d elemente reale.\n",n);
+	for (int i = 0; i < n; i++)
+	{
+		printf("v[%d]= ", i);
+		scanf_s("%f", &a[i]);
+	}
+}
+
+void afisare(float a[50], int n)
+{
+	float med = media(n, a);
+	printf("\nElementele mai mari decat media sunt:\n");
+	for (int i = 0; i < n; i++)
+		a[i] > med ? printf("%.3f ", a[i]) : true;
+}
+
+float media(int n, float v[50])
+{
+	int nr = 0;
+	float s = 0;
+	for (int i = 0; i < n; i++)
+	{
+		s += v[i];
+		nr++;
+	}
+	return (float)s / nr;
+}
+
+/*
+Croitoru Rares, program care afiseaza numerele impare negative dintr-un tablou unidimensional si numarul acestora
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(int a[50], int &n);
+void afisare(int a[50], int n);
+int numarul(int n, int v[50]);
+
+int main()
+{
+	int n;
+	int a[50];
+	citire(a,n);
+	afisare(a, n);
+	return 0;
+}
+
+void citire(int a[50],int &n)
+{
+	printf("\nIntroduceti cate elem vor fi in sir: ");
+	scanf_s("%d", &n);
+	printf("\nIntroduceti %d elemente intregi.\n",n);
+	for (int i = 0; i < n; i++)
+	{
+		printf("v[%d]= ", i);
+		scanf_s("%d", &a[i]);
+	}
+}
+
+void afisare(int a[50], int n)
+{
+	printf("\nExista %d elemente negative impare si acestea sunt:\n", numarul(n,a));
+	for (int i = 0; i < n; i++)
+		a[i] < 0 && a[i] % 2 ? printf("%d ", a[i]) : true;
+}
+
+int numarul(int n, int v[50])
+{
+	int nr = 0;
+	for (int i = 0; i < n; i++)
+		v[i] < 0 && v[i] % 2 ? nr++ : true;
+	return nr;
+}
+
+/*
+Croitoru Rares, program care afiseaza calculeaza si afiseaza un tablou  unidimensional
+în care se vor stoca resturile împărţirii elementelor primului tablou la numărul elementelor pozitive din acesta
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(int v[50], int &n);
+void afisare(int v[50], int n);
+int numarul(int n, int v[50]);
+void nou(int n, int v[50], int x[50]);
+
+int main()
+{
+	int n;
+	int v[50],x[50];
+	citire(v,n);
+	nou(n, v, x);
+	afisare(x, n);
+	return 0;
+}
+
+void citire(int v[50],int &n)
+{
+	printf("\nIntroduceti cate elem vor fi in sir: ");
+	scanf_s("%d", &n);
+	printf("\nIntroduceti %d elemente intregi.\n",n);
+	for (int i = 0; i < n; i++)
+	{
+		printf("v[%d]= ", i);
+		scanf_s("%d", &v[i]);
+	}
+}
+
+void afisare(int v[50], int n)
+{
+	printf("\nNoul tablou unidimensional este:\n");
+	for (int i = 0; i < n; i++)
+		printf("%d ", v[i]);
+}
+
+int numarul(int n, int v[50])
+{
+	int nr = 0;
+	for (int i = 0; i < n; i++)
+		v[i] > 0 ? nr++ : true;
+	return nr;
+}
+
+void nou(int n, int v[50], int x[50])
+{
+	int nr = numarul(n, v);
+	for (int i = 0; i < n; i++)
+		v[i] >= 0 ? x[i] = v[i] % nr : x[i] = (nr + v[i] % nr != nr ? nr + v[i] % nr : 0);
+}
+
+/*
+Croitoru Rares, program care inverseaza un sir de caractere si formeaza un sir cu elementele de pe pozitiile pare
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<string.h>
+
+void invers(char s[50]);
+void facere(char s[50]);
+
+int main()
+{
+	char s[50];
+	printf("\nIntroduceti un sir de caractere:\n");
+	gets_s(s);
+	s[strlen(s)] = '\0';
+	facere(s);
+	return 0;
+}
+
+void invers(char s[50])
+{
+	char aux;
+	for (unsigned int i = 0; i < strlen(s)/2; i++)
+	{
+		aux = s[i];
+		s[i] = s[strlen(s) - i - 1];
+		s[strlen(s) - i - 1] = aux;
+	}
+	printf("\nSirul inversat este:\n%s\n", s);
+}
+
+void facere(char s[50])
+{
+	char t[50] = "\0";
+	invers(s);
+	for (unsigned int i = 0; i < strlen(s); i = i + 2)
+		t[i / 2] = s[i];
+	strcat(t, "\0");
+	printf("\nNoul sir este:\n%s\n", t);
+}
+
+/*
+Croitoru Rares, program care citeste o matrice si dimensiunile ei si:
+a)dacă matricea este pătratică afiseaza elementele diagonalei secundare
+b)afiseaza suma elementelor de pe o coloană dată, c.
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(int v[20][20], int &m, int &n, int &c);
+void afisare_secundara(int v[20][20], int m);
+int suma_col(int v[20][20], int m, int c);
+
+int main()
+{
+	int m, n, c, v[20][20];
+	citire(v, m, n, c);
+	if (m == n)
+		afisare_secundara(v, m);
+	else printf("\nSuma elementelor de pe coloana %d este %d\n", c, suma_col(v, m, c));
+	return 0;
+}
+
+void citire(int v[20][20], int &m, int &n,int &c)
+{
+	printf("\nIntroduceti dimensiunile matricei (numere intregi):\n");
+	scanf_s("%d%d", &m, &n);
+	printf("\nIntroduceti numarul unei coloane a matricei (numar intreg):\n");
+	scanf_s("%d", &c);
+	printf("\nIntroduceti elementele matricei (numere intregi).\n");
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++)
+		{
+			printf("v[%d][%d]= ", i, j);
+			scanf_s("%d", &v[i][j]);
+		}
+}
+
+void afisare_secundara(int v[20][20], int m)
+{
+	printf("\nElementele de pe diagonala secundara sunt:\n");
+		for (int i = 0; i < m; i++)
+			printf("v[%d][%d]= %d\n", i, m - i - 1, v[i][m - i - 1]);
+}
+
+int suma_col(int v[20][20], int m, int c)
+{
+	/*
+	int s = 0;
+	for (int i = 0; i < m; i++)
+		s += v[i][c];
+	return s;
+	*/
+	if (m > 0)
+		return suma_col(v, m - 1, c) + v[m-1][c];
+	return 0;
+}
+
+/*
+Croitoru Rares, program care afiseaza un tablou tridimensional din perspectivele xOz si yOz dupa ce a fost citit in xOy
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(int v[15][15][15], int& x, int& y, int& z);
+void afis_xOz(int v[15][15][15], int x, int y, int z);
+void afis_yOz(int v[15][15][15], int x, int y, int z);
+
+int main()
+{
+	int x, y, z, v[15][15][15];
+	citire(v, x, y, z);
+	afis_xOz(v, x, y, z);
+	afis_yOz(v, x, y, z);
+	return 0;
+}
+
+void citire(int v[15][15][15], int &x, int &y, int &z)
+{
+	printf("\nIntroduceti cele 3 dimensiuni ale tabloului:\n");
+	scanf_s("%d%d%d", &x, &y, &z);
+	printf("\nSe citeste tabloul din perspectiva xOy.\n");
+	for(int i=0;i<x;i++)
+		for (int j=0;j<y;j++)
+			for (int k = 0; k < z; k++)
+			{
+				printf("\nIntroduceti elementul v[%d][%d][%d]= ", i, j, k);
+				scanf_s("%d", &v[i][j][k]);
+			}
+}
+
+void afis_xOz(int v[15][15][15], int x, int y, int z)
+{
+	printf("\nSe afiseaza tabloul din perspectiva xOz.\n");
+	for (int i = 0; i < x; i++)
+	{
+		for (int k = 0; k < z; k++)
+		{
+			for (int j = 0; j < y; j++)
+				printf("v[%d][%d][%d]= %d  ", i, j, k, v[i][j][k]);
+			putchar('\n');
+		}
+		putchar('\n');
+	}
+}
+
+void afis_yOz(int v[15][15][15], int x, int y, int z)
+{	
+	printf("\nSe afiseaza tabloul din perspectiva yOz.\n");
+	for (int j = 0; j < y; j++)
+	{
+		for (int k = 0; k < z; k++)
+		{
+			for (int i = 0; i < x; i++)
+				printf("v[%d][%d][%d]= %d  ", i, j, k, v[i][j][k]);
+			putchar('\n');
+		}
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares, program care respecta urmatoarea cerinta:
+"Afisați fiecare apariție a fiecărui caracter din alfabetul englez dintr-un șir de testare(fara spatii),
+ca de exemplu, “Thequickbrownfoxjumpsoverthelazydog”,folosit în vechea telegrafie(cod morse), pe o linie
+va fi un triplet al caracterului căutat, offsetul din interiorul șirului unde a fost găsit,
+(pozitia relativa  fata  de  inceput) și caracterul morse potrivit.
+Afisați șirul de  test  initial cu  prima  apariție a fiecărui caracter convertit catre caracterele
+majuscule(caracterele ne-alfabetice vor fi ignorate)."
+28.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<string.h>
+
+void getmorse(char c, char mo[5]);
+void allsmall(char s[50]);
+void firstencounter(char s[50]);
+void facere(char s[50]);
+
+int main()
+{
+	char s[50];
+	printf("\nIntroduceti un sir fara spatii care sa contina doar litere ale alfabetului englez:\n");
+	scanf("%s", &s);
+	s[strlen(s)] = '\0';
+	allsmall(s);//am convertit sirul ca toate literele sa fie mici
+	facere(s);//afiseaza triplete cu caracterul, offsetul si codul morse al caracterului
+	firstencounter(s);//am transformat prima aparitie a fiecarei litere din sir in majuscula
+	printf("\nSirul cu primele aparitii ale literelor majuscule este:\n%s\n", s);
+	return 0;
+}
+
+void getmorse(char c, char mo[5])
+{
+	char text[26] = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+	char morse[26][5] = { ".-","-...","-.-.","-..",".","..-","--.","....","..",".---","-.-",".-..","--","-.","---",".--.","--.-",".-.","...","-","..-","...-",".--","-..-","-.--","--.." };
+	for (int i = 0; i < 26; i++)
+		if (c - 32 == text[i])
+			strcpy(mo, morse[i]);
+}//in sirul mo[5] retine scrierea in codul morse a literei mici din caracterul c
+
+void allsmall(char s[50])
+{
+	for (unsigned int i = 0; i < strlen(s); i++)
+		s[i] >= 'A' && s[i] <= 'Z' ? s[i] += 32 : true;
+}//converteste toate literele in litere mici
+
+void firstencounter(char s[50])
+{
+	int primaapar[26] = { 0 };
+	for (unsigned int i = 0; i < strlen(s); i++)
+		if (primaapar[s[i] - 'a'] == 0)
+		{
+			primaapar[s[i] - 'a'] = i+1;//i+1 ca sa nu fie 0 cand i=0
+			s[i] -= 32;
+		}
+}//retine in primaapar pozitia primei aparitii a unei litere in sirul s si converteste acea prima litera in majuscula
+
+void facere(char s[50])
+{
+	char mo[5];
+	for (unsigned int i = 0; i < strlen(s); i++)
+	{
+		getmorse(s[i], mo);
+		printf("\n( %c , %d , %s )\n", s[i], i, mo);
+	}
+}

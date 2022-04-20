@@ -1,0 +1,499 @@
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Să se scrie un program care citeşte şi apoi afişează date întregi preluate dintr-un fişier text al cărui
+nume este citit de la consolă. Creati in prealabil fisierul prin program.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+	char sir[100];
+	printf("\nIntroduceti numele fisierului text:\n");
+	scanf("%s", &sir);
+	FILE* file;
+	errno_t err;
+	err = fopen_s(&file, sir, "r");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	int dataCount;
+	fscanf_s(file, "%d", &dataCount);
+	int* tab;
+	if (tab = (int*)malloc(sizeof(int) * dataCount));
+	else
+	{
+		printf("Eroare alocare!");
+		exit(1);
+	}
+	for (int i = 0; i < dataCount; i++)
+	{
+		int temp = 0;
+		fscanf_s(file, "%d", &temp);
+		*(tab + i) = temp;
+	}
+	printf("\nNumerele din fisier sunt: ");
+	for (int i = 0; i < dataCount; i++)
+		printf("%d ", *(tab + i));
+	free(tab);
+	fclose(file);
+	return 0;
+}
+
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Să  se  scrie  un  program  care  citeşte  dintr-un  fişier  text  10  numere  întregi (generat
+in prealabil prin program sau extern). Să se scrie funcţiile care:
+a. aranjează crescător/descrescator şirul si afiseaza rezultatul;
+b. numără câte elemente sunt paresi afiseaza rezultatul.
+Adăugați în fișierul original noile rezultate obținute.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+void sortare(int* p);
+int pare(int* p);
+
+int main()
+{
+	FILE* file;
+	errno_t err;
+	err = fopen_s(&file, "test.txt", "r");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	int* p;
+	if (p = (int*)malloc(sizeof(int) * 10));
+	else
+	{
+		printf("Eroare alocare!");
+		exit(1);
+	}
+	for (int i = 0; i < 10; i++)
+		fscanf_s(file, "%d", (p + i));
+	sortare(p);
+	printf("\nSirul ordonat este: ");
+	for (int i = 0; i < 10; i++)
+		printf("%d ", *(p + i));
+	int par = pare(p);
+	printf("\nNumarul de numere pare din sir este %d.\n", par);
+	fputc('\n', file);
+	for (int i = 0; i < 10; i++)
+		fprintf(file, "%d ", *(p + i));
+	fputc('\n', file);
+	fprintf(file, "%d", par);
+	free(p);
+	fclose(file);
+	return 0;
+}
+
+void sortare(int* p)
+{
+	for (int i = 0; i < 9; i++)
+		for (int j = i + 1; j < 10; j++)
+			if (*(p + i) > *(p + j))
+			{
+				*(p + i) = *(p + i) ^ *(p + j);
+				*(p + j) = *(p + i) ^ *(p + j);
+				*(p + i) = *(p + i) ^ *(p + j);
+			}
+}
+
+int pare(int* p)
+{
+	int nr = 0;
+	for (int i = 0; i < 10; i++)
+		*(p + i) % 2 == 0 ? nr++ : true;
+	return nr;
+}
+
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Scrieţi un program care citeşte de la consolă n numere întregi pe care le scrie într-un fişier text
+cu numele citit de la tastatură. Citiţi apoi numerele din fişier,determinaţi media lor aritmetică,
+pe care o adăugaţi la sfârşitul fişieruluişi o afişaţi şi pe ecran.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+double media(FILE* file, int n);
+
+int main()
+{
+	FILE* file;
+	char sir[50];
+	printf("\nNume fisier: ");
+	scanf("%s", &sir);
+	errno_t err;
+	err = fopen_s(&file, sir, "r+");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	int n;
+	printf("\nIntroduceti cate numere vor fi: ");
+	scanf_s("%d", &n);
+	puts("\nIntroduceti numerele:\n");
+	int x;
+	for (int i = 0; i < n; i++)
+	{
+		scanf_s("%d", &x);
+		fprintf(file, "%d ", x);
+	}
+	double med = media(file, n);
+	printf("\nMedia este %lf.\n", med);
+	fputc('\n', file);
+	fputc('\n', file);
+	fprintf(file, "%lf", med);
+	fclose(file);
+	return 0;
+}
+
+double media(FILE* file, int n)
+{
+	fseek(file, 0L, SEEK_SET);
+	int s = 0, nr = 0, x;
+	for (int i = 0; i < n; i++)
+	{
+		fscanf_s(file, "%d", &x);
+		s += x;
+		nr++;
+	}
+	return (double)s / nr;
+}
+
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Scrieţi un program C/C++ care citeşte de la tastatură un caracter apoi scrie acest caracter într-un
+fişier text pe nlinii, câte ncaractere pe fiecare linie, ncitit de la consola.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+	FILE* file;
+	char ch = 0;
+	printf("\nIntroduceti un caracter: ");
+	scanf(" %c", &ch);
+	errno_t err;
+	err = fopen_s(&file, "test.txt", "w");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	int n;
+	printf("\nIntroduceti cate linii si coloane vor fi: ");
+	scanf_s("%d", &n);
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+			fprintf(file, "%c ", ch);
+		fputc('\n', file);
+	}
+	fclose(file);
+	return 0;
+}
+
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Să se scrie o aplicaţie C/C++ care citeşte un fişier text linie cu linie şi îl afişează pe ecran.
+Se va folosi un fisier existent din sistem sau se va genera in prealabil unul prin program.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+int main()
+{
+	FILE* file;
+	errno_t err;
+	err = fopen_s(&file, "test.txt", "r");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	char* sir;
+	if (sir = (char*)malloc(sizeof(char) * 255));
+	else
+	{
+		printf("Eroare alocare!");
+		exit(1);
+	}
+	printf("\nLiniile din fisier sunt urmatoarele:\n\n");
+	while (!feof(file))
+	{
+		fgets(sir, 255, file);
+		printf("\n%s\n", sir);
+	}
+	free(sir);
+	fclose(file);
+	return 0;
+}
+
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Scrieţi  un  program C/C++careciteşte  de  la  tastatură valori  reale în  format  float,  cu confirmare.
+Valorile  cititevorfi  scriseîntr-un  fişier  text  cu  numele  citit  din  linia  de comandă.Citiţi apoi
+fişierul şi  afişati  valorile  mai  mari  decât  o  valoare  dată, citităde  la tastatură.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <conio.h>
+
+int main(int argc, char* argv[])
+{
+	FILE* file;
+	errno_t err;
+	err = fopen_s(&file, *(argv + 1), "w");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	float x, n;
+	char ch;
+	while (true)
+	{
+		printf("\nIntroduceti o valoare de tip float sa se scrie in fisier:\n");
+		scanf_s("%f", &n);
+		fprintf(file, "%f ", n);
+		printf("\nMai introduceti o valoare? Apasati orice pentru da, sau escape ca sa intrerupeti!\n");
+		ch = _getch();
+		if (ch == 27)
+			break;
+	}
+	fclose(file);
+	err = fopen_s(&file, *(argv + 1), "r");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	printf("Introduceti o valoare de tip float: ");
+	scanf_s("%f", &x);
+	printf("\nValorile din fisier mai mari decat %f sunt:\n", x);
+	while (!feof(file))
+	{
+		fscanf_s(file, "%f", &n);
+		if (n > x && !feof(file))
+			printf("%f ", n);
+	}
+	fclose(file);
+	return 0;
+}
+
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Scrieţi o  aplicaţie  C/C++ care  citeşte  caracter  cu  caracter  un  fişier  text şi  converteşte
+primul caracter al fiecărui cuvânt în majusculă.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+int main()
+{
+    FILE* file;
+    char sir[20];
+    int ok = 0;
+    char ch = 0;
+    printf("\nCare este numele fisierului din care se va citi?\n");
+    scanf("%s", &sir);
+    errno_t err;
+    err = fopen_s(&file, sir, "r");
+    if (err != 0)
+    {
+        puts("\n N-am putut deschide fisierul.");
+        exit(1);
+    }
+    while (ch != EOF)
+    {
+        ch = fgetc(file);
+        if (ok == 0)
+        {
+            putchar(toupper(ch));
+            ok = 1;
+        }
+        else
+            printf("%c", ch);
+        if (ch == ' ')
+            ok = 0;
+    }
+    fclose(file);
+    return 0;
+}
+
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Scrieţi un program care citeşte valori reale dintr-un fişier creat în prealabil si scrie într-un alt
+fişier partea întreagă a numerelor pozitive citite.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+int main()
+{
+	FILE* file1, * file2;
+	errno_t err;
+	err = fopen_s(&file1, "test.txt", "r");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	err = fopen_s(&file2, "fruct.txt", "w");
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	double x;
+	while (!feof(file1))
+	{
+		fscanf_s(file1, "%lf", &x);
+		if (x > 0)
+			fprintf(file2, "%d ", (int)floor(x));
+	}
+	fclose(file1);
+	fclose(file2);
+	return 0;
+}
+
+/*
+Croitoru Rares, 09.01.2021, grupa 2011
+Să se scrie o aplicaţie care:
+-defineşte o structură numită Student, cu câmpurile numele, prenumele, grupa, media;
+-citeşte de la consolăun număr întreg n (numărul studentilor)
+-pentru fiecare înregistrare de tip Student, citeşte cu o funcţie datele aferente şi le scrie într-un fişier,
+cu numele preluat de la consolă;
+-citeşte conţinutul fişierului şi afişează studenţii ce au media mai mare decât o valoare citită de la consolă
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Student
+{
+    char nume[50];
+    char prenume[50];
+    int grupa;
+    float media;
+};
+
+void afisare(Student* b, int n, FILE* file);
+void citire(Student* b, int n);
+void facere(Student* b, int n, FILE* file, float med);
+
+int main()
+{
+    FILE* file;
+    int n;
+    char sir[50];
+    printf("\nIntroduceti numele fisierului: ");
+    scanf("%s", &sir);
+    errno_t err;
+    err = fopen_s(&file, sir, "w");
+    if (err != 0)
+    {
+        puts("\n N-am putut deschide fisierul.");
+        exit(1);
+    }
+    printf("\nIntroduceti numarul studentilor: ");
+    scanf_s("%d", &n);
+    Student* p;
+    if (p = new Student[n]);
+    else
+    {
+        printf("Alocare nereusita!");
+        exit(1);
+    }
+    citire(p, n);
+    afisare(p, n, file);
+    fclose(file);
+    err = fopen_s(&file, sir, "r");
+    if (err != 0)
+    {
+        puts("\n N-am putut deschide fisierul.");
+        exit(1);
+    }
+    float med;
+    printf("\nIntroduceti o medie: ");
+    scanf_s("%f", &med);
+    facere(p, n, file, med);
+    delete[]p;
+    fclose(file);
+    return 0;
+}
+
+void citire(Student* b, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("\nIntroduceti numele studentlui %d: ", i + 1);
+        scanf("%s", &(b[i].nume));
+        printf("Introduceti prenumele studentlui %d: ", i + 1);
+        scanf("%s", &(b[i].prenume));
+        printf("Introduceti grupa studentului %d: ", i + 1);
+        scanf_s("%d", &(b[i].grupa));
+        printf("Introduceti media studentului %d: ", i + 1);
+        scanf_s("%f", &(b[i].media));
+    }
+}
+
+void facere(Student* b, int n, FILE* file, float med)
+{
+    printf("\nStudentii cu media mai mare de %.02f sunt:\n", med);
+    for (int i = 0; i < n; i++)
+    {
+        fscanf(file, "%s", &(b[i].nume));
+        fscanf(file, "%s", &(b[i].prenume));
+        fscanf_s(file, "%d", &(b[i].grupa));
+        fscanf_s(file, "%f", &(b[i].media));
+        if (med < (b + i)->media)
+        {
+            printf("Numele: %s\n", (b + i)->nume);
+            printf("Prenumele: %s\n", (b + i)->prenume);
+            printf("Grupa: %d\n", (b + i)->grupa);
+            printf("Media: %.02f\n", (b + i)->media);
+            putchar('\n');
+        }
+    }
+}
+
+void afisare(Student* b, int n, FILE* file)
+{
+    for (int i = 0; i < n; i++)
+    {
+        fprintf(file, "%s\n", (b + i)->nume);
+        fprintf(file, "%s\n", (b + i)->prenume);
+        fprintf(file, "%d\n", (b + i)->grupa);
+        fprintf(file, "%.02f\n", (b + i)->media);
+        fputc('\n', file);
+    }
+}

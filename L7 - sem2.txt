@@ -1,0 +1,580 @@
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 7 - 1.Modificaţi exemplul 3 astfel încât să permită obtinerea  unui  nou  punct,  avand  coordonatele
+obtinute  prin adunarea coordonatelor a  douăastfel  de  puncte.  Numele  noului  punct  va  fi rezultat
+prin  concatenarea  numelor  celor  două  puncte.Adaugati  si  testatio metoda care calculeaza distanta
+de la un punct la origine.Modificați clasa astfel încât sa eliminați metoda afis()folosind   inschimb 
+metode accesor adecvate.  Eliminați  de  asemenea   atributul lungime_sirmodificând adecvat metodele 
+clasei.Testati utilizand si functii specifice sirurilor de caracteredin VC++1y/2z(strcpy_s() si strcat_s()).
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+const int DIM = 20;
+
+class CPunctText {
+	int x; int y; int lungime_sir;
+	char* sNume;
+public:
+	CPunctText();
+	CPunctText(int ix, int iy, const char* sText = "Punct");
+	CPunctText(const CPunctText& pct);
+	~CPunctText();
+	void Afis() {
+		cout << "\nObiectul are x= " << x;
+		cout << "\nObiectul are y= " << y;
+		cout << "\nObiectul are sirul = " << sNume << endl;
+	}
+	void suma(CPunctText, CPunctText);
+	void dist();
+};
+
+CPunctText::CPunctText() {
+	cout << "\nConstructor vid";
+	lungime_sir = DIM;
+	sNume = new char[lungime_sir];
+}
+
+CPunctText::CPunctText(int ix, int iy, const char* sText) {
+	cout << "\nConstructor cu parametri";
+	lungime_sir = strlen(sText) + 1;
+	sNume = new char[lungime_sir];
+	x = ix;
+	y = iy;
+	strcpy(sNume, sText);
+}
+
+CPunctText::CPunctText(const CPunctText& pct) {
+	cout << "\nConstructor de copiere";
+	sNume = new char[pct.lungime_sir];
+	x = pct.x;
+	y = pct.y;
+	lungime_sir = pct.lungime_sir;
+	strcpy(sNume, pct.sNume);
+}
+CPunctText::~CPunctText() {
+	cout << "\nDestructor";
+	delete[] sNume;
+}
+
+void CPunctText::suma(CPunctText pct1, CPunctText pct2) 
+{
+	x = pct1.x + pct2.x;
+	y = pct1.y + pct2.y;
+	lungime_sir = pct1.lungime_sir + pct2.lungime_sir;
+	sNume = new char[lungime_sir];
+	strcpy(sNume, pct1.sNume);
+	strcat(sNume, pct2.sNume);
+}
+
+void CPunctText::dist() {
+	float d;
+	d = sqrt((float)x * x + y * y);
+	cout << "\nDistanta de la pct la origine este: " << d;
+}
+
+int main() 
+{
+	int x1, x2, y1, y2;
+	char text1[DIM], text2[DIM];
+	cout << "Punctul 1:\n";
+	cout << "\tx1: ";
+	cin >> x1;
+	cout << "\ty1: ";
+	cin >> y1;
+	cout << "Textul asociat punctului 1: ";
+	cin >> text1;
+	cout << "\nPunctul 2:\n";
+	cout << "\tx2: ";
+	cin >> x2;
+	cout << "\ty2: ";
+	cin >> y2;
+	cout << "Textul asociat punctului 2: ";
+	cin >> text2;
+	CPunctText pct1(x1, y1, text1), pct2(x2, y2, text2);
+	cout << "\n\nPunctul 1: ";
+	pct1.Afis();
+	cout << "\nPunctul 2: ";
+	pct2.Afis();
+	CPunctText s;
+	s.suma(pct1, pct2);
+	cout << "\n\nPunctul format din suma celorlalte doua puncte: ";
+	s.Afis();
+	s.dist();
+	return 0;
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 7 - 2.Să se scrie o aplicaţie C/C++ care sămodeleze obiectual un tablou unidimensionalde numere
+reale.  Creaţi  două instanţe  ale  clasei şi afișați  valorile  unui al  3-lea tablou,  obținute  
+prin scăderea elementelelor corespunzătoare  din primele  2 tablouri.Dacătablourileau  lungimi diferite,
+tabloul rezultat va avea lungimea tabloului cel mai scurt.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+const int MAX = 100;
+
+class Array
+{
+private:
+	int n;
+public:
+	float tab[MAX];
+	int getLength()
+	{
+		return n;
+	}
+	void setLength(int len)
+	{
+		n = len;
+	}
+	void afis()
+	{
+		for (int i = 0; i < n; i++)
+		{
+			cout << "tab[" << i << "]= " << tab[i] << endl;
+		}
+	}
+	void read()
+	{
+		for (int i = 0; i < n; i++)
+		{
+			cout << "tab[" << i << "]= ";
+			cin >> tab[i];
+			cout << endl;
+		}
+	}
+};
+
+
+int main()
+{
+	Array sir1, sir2, sir3;
+	int l1, l2;
+	cout << "Introduceti lungimile sirurilor: ";
+	cin >> l1;
+	cin >> l2;
+	int n;
+	if (l1 < l2) n = l1;
+	else n = l2;
+	sir1.setLength(l1);
+	sir2.setLength(l2);
+	cout << "\nIntroduceti primul sir: \n";
+	sir1.read();
+	cout << "\nIntroduceti al doilea sir: \n";
+	sir2.read();
+	sir3.setLength(n);
+	for (int i = 0; i < n; i++)
+		sir3.tab[i] = sir1.tab[i] - sir2.tab[i];
+	cout << "\nSirul rezultat este: \n";
+	sir3.afis();
+	return 0;
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 7 - 3.Modelați clasa Studentcare să conțină atributele private nume, prenume, note(tablou 7 valori int),
+grupa. Alocați dinamic memorie pentru nstudenți. Calculați mediacu o metoda din clasași sortați studenții după
+medie, afisând datele fiecărui student (nume, prenume, grupa, medie).Implementati si destructorul clasei care
+să afișeze unmesaj.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+const int DIM = 100;
+
+class Student {
+private:
+	char nume[DIM];
+	char prenume[DIM];
+	int* note;
+	int grupa;
+public:
+	Student() {
+		cout << "\n constructor explicit vid";
+		strcpy(nume, ""); strcpy(prenume, "");
+		grupa = 0;
+		note = new int[7];
+	}
+	Student(char n[DIM], char p[DIM], int gr) {
+		cout << "\n constructor cu parametri";
+		strcpy(nume, n); strcpy(prenume, p);
+		grupa = gr;
+		note = new int[7];
+	}
+	Student(const Student& pct) {
+		cout << "\n constructor de copiere";
+		strcpy(nume, pct.nume); strcpy(prenume, pct.prenume);
+		grupa = pct.grupa;
+		note = new int[7];
+	}
+	char* getNume() { return nume; }
+	char* getPrenume() { return prenume; }
+	int* getNote() { return note; }
+	int getGrupa() { return grupa; }
+	void setNume(char s[DIM]) { strcpy(nume, s); }
+	void setPrenume(char s[DIM]) { strcpy(prenume, s); }
+	void setNote(int arr[7]) {
+		for (int i = 0; i < 7; i++)
+			note[i] = arr[i];
+	}
+	void setGrupa(int x) { grupa = x; }
+	double media() {
+		double x = 0.0;
+		for (int i = 0; i < 7; i++)
+			x += note[i];
+		return (double)x / 7.0;
+	}
+	void readStudent() {
+		char n[DIM], p[DIM];
+		int no[7], gr;
+		cout << "\n Nume= "; cin >> n; setNume(n);
+		cout << "Prenume= "; cin >> p; setPrenume(p);
+		cout << "Cele 7 note: "; for (int i = 0; i < 7; i++)cin >> no[i]; setNote(no);
+		cout << "Grupa= "; cin >> gr; setGrupa(gr);
+	}
+	void afisStudent() {
+		cout << "\n\nNume: " << nume;
+		cout << "\nPrenume: " << prenume;
+		cout << "\nGrupa: " << grupa;
+		cout << "\nMedie: " << media();
+	}
+	~Student() {
+		cout << "\n destructor";
+		delete[]note;
+	}
+};
+
+int cmp(const void* a, const void* b);
+
+int main()
+{
+	int n;
+	cout << "\nn= "; cin >> n;
+	Student* p;
+	p = new Student[n];
+	for (int i = 0; i < n; i++)
+		p[i].readStudent();
+	qsort(p, n, sizeof(Student), cmp);
+	for (int i = 0; i < n; i++)
+		p[i].afisStudent();
+	delete[]p;
+	return 0;
+}
+
+int cmp(const void* a, const void* b)
+{
+	if (*(double*)a > *(double*)b)
+		return 1;
+	else  if (*(double*)a < *(double*)b)
+		return -1;
+	else
+		return 0;
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 7 - 4.Să se scrie o aplicaţie încare se modelează clasa Studentcu nume, prenume, numar note si
+notele din  sesiuneadin  iarnădeclarat  printr-un  pointer  de  tip int. Să se afişeze  numele 
+studenţilor din grupăcare  au restanțe și apoi numele primilor 3studenți din grupăîn ordinea mediilor,
+care se va afisa si ea.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+const int NR_EXAMENE = 5;
+
+class Student
+{
+public:
+	char name[50];
+	char surname[50];
+	double avg = 0;
+	int marks[NR_EXAMENE];
+	void citMarks()
+	{
+		for (int i = 0; i < NR_EXAMENE; i++)
+			cin >> marks[i];
+	}
+	double media()
+	{
+		double temp = 0;
+		for (int i = 0; i < NR_EXAMENE; i++)
+		{
+			temp += marks[i];
+		}
+		return temp /= NR_EXAMENE;
+	}
+	int rest()
+	{
+		int k = 0;
+		for (int i = 0; i < NR_EXAMENE; i++)
+			if (marks[i] < 5) k++;
+		return k;
+	}
+	void setAvg(double a)
+	{
+		avg = a;
+	}
+	void setName(char n[50])
+	{
+		strcpy(name, n);
+	}
+	void setSurname(char n[50])
+	{
+		strcpy(surname, n);
+	}
+};
+
+int main()
+{
+	int n;
+	cout << "Introduceti numarul studentilor: ";
+	cin >> n;
+	Student* vect = new Student[n];
+	for (int i = 0; i < n; i++)
+	{
+		char nam[50], surn[50];
+		cout << "\nStudent " << i + 1;
+		cout << "\nName: ";
+		cin >> nam;
+		vect[i].setName(nam);
+		cout << "\nSurname: ";
+		cin >> surn;
+		vect[i].setSurname(surn);
+		cout << "\nMarks: \n";
+		vect[i].citMarks();
+	}
+	cout << "\nRestantieri: \n";
+	for (int i = 0; i < n; i++)
+	{
+		int k = 0;
+		if (vect[i].rest() > 0)
+		{
+			cout << vect[i].name << " " << vect[i].surname;
+			cout << "\n";
+			k++;
+		}
+		if (k == 0) cout << "Nu exista restantieri!";
+	}
+	cout << "Primii 3 studenti sunt: \n";
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n - 1; j++)
+		{
+			if (vect[i].media() < vect[i + 1].media())
+			{
+				double tempAvg = 5;
+				char* tempName = nullptr;
+				char* tempSurname = nullptr;
+				strcpy(tempName, "a");
+				strcpy(tempSurname, "a");
+				tempAvg = vect[i].media();
+				vect[i].setAvg(vect[i + 1].media());
+				vect[i + 1].setAvg(tempAvg);
+				tempName = vect[i].name;
+				vect[i].setName(vect[i + 1].name);
+				vect[i + 1].setName(tempName);
+				tempSurname = vect[i].surname;
+				vect[i].setSurname(vect[i + 1].surname);
+				vect[i + 1].setSurname(tempSurname);
+
+			}
+		}
+	}
+	for (int i = 0; i < 3; i++)
+	{
+		cout << vect[i].name << " " << vect[i].surname << endl;
+		cout << "Average: " << vect[i].media();
+		cout << "\n";
+	}
+	delete[]vect;
+	return 0;
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 7 - 5.Să se scrie o aplicaţie C/C++ în care se citeşte de la tastaturăun punct prin coordonatele
+x,y,z. Să se scrie o metodă prin care să se facă translaţia punctului cu o anumitădistanţăpe fiecare
+dintre cele trei axe. Să se verifice dacă dreapta care uneşte primul punct şi cel rezultat în urma
+translaţiei trec printr-un al treilea punct dat de la consolă.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+class Punct {
+private:
+	int x, y, z;
+public:
+	int getZ() {
+		return z;
+	}
+	int getY() {
+		return y;
+	}
+	int getX() {
+		return x;
+	}
+	void setPoints(int a, int b, int c) {
+		x = a;
+		y = b;
+		z = c;
+	}
+};
+
+bool coliniar(Punct p1, Punct p2, Punct p3);
+
+int main()
+{
+	Punct p1;
+	int x, y, z;
+	cout << "\n\nIntroduceti primul punct: \n";
+	cout << "\tx= "; cin >> x;
+	cout << "\ty= "; cin >> y;
+	cout << "\tz= "; cin >> z;
+	p1.setPoints(x, y, z);
+	cout << "\nIntroduceti distanta cu care sa fie miscat: ";
+	int depl;
+	cin >> depl;
+	Punct p2;
+	p2.setPoints(x + depl, y + depl, z + depl);
+	cout << "\nIntroduceti inca un punct: \n";
+	Punct p3;
+	cout << "\tx= "; cin >> x;
+	cout << "\ty= "; cin >> y;
+	cout << "\tz= "; cin >> z;
+	p3.setPoints(x, y, z);
+	if (coliniar(p1, p2, p3) == 1)
+		cout << "\nPunctele sunt coliniare";
+	else
+		cout << "\nPunctele nu sunt coliniare";
+	return 0;
+}
+
+bool coliniar(Punct p1, Punct p2, Punct p3) {
+	bool ok = 1;
+	float distan1to2, distan2to3, distan1to3;
+	distan1to2 = sqrt((p2.getX() - p1.getX()) * (p2.getX() - p1.getX()) + (p2.getY() - p1.getY()) * (p2.getY() - p1.getY()) + (p2.getZ() - p1.getZ()) * (p2.getZ() - p1.getZ()));
+	distan2to3 = sqrt((p3.getX() - p2.getX()) * (p3.getX() - p2.getX()) + (p3.getY() - p2.getY()) * (p3.getY() - p2.getY()) + (p3.getZ() - p2.getZ()) * (p3.getZ() - p2.getZ()));
+	distan1to3 = sqrt((p3.getX() - p1.getX()) * (p3.getX() - p1.getX()) + (p3.getY() - p1.getY()) * (p3.getY() - p1.getY()) + (p3.getZ() - p1.getZ()) * (p3.getZ() - p1.getZ()));
+	if ((distan1to3 == distan1to2 + distan2to3) || (distan1to2 == distan1to3 + distan2to3) || (distan2to3 == distan1to2 + distan1to3)) ok = 1;
+	else ok = 0;
+	return ok;
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 7 - 6.Definiți o clasă Complexmodelată prin atributele de tip double real, imag și un pointerde tip
+charcătre numele fiecărui număr complex. În cadrul clasei definiți un constructor explicit cu doi parametri
+care au implicit valoarea 1.0 și care alocăspațiu pentru numeun șirde maxim 15caractere,  de  exemplu "c1".
+De asemenea, definiți un constructor  de  copiere  pentruclasa Complex.Clasa va mai conține metode mutator/setter
+și accesor/getterpentru fiecare membru al clasei,metode care permit operațiile de bază cu numere complexeși un
+destructor explicit. Definiți cel mult 10 numere complexeîntr-un tablou. Calculați suma numerelor complexedin
+tablou,  valoare  cevafi  folosită  pentru  a  inițializa  un  nou  număr  complex,  cu  numele "Suma_c". 
+Realizați aceleași acțiuni făcând diferența și produsul numerelor complexe
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+const int DIM = 15;
+
+class Complex {
+private:
+	double real;
+	double imag;
+	char* nume;
+public:
+	Complex() {
+		cout << "\n constructor explicit vid";
+		nume = new char[DIM];
+		real = 1.0; imag = 1.0;
+	}
+	Complex(double r, double i) {
+		cout << "\n constructor cu parametri";
+		nume = new char[DIM];
+		real = r; imag = i;
+	}
+	Complex(const Complex& pct) {
+		cout << "\n constructor de copiere";
+		nume = new char[DIM];
+		real = pct.real; imag = pct.imag;
+	}
+	char* getNume() { return nume; }
+	double getReal() { return real; }
+	double getImag() { return imag; }
+	void setNume(char s[DIM]) { strcpy(nume, s); }
+	void setReal(double x) { real = x; }
+	void setImag(double x) { imag = x; }
+	Complex suma(Complex s1, Complex s2) {
+		Complex t;
+		t.real = s1.real + s2.real;
+		t.imag = s2.imag + s2.imag;
+		return t;
+	}
+	Complex diferenta(Complex s1, Complex s2) {
+		Complex t;
+		t.real = s1.real - s2.real;
+		t.imag = s2.imag - s2.imag;
+		return t;
+	}
+	Complex produs(Complex s1, Complex s2) {
+		Complex t;
+		t.real = s1.real * s2.real - s1.imag * s2.imag;
+		t.imag = s1.real * s2.imag + s1.imag * s2.real;
+		return t;
+	}
+	~Complex() {
+		cout << "\n destructor";
+		delete[]nume;
+	}
+};
+
+int main()
+{
+	Complex group[10] = {
+		Complex(1,2),
+		Complex(3,4),
+		Complex(1,5),
+		Complex(1,4),
+		Complex(1,8),
+		Complex(3,2),
+		Complex(7,2),
+		Complex(5,2),
+		Complex(9,2),
+		Complex(0,2)
+	};
+	Complex Suma_c(0, 0);
+	for (int i = 0; i < 9; i++)
+		Suma_c = Suma_c.suma(group[i], group[i + 1]);
+	cout << "\n Suma= " << Suma_c.getReal() << "+" << Suma_c.getImag() << "*i";
+	Suma_c.setReal(0); Suma_c.setImag(0);
+	for (int i = 0; i < 9; i++)
+		Suma_c = Suma_c.produs(group[i], group[i + 1]);
+	cout << "\n Produs= " << Suma_c.getReal() << "+" << Suma_c.getImag() << "*i";
+	Suma_c.setReal(0); Suma_c.setImag(0);
+	for (int i = 0; i < 9; i++)
+		Suma_c = Suma_c.diferenta(group[i], group[i + 1]);
+	cout << "\n Produs= " << Suma_c.getReal() << "+" << Suma_c.getImag() << "*i";
+	Suma_c.setReal(0); Suma_c.setImag(0);
+	return 0;
+}

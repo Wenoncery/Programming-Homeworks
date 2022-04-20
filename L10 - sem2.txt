@@ -1,0 +1,630 @@
+/*
+Croitoru Rares, 09.05.2021, grupa 2011
+Lab 10 - 1.Implementaţi  programul  prezentat  înexemplul 3şi  examinaţi eventualele  erori date la
+compilare daca exista prin eliminarea comentariilor. Modificaţi programul astfel încât să se poată
+accesa  din  funcţia main(), prin  intermediul  obiectului obiect_derivat,şi   metodele aduna() şi 
+scade()din clasa de bazapastrand mostenirea de tip private.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+#include "Baza_deriv.h"
+
+int main()
+{
+	Baza obiect_baza;
+	cout << "\nAfis din baza(val. initiale): " << obiect_baza.getA() << " " << obiect_baza.getB() << '\n';
+	cout << "\nSuma este (cu val. initiale, baza) = " << obiect_baza.aduna(); // corect aduna() e public
+	cout << "\nDiferenta este (cu val. initiale, baza) = " << obiect_baza.scade();//corect scade() e public
+	obiect_baza.setA(2);
+	obiect_baza.setB(3);
+	cout << "\nAfis din baza (modificat): " << obiect_baza.getA() << " " << obiect_baza.getB() << '\n';
+	cout << "\nSuma/Diferenta dupa setare= " << obiect_baza.aduna() << "/" << obiect_baza.scade() << '\n';
+	Derivata obiect_derivat;
+	cout << "\nProdusul este (din derivat cu val. initiale) = " << obiect_derivat.inmulteste() << '\n';// corect val. implicite
+	cout << "\nSuma este (din derivat cu val. initiale, baza) =" << obiect_derivat.getAduna();
+	cout << "\nDiferenta este (din derivat) =" << obiect_derivat.getScade();
+	return 0;
+} //end main
+
+//Baza_deriv.h
+
+#pragma once
+
+class Baza {
+protected:
+	int a, b;
+public:
+	Baza() { a = 1, b = 1; }
+	void setA(int a) { this->a = a; }
+	void setB(int b) { this->b = b; }
+	int getA() { return a; }
+	int getB() { return b; }
+	int aduna() { return a + b; }
+	int scade() { return a - b; }
+};
+
+class Derivata : private Baza {
+public:
+	int inmulteste()
+	{
+		return a * b;
+	}
+	int getAduna() { return aduna(); } //am adaugat aceasta metoda
+	int getScade() { return scade(); } //si aceasta metoda
+};
+
+/*
+Croitoru Rares, 09.05.2021, grupa 2011
+Lab 10 - 2.Folosind modelul claselor de la mostenirea publica, implementaţi două clase, astfel:
+-clasa de bază contine metode pentru:
+	-codarea unui şir de caractere (printr-unalgoritm oarecare) 
+	=> public;
+	-afişarea şirului original şi a celui rezultat din transformare
+	= > public;
+-clasa derivata contine o metoda pentru:
+	-scrirea rezultatului codării într-un fişier, la sfârşitul acestuia. 
+Fiecare inregistrare are forma: nr_inregistrare: şir_codat;
+Accesul   la   metodele   ambelor   clase   se   face   prin   intermediul   unui  obiect rezultat
+prin instanţierea clasei derivate. Programul care foloseşte clasele citeşte un şir de caractere de
+la tastatură şi apoi, în funcţie de opţiunea utilizatorului, afişează rezultatul codării sau 
+îl scrie în fişier.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+#include "Header.h"
+
+int main()
+{
+	Appending ob;
+	char* cod = new char[30];
+	cout << "Introduce the code: ";
+	cin >> cod;
+
+	ob.setCode(cod);
+
+	cout << "\nIntroduce what you want to do with the code (1=append, 2=code): ";
+	int k;
+	cin >> k;
+	cout << "\nYour original code: " << cod;
+	ob.append(k);
+	delete[]cod;
+	return 0;
+} //end main
+
+//Header.h
+
+#pragma once
+
+class Base
+{
+protected:
+	char* code;
+public:
+	Base()
+	{
+		code = new char[30];
+	}
+	char* getCode()
+	{
+		return code;
+	}
+
+	void setCode(char cod[30])
+	{
+		strcpy(code, cod);
+	}
+
+	void coding()
+	{
+		cout << "\nCoding...";
+		for (unsigned int i = 0; i < strlen(code); i++)
+		{
+			code[i] += 4;
+		}
+	}
+
+	void decoding()
+	{
+		cout << "\nDecoding...";
+		for (unsigned int i = 0; i < strlen(code); i++)
+		{
+			code[i] -= 4;
+		}
+	}
+
+	void show()
+	{
+		cout << "\nThe code is: " << code;
+	}
+	~Base()
+	{
+		delete[]code;
+	}
+};
+
+class Appending : public Base
+{
+public:
+	Appending(const char* default_name = "default")
+	{
+		strcpy(code, default_name);
+	}
+	FILE* fp = nullptr;
+
+	void append(int k)
+	{
+		if (k == 1)
+		{
+			fp = fopen("test.txt", "a");
+			for (unsigned int i = 0; i < strlen(code); i++)
+				fprintf(fp, "%c", code[i]);
+
+			fclose(fp);
+			cout << "\nThe code was appended!";
+		}
+		else if (k == 2)
+		{
+			coding();
+			show();
+		}
+	}
+};
+
+/*
+Croitoru Rares, 09.05.2021, grupa 2011
+Lab 10 - 3.Implement a  class  that  has  2 protected integer  variables, that  contains  a  setter
+and  gettermethodsfor eachattribute.Write  a  second  class  that  inherits  the  first  defined  
+class  and implements the elementary arithmetic operations (+, -, *, /) applied on the variables 
+mentioned abovethe results being returned by methods.Write a third class derived from the second 
+one that implements the methodsfor calculating the square rootof a number(mulresultobtained by  
+the  previous  derived  class)received  as  parameter,and  for  raising  a  numeric  value  to  
+a certain  power  (the base(plus, result  obtained  by  the  previous  derived  class)and  the 
+power(minus,  result  obtained  by  the  previous  derived  class) are  sentto  the method as  
+parameters).Verify the methods’s calling using objects at different hierchies levels.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <math.h>
+
+using namespace std;
+
+#include"Header.h"
+
+int main()
+{
+	Class1 ob1;
+	int x, y;
+	cout << "Enter two numbers: ";
+	cin >> x >> y;
+	ob1.setX(x);
+	ob1.setY(y);
+	cout << "\nThe numbers are: " << ob1.getX() << " " << ob1.getY();
+	Class2 ob2;
+	ob2.setX(x);
+	ob2.setY(y);
+	cout << "\n\nThe addition between the numbers is: " << ob2.addition();
+	cout << "\nThe difference between the numbers is: " << ob2.difference();
+	cout << "\nThe product between the numbers is: " << ob2.multiplication();
+	cout << "\nThe division between the numbers is: " << ob2.division();
+	Class3 ob3;
+	ob3.setX(x);
+	ob3.setY(y);
+	cout << "\n\nThe square root of the multiplication is: " << ob3.squareRoot();
+	cout << "\nThe power result between addition^minus: " << ob3.power();
+	return 0;
+}
+
+//Header.h
+
+#pragma once
+
+class Class1 {
+protected:
+	int x, y;
+public:
+	int getX() {
+		return x;
+	}
+	int getY() {
+		return y;
+	}
+	void setX(int x) {
+		this->x = x;
+	}
+	void setY(int y) {
+		this->y = y;
+	}
+};
+
+class Class2 : public Class1 {
+public:
+	int addition() {
+		return x + y;
+	}
+	int difference() {
+		return x - y;
+	}
+	double multiplication() {
+		return (double)x * y;
+	}
+	double division() {
+		return (double)x / y;
+	}
+};
+
+class Class3 : public Class2 {
+public:
+	double squareRoot() {
+		return sqrt(multiplication());
+	}
+	double power() {
+		double nr = 0;
+		for (int i = 0; i < difference(); i++) {
+			nr *= addition();
+		}
+		return nr;
+	}
+};
+
+/*
+Croitoru Rares, 09.05.2021, grupa 2011
+Lab 10 - 4.Definiţi o clasă numita Trianglecare  are  3  atribute  protected  pentru  laturi  si
+o  metoda  care calculează perimetrul unui triunghi ale cărui laturi sunt citite de la tastatura
+(folosite  de  un constructor adecvat) şi apoi o clasă derivata in mod public din Triangle, 
+Triangle_extended, care  în  plus,  calculează  şi  aria  triunghiului. Folosind obiecte  din 
+cele  doua  clase  apelati metodele specifice.Verificati inainte de instantiere posibilitatea 
+definirii unui triunghi.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <math.h>
+#include <stdlib.h>
+
+using namespace std;
+
+#include "Header.h"
+
+int main()
+{
+	cout << "\nIntroduceti laturile triunghiului: \n";
+	int lat1, lat2, lat3;
+	cin >> lat1 >> lat2 >> lat3;
+	if ((lat1 > lat2 + lat3) || (lat2 > lat1 + lat3) || (lat3 > lat1 + lat3))
+	{
+		cout << "\nNu e triunghi!\n";
+		exit(1);
+	}
+	Triangle triunghi1;
+	triunghi1.setLats(lat1, lat2, lat3);
+	cout << "\nPerimetrul = " << triunghi1.perim();
+	Triangle_extended triunghi2(lat1, lat2, lat3);
+	cout << "\nAria = " << triunghi2.Area();
+	return 0;
+} //end main
+
+//Header.h
+
+#pragma once
+
+class Triangle {
+protected:
+	int lat1, lat2, lat3;
+public:
+	Triangle(int a = 0, int b = 0, int c = 0)
+	{
+		lat1 = a;
+		lat2 = b;
+		lat3 = c;
+	};
+	void setLats(int a, int b, int c)
+	{
+		lat1 = a;
+		lat2 = b;
+		lat3 = c;
+	}
+	int perim()
+	{
+		return lat1 + lat2 + lat3;
+	}
+};
+
+class Triangle_extended : public Triangle {
+public:
+	Triangle_extended(int a = 0, int b = 0, int c = 0)
+	{
+		lat1 = a;
+		lat2 = b;
+		lat3 = c;
+	};
+	double Area()
+	{
+		double p = (double)(lat1 + lat2 + lat3) / 2.0;
+		return sqrt(p * (p - lat1) * (p - lat2) * (p - lat3));
+	}
+};
+
+/*
+Croitoru Rares, 09.05.2021, grupa 2011
+Lab 10 - 5.Adaugaţi  în  clasa  derivată  din  exemplul  anterior  o  metodă  care
+calculează  înalţimea triunghiului. Apelati metoda folosind un obiect adecvat.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <math.h>
+#include <stdlib.h>
+
+using namespace std;
+
+#include "Header.h"
+
+int main()
+{
+	cout << "\nIntroduceti laturile triunghiului: \n";
+	int lat1, lat2, lat3;
+	cin >> lat1 >> lat2 >> lat3;
+	if ((lat1 > lat2 + lat3) || (lat2 > lat1 + lat3) || (lat3 > lat1 + lat3))
+	{
+		cout << "\nNu e triunghi!\n";
+		exit(1);
+	}
+	Triangle triunghi1;
+	triunghi1.setLats(lat1, lat2, lat3);
+	cout << "\nPerimetrul = " << triunghi1.perim();
+	Triangle_extended triunghi2(lat1, lat2, lat3);
+	cout << "\nAria = " << triunghi2.Area();
+	cout << "\nInaltimea = " << triunghi2.height();
+	return 0;
+} //end main
+
+//Header.h
+
+#pragma once
+
+class Triangle {
+protected:
+	int lat1, lat2, lat3;
+public:
+	Triangle(int a = 0, int b = 0, int c = 0)
+	{
+		lat1 = a;
+		lat2 = b;
+		lat3 = c;
+	};
+	void setLats(int a, int b, int c)
+	{
+		lat1 = a;
+		lat2 = b;
+		lat3 = c;
+	}
+	int perim()
+	{
+		return lat1 + lat2 + lat3;
+	}
+};
+
+class Triangle_extended : public Triangle {
+public:
+	Triangle_extended(int a = 0, int b = 0, int c = 0)
+	{
+		lat1 = a;
+		lat2 = b;
+		lat3 = c;
+	};
+	double Area()
+	{
+		double p = (double)(lat1 + lat2 + lat3) / 2.0;
+		return sqrt(p * (p - lat1) * (p - lat2) * (p - lat3));
+	}
+	double height()
+	{
+		int base = 0;
+		if (lat1 > lat2) base = lat1;
+		else base = lat2;
+		if (lat3 > base) base = lat3;
+		return 2 * Area() / base;
+	}
+};
+
+/*
+Croitoru Rares, 09.05.2021, grupa 2011
+Lab 10 - 6.Definiţi o clasă numită Formecare defineste o figura geometrica
+cu un numeca si atributde tip  pointer  la  un  sir  de  caractere.   Clasa 
+va  contine  un  constructor  fara  parametrii,  unul  cu parametrii,  copy 
+constructor  si  se  va  supraincarca  operatorul  de  asignare.  Clasa  va 
+aveasi o metoda getter si un destructor.Derivati in mod public o clasa Cerc
+care adaugaun atribut de tip intpentru raza si constructoriadecvati considerand
+si atributele (nume, raza)si o metoda getter pentru raza  si alte  metodecare 
+calculeaza  aria  si perimetrul cercului de  raza r, valoare introdusa  in
+main()de  la  tastatura.  Similar  definiti  o clasa Patratsi Dreptunghicare 
+permitdeterminarea ariei si perimetrului obiectelor specifice. Instantiati 
+obiecte din clasele derivate si afisati aria si perimetrul obiectelor. Datele 
+specifice vor fi introduse de la tastatura.Definiti un obiect  de  tip Cerc cu 
+parametrii care  sa  il  copiati  intr-un  nou  obiect  la  care  sa  ii 
+afisati atributele.Definiti un obiect de tip Patratcu parametrii si altul 
+fara parametrii. Asignati celui fara parametrii obiectul instantiat cu parametrii
+si afisati atributele.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+const int DIM = 30;
+
+int main() {
+	int radius, lat, lat1, lat2;
+	char name[DIM];
+	cout << "Enter radius: ";
+	cin >> radius;
+	cout << "Enter name: ";
+	cin >> name;
+	Circle C(radius);
+	C.setName(name);
+	cout << "Area of the circle: " << C.area();
+	cout << "\nPerimeter of the circle: " << C.perimeter();
+
+	cout << "\n\nEnter the squares side: ";
+	cin >> lat;
+	cout << "Enter name: ";
+	cin >> name;
+	Square S(lat);
+	S.setName(name);
+	cout << "Area of the square: " << S.area();
+	cout << "\nPerimeter of the square: " << S.perimeter();
+
+	cout << "\n\nEnter the rectangles side: ";
+	cin >> lat1 >> lat2;
+	cout << "Enter name: ";
+	cin >> name;
+	Rectangle R(lat1, lat2);
+	R.setName(name);
+	cout << "Area of the rectangle: " << R.area();
+	cout << "\nPerimeter of the rectangle: " << R.perimeter();
+
+	cin.ignore();
+	cin.get();
+}
+
+class Shape {
+protected:
+	char* name;
+public:
+	Shape() {
+		name = new char[DIM];
+		strcpy(name, "default");
+	}
+
+	void setName(char name[DIM]) {
+		strcpy(this->name, name);
+	}
+
+	char* getName() {
+		return name;
+	}
+
+	~Shape() {
+		delete[] name;
+	}
+};
+
+class Circle : public Shape {
+protected:
+	int radius;
+public:
+	Circle(int radius = 0) {
+		name = new char[DIM];
+		this->radius = radius;
+		strcpy(name, "default");
+	}
+
+	int getRadius() {
+		return radius;
+	}
+
+	void setName(char name[DIM]) {
+		strcpy(this->name, name);
+	}
+
+	char* getName() {
+		return name;
+	}
+
+	double area() {
+		return 3.14 * radius * radius;
+	}
+
+	double perimeter() {
+		return 2 * 3.14 * radius;
+	}
+
+	~Circle() {
+		delete[] name;
+	}
+};
+
+class Square : public Shape {
+protected:
+	int lat;
+public:
+	Square(int lat = 0) {
+		name = new char[DIM];
+		this->lat = lat;
+		strcpy(name, "default");
+	}
+
+	void setName(char name[DIM]) {
+		strcpy(this->name, name);
+	}
+
+	char* getName() {
+		return name;
+	}
+
+	int getLat() {
+		return lat;
+	}
+
+	int area() {
+		return lat * lat;
+	}
+
+	int perimeter() {
+		return 4 * lat;
+	}
+
+	~Square() {
+		delete[] name;
+	}
+};
+
+class Rectangle : public Shape {
+protected:
+	int lat1, lat2;
+public:
+	Rectangle(int lat1 = 0, int lat2 = 0) {
+		name = new char[DIM];
+		this->lat1 = lat1;
+		this->lat2 = lat2;
+		strcpy(name, "default");
+	}
+
+	void setName(char name[DIM]) {
+		strcpy(this->name, name);
+	}
+
+	char* getName() {
+		return name;
+	}
+
+	int area() {
+		return lat1 * lat2;
+	}
+
+	int perimeter() {
+		return 2 * (lat1 + lat2);
+	}
+
+	int getLat1() {
+		return lat1;
+	}
+
+	int getLat2() {
+		return lat2;
+	}
+
+	~Rectangle() {
+		delete[] name;
+	}
+};

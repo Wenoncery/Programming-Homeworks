@@ -1,0 +1,298 @@
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 1. Definiţi o funcţie macro MAX care determină şi afişează maximul dintre 2 si dintre 3 numere introduse de la tastatură.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#define MAX2(a,b) (a>b?a:b)
+#define MAX3(a,b,c) (a>b?(a>c?a:c):(b>c?b:c))
+
+int main()
+{
+	int a, b, c;
+	puts("\nIntroduceti 2 numere de la tastatura: ");
+	scanf_s("%d%d", &a, &b);
+	printf("\nMaximul dintre cele 2 numere este %d\n", MAX2(a, b));
+	puts("\nIntroduceti 3 numere de la tastatura: ");
+	scanf_s("%d%d%d", &a, &b, &c);
+	printf("\nMaximul dintre cele 3 numere este %d\n", MAX3(a, b, c));
+	return 0;
+}
+
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 2. Definiţi o funcţie inline min()care determină şi afişează minimul dintre 2
+si dintre 3 numere întregi introduse de la tastatură.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+inline int MIN2(int a, int b);
+inline int MIN3(int a, int b, int c);
+
+int main()
+{
+	int a, b, c;
+	puts("\nIntroduceti 2 numere de la tastatura: ");
+	scanf_s("%d%d", &a, &b);
+	printf("\nMinimul dintre cele 2 numere este %d\n", MIN2(a, b));
+	puts("\nIntroduceti 3 numere de la tastatura: ");
+	scanf_s("%d%d%d", &a, &b, &c);
+	printf("\nMinimul dintre cele 3 numere este %d\n", MIN3(a, b, c));
+	return 0;
+}
+
+inline int MIN2(int a, int b)
+{
+	return (a < b ? a : b);
+}
+
+inline int MIN3(int a, int b, int c)
+{
+	return a < b ? (a < c ? a : c) : (b < c ? b : c);
+}
+
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 3.Considerati o structura de date Student, care contine un camp de tip sir de caractere (maxim 30) 
+pentru nume_prenumesi un alt camp nota de tip int. Definiti un obiect de tip Student la care datele vor fi 
+citite de la tastatura. Validati ca nume_prenumesa aiba cel putin 5 caractere iar nota sa fie >=5si <=10. 
+Afisati campurile obiectului in caz de introducere corecta.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#include <assert.h>
+#include <stdlib.h>
+
+struct Student
+{
+	char nume_prenume[30];
+	int nota;
+};
+
+void initializare(struct Student* p);
+void afisare(Student* p);
+
+int main()
+{
+	int n, i;
+	Student* p;
+	printf("\nNumarul studentilor: ");
+	scanf_s("%d", &n);
+	p = new Student[n];
+	if (p);
+	else
+	{
+		printf("Alocare nereusita!");
+		exit(1);
+	}
+	for (i = 0; i < n; i++)
+	{
+		puts("\nIntroduceti datele studentilor:\n");
+		initializare(p + i);
+	}
+	for (int i = 0; i < n; i++)
+	{
+		assert(strlen((p + i)->nume_prenume) >= 5);
+		assert((p + i)->nota >= 5 && (p + i)->nota <= 10);
+	}
+	for (int i = 0; i < n; i++)
+	{
+		printf("\n\n\tStudent number %d\n", i + 1);
+		afisare(p + i);
+	}
+	if (p) 
+		delete[]p;
+	return 0;
+}
+
+void initializare(struct Student* p)
+{
+	printf("\nPrenume si nume: ");
+	scanf("%s", p->nume_prenume);
+	printf("Nota: ");
+	scanf_s("%d", &(p->nota));
+}
+
+void afisare(Student* p)
+{
+	printf("\nPrenume si nume: %s\n nota: %d\n\n", p->nume_prenume, p->nota);
+}
+
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 4.Consideraţi o funcţie cu 3 parametrii toţi impliciţi (int, float, double) care returnează 
+produsul acestor valori. Apelaţi funcţia considerând mai multe variante de apel concrete
+(fără  parametri, 1 parametru, 2 parametri, 3 parametri).
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+double function(int a, float b, double c);
+
+int main()
+{
+	int x = 1;
+	float y = 2.0;
+	double z = 3.5;
+	printf("%lf %lf %lf", function(x), function(x, y), function(x, y, z));
+	function(); function(x); function(x, y); function(x, y, z);
+	return 0;
+}
+
+double function(int a, float b, double c)
+{
+	return (double)a * b * c;
+}
+
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 5.Folosind supraîncărcarea funcţiilor definiţi trei funcţii cu acelaşi nume dar cu tipuri
+diferite de parametri (int, int *, int&) care returnează radicalul unei valoriintregi. Analizaţi
+cazul transmiterii parametrilor prin valoare şi prinreferinţă.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <math.h>
+
+double function(int x);
+double function(int* x, int a);
+double function(int& x, int a, int b);
+
+int main()
+{
+	int x = 15, a = 2, c = 3;
+	printf("%lf\n", function(x));
+	printf("%lf\n", function(&x, a));
+	printf("%lf\n", function(x, a, c));
+	return 0;
+}
+
+double function(int x)
+{
+	return sqrt(x);
+}
+
+double function(int* x, int a)
+{
+	return sqrt(*x);
+}
+
+double function(int& x, int a, int b)
+{
+	return sqrt(x);
+}
+
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 6.Determinaţi minimuldintr-un şir de 10 numere flotante (introduse de la tastatură/iniţializate) 
+folosindfuncţii cu un număr variabil de parametri. Se vor considera primele 7 valori din şir, apoi următoarele 3, 
+după care se afişează minimul din cele 10 folosind valorile determinate anterior.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdarg.h>
+
+double min(double, ...);
+
+int main()
+{
+	double x, y, z;
+	x = min(7, 13, 2, 1, 4, 5, 6, 7);
+	printf("The minimum between the first 7 no is: %.1lf", x);
+	y = min(3, 8, 9, 10);
+	printf("\nThe minimum between the last 3 no is: %.1lf", y);
+	z = min(2, x, y);
+	printf("\nThe minimum between all the numbers is: %.1lf", z);
+	return 0;
+}
+
+double min(double nr, ...)
+{
+	double minimum = 9999;
+	double x;
+	va_list list;
+	va_start(list, nr);
+	for (int i = 0; i < nr; i++) 
+	{
+		if ((x = va_arg(list, int)) < minimum)
+		{
+			minimum = x;
+		}
+	}
+	va_end(list);
+	return minimum;
+}
+
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 7.Scrieţi un program care face o codare simplă prin adaugarea la codul ASCII al caracterului,
+o valoare n=3, folosind  macrofuncții. Exemplu: ‘a’ devine în urma codării ‘d’.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#define function(x) {x+=3;}
+
+int main()
+{
+	char x;
+	puts("Introduceti un caracter");
+	scanf(" %c", &x);
+	function(x);
+	printf("Noul caracter este %c", x);
+	return 0;
+}
+
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 8.Să se scrie un program care afişează numele programului, data şi ora compilării şi numărul 
+de linii pe care îl are acest program.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	printf("Numele programului: %s", __FILE__);
+	printf("\nData compilarii: %s", __DATE__);
+	printf("\nOra compilarii: %s", __TIME__);
+	printf("\nNumarul de linii de cod: %d", __LINE__);
+	return 0;
+}
+
+/*
+Croitoru Rares, 05.03.2021, grupa 2011
+Lab 1 - 9.Realizaţi o aplicaţie C/C++ care aplică un cod binar (mască) fiecărui element al unui şir 
+printr-o funcţie de codare şi invers îl decodează într-o funcţie de decodare, folosind funcţii macro. 
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <string.h>
+#define code(x) {x^=0b11001010;}
+#define decode(x) {x^=0b11001010;}
+
+int main()
+{
+	char v[50];
+	puts("\nIntroduceti un sir de caractere:\n");
+	gets_s(v);
+	printf("\nSirul de caractere initial a fost %s\n", v);
+	int len = strlen(v);
+	for (int i = 0; i < len; i++)
+		code(v[i]);
+	printf("\nSirul codat de caractere este %s\n", v);
+	for (int i = 0; i < len; i++)
+		decode(v[i]);
+	printf("\nSirul de caractere dupa decodare este %s\n", v);
+	return 0;
+}

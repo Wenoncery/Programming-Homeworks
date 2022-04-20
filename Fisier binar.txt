@@ -1,0 +1,58 @@
+// Program care genereaza numere aleatoare, le scrie într-un fisier binar,
+// apoi le citeste din fisier si le afiseaza pe ecran. 
+// Numele fisierului si numarul valorilor de generat se introduc de la tastatura. 
+//#define _CRT_SECURE_NO_WARNINGS //pt. C standard, fopen()
+#include<stdio.h>
+#include<stdlib.h>
+#include<time.h>// functii de biblioteca din limbaj pt. ceasul in timp real
+
+FILE* generare();// functia creaza un fisier binar, scrie numerele in el, lasa fisierul deschis.Returneaza un descriptor de fisier, numit si “file-handle”
+
+int main()
+{
+	FILE* f1;
+	int buf1; // un intreg simplu, buffer pt. afisare cu fread()
+	f1 = generare();/*Revenind din functie indicatorul de pozitie sta pe urmatorul octet de scris.Aici va pune fclose() un EOF, daca nu se mai scrie nimic in acest fisier.Daca fisierul are N octeti,offsetul acestui octet = N (primul fiind la offset zero). Deciftell() ne returneaza chiar lungimea fisierului.*/
+	printf("Lungimea fisierului binar = %d[octeti]\n", ftell(f1));// Urmeaza sa afisam continutul fisierului
+	fseek(f1,0L,SEEK_SET);  // aducem pointerul de fisier pe primul octet.
+	printf("Valorile scrise in fisier sunt: ");/*while (1) {fread(&buf1, sizeof(int), 1, f1);if (feof(fp))break;printf("%4d", buf1);}*/
+	while(fread(&buf1, sizeof(int), 1, f1) == 1)
+		printf("%4d",buf1);fclose(f1);
+	puts("\n...fisierul e inchis, apasti o tasta pt. a termina.\n");
+	return 0;
+}
+FILE* generare()
+{
+	// returnam identificatorul pentru fisierul creat in functie
+	int n, i;
+	char sp[10];  // tablou de caractere, numele fisierului de creat
+	int buf2;  // loc de manevra pt. un singur numar intreg, de scris in fisier
+	FILE* pf;  // declaram fp un pointer la structura de control-stream tip FILE
+	int OFFSET = 1;
+	int RANGE_MAX = 100;
+	printf("Numele fisierului binar(!max.10 car.)<Enter>: ");
+	gets_s(sp, _countof(sp));
+	printf("Cate valori? : "); // cu un break-point aici vedem cum gets() //a substituit terminatorul de rand ‘\n’cu caracterul‘\0’(octetul null)
+	scanf_s("%d", &n);
+	errno_t err;
+	err = fopen_s(&pf, sp, "w+b"); // Efectmodde acces w+b: daca exista un fis. cu acest nume, va fisuprascris
+	if (err != 0)
+	{
+		puts("\n N-am putut deschide fisierul.");
+		exit(1);
+	}
+	else
+	{
+		srand((unsigned)time(NULL));
+		for (i = 0; i < n; i++)
+		{// n = cate numere scriem in fisierul binar// formatului double ofera53 biti pt. mantisasi11 biti pt. exponent.
+			buf2 = (int)(((double)rand() / RAND_MAX) * RANGE_MAX + OFFSET);//RAND_MAX = constanta predefinita in limbaj
+			fwrite(&buf2, sizeof(int), 1, pf);
+		}
+	}
+	printf("...gata, toate numerele s-au scris in %s, dar fisierul e inca deschis\n", sp);
+	return pf;
+}
+/*exemplu de rulare:Numele fisierului binar(!max.10 car.)<Enter>: f7.binCate valori? : 7...gata, toate numerele s-au scris in f7.bin, dar fisierul e inca deschis
+Lungimea fisierului binar = 28[octeti]Valorile scrise in fisier sunt:   11  60  50  88  55  45  45...fisierul e inchis, apasti o tasta pt. a termina.
+E:\...\L13\Debug\L13.exe (process 11696) exited with code 0.Press any key to close this window .. .*/

@@ -1,0 +1,18 @@
+// we supose that the array is increasing sorted
+int binarySearch(int arr[], int size, int target)
+{
+	int middlePosition, middleValue;
+	int low = 0, high = size - 1;
+	while (low <= high)
+	{
+		middlePosition = (low + high) / 2;
+		middleValue = arr[middlePosition];
+		if (target == middleValue)
+			return middlePosition;
+		else
+			if (target < middleValue)
+				high = middlePosition - 1;
+			else low = middlePosition + 1;
+	}
+	return -1;
+}

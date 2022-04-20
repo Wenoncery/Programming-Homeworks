@@ -1,0 +1,49 @@
+// bidimensional  array(matrix) –with array of pointers C++ allocation
+#include <iostream>
+using namespace std;
+int main()
+{
+	int i, j, m, n, ** tab;
+	cout << "\n Introduceti numarul de linii : ";
+	cin >> m;
+	tab = new int* [m];
+	//aray of pointers to rows
+	if (tab != 0)
+	{
+		cout << "\n Introduceti numarul de coloane : ";
+		cin >> n;
+		for (i = 0; i < m; i++)
+		{
+			tab[i] = new int[n];
+			//each row pointer to n elems allocated as int
+			if (tab[i] == 0)
+			{
+				cout << "\n Eroare de alocare ! " << endl;
+				return 1;
+			}
+		}
+		cout << "\n Introduceti elementele tabloului : ";
+		for (i = 0; i < m; i++)
+			for (j = 0; j < n; j++)
+			{
+				cout << "\n\t Elementul tab[" << i << "][ " << j << "]:";
+				cin >> tab[i][j];
+			}
+		cout << "\n\n Elementele tabloului sunt : " << endl;
+		for (i = 0; i < m; i++)
+		{
+			for (j = 0; j < n; j++)
+				cout << tab[i][j] << '\t';
+			cout << '\n';
+		}
+	}
+	else
+		cout << "Alocare nereusita !";
+	if (tab)
+	{
+		for (i = 0; i < m; i++)
+			delete[] tab[i];//for each row eliberate the space of int values 
+		delete[] tab;
+	}//eliberate the array of pointers to rows
+	return 0;
+}

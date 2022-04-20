@@ -1,0 +1,394 @@
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 8 - 1.Construiţi o aplicaţie în care clasa OraCurentaare  ca atribute private ora, minutele şi 
+secundele şi metode publicedetip  set/get  pentru  atributele  clasei.  Adaugaţi  o functie friend 
+clasei  prin  care  să  se  poată  copia conţinutul unui obiect OraCurentadatca  si  parametru,
+într-un alt obiect instanţă a aceleiaşi clasecare  va  fi returnatde functie, ora fiind insa 
+modificata la Greenwich Mean Time.Utilizati timpul curent al calculatorului.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <ctime>
+
+using namespace std;
+
+class OraCurenta {
+private:
+	int ora, minute, secunde;
+public:
+	int getSecunde() {
+		return secunde;
+	}
+	int getMinute() {
+		return minute;
+	}
+	int getOra() {
+		return ora;
+	}
+	void setOra(int x) { ora = x; }
+	void setMinute(int x) { minute = x; }
+	void setSecunde(int x) { secunde = x; }
+	friend OraCurenta functie(OraCurenta);
+};
+
+int main()
+{
+	OraCurenta p1, p2;
+	time_t t = time(NULL);
+	time_t timp_curent = time(NULL);
+	tm* timePtr = localtime(&t);
+	cout << "\nPrimul obiect este: ";
+	p1.setOra(timePtr->tm_hour);
+	p1.setMinute(timePtr->tm_min);
+	p1.setSecunde(timePtr->tm_sec);
+	cout << "\nTimpul este:";
+	cout << "\nOra: " << p1.getOra() << " , " << p1.getMinute() << " minute si " << p1.getSecunde() << " secunde \n";
+	tm* tm_gmt = gmtime(&timp_curent);
+	p2.setOra(tm_gmt->tm_hour);
+	p2.setMinute(tm_gmt->tm_min);
+	p2.setSecunde(tm_gmt->tm_sec);
+	p1 = functie(p2);
+	cout << "\nAcelasi obiect dupa copiere si setare la GMT";
+	cout << "\nOra: " << p1.getOra() << " , " << p1.getMinute() << " minute si " << p1.getSecunde() << " secunde \n";
+	return 0;
+}
+
+OraCurenta functie(OraCurenta p2)
+{
+	OraCurenta p1;
+	p1.ora = p2.ora;
+	p1.minute = p2.minute;
+	p1.secunde = p2.secunde;
+	return p1;
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 8 - 2.Scrieţi o aplicaţie C/C++ încare clasa Calculatorare un atribut privat memorie_RAM(int)
+şi o funcțieprietenă tehnician_service()care  permite  modificarea  valorii  acestui  atribut. 
+Functia friend va  fi  membra  intr-o  alta clasa, Placa_de_bazacare are o componentă 
+denumire_procesor(sir de caractere). Scrieţi codul necesar care permite funcțieiprietene 
+tehnician_service()să modifice (schimbe) valoarea variabilei denumire_procesorsi memorie _RAM.
+*/
+
+#define CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+class Calculator;
+class Placa_de_baza 
+{
+	char denumire_procesor[20];
+public:
+	Placa_de_baza() {
+		strcpy_s(denumire_procesor, " AMD");
+	}
+	void tehnician_service(Calculator c);
+	void nume() {
+		char sir[20];
+		cout << "\nNume procesor: ";
+		cin >> sir;
+		strcpy_s(denumire_procesor, sir);
+	}
+	void getNume() { cout << "\nNumele procesorului este: " << denumire_procesor; }
+};
+
+class Calculator {
+	int memorie_RAM;
+public:
+	Calculator() { memorie_RAM = 16; }
+	void getCalc() { cout << "\nMemoria in RAM a calculatorului este: " << memorie_RAM; }
+	friend void Placa_de_baza::tehnician_service(Calculator);
+};
+
+int main()
+{
+	Calculator calc1;
+	Placa_de_baza pb1;
+	calc1.getCalc();
+	pb1.getNume();
+	pb1.tehnician_service(calc1);
+	calc1.getCalc();
+	pb1.getNume();
+	return 0;
+}
+
+void Placa_de_baza::tehnician_service(Calculator c)
+{
+	c.memorie_RAM = 8;
+	cout << "\nIn functia prietena noua valoare a memoriei RAM este: " << c.memorie_RAM;
+	getNume();
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 8 - 3.Definţi o clasă numită Repositorycare are două variabile private de tip întreg. Clasa mai
+conţine un constructor explicitvid si unul cu 2 parametri şi o metodă accesor care afişează valorile
+variabilelor din clasă. Scrieţi o clasă numită Mathemathics, friend cu prima clasă, care implementează
+operaţiile aritmetice elementare (+, -, *, /) asupra variabilelor din prima clasa.Fiecare metoda 
+primeşte ca parametru un obiect al clasei Repository.
+*/
+
+#define CRT_SECURE_NO_WARNINGS
+#include<iostream>
+
+using namespace std;
+
+class Mathemathics;
+class Repository
+{
+	int x;
+	int y;
+public:
+	Repository() {}; //constructor explicit vid
+	Repository(int s, int b); //constructor cu parametri
+	void afis(); //metoda de afisare
+	friend Mathemathics;
+};
+
+class Mathemathics
+{
+public:
+	Mathemathics() {}; //constructor explicit vid
+	int adunare(Repository);
+	int scadere(Repository);
+	int inmultire(Repository);
+	double impartire(Repository);
+};
+
+int main()
+{
+	int a, b;
+	Mathemathics m;
+	cout << "\n Introduceti valoarea primului numar: ";
+	cin >> a;
+	cout << "\n Introduceti valoarea celui de-al doilea numar: ";
+	cin >> b;
+	Repository p1(a, b);
+	p1.afis();
+	cout << "\n Suma numerelor este: " << m.adunare(p1);
+	cout << "\n Diferenta numerelor este: " << m.scadere(p1);
+	cout << "\n Produsul numerelor este: " << m.inmultire(p1);
+	if (m.impartire(p1) != 0)
+		cout << "\n Rezultatul impartirii este: " << m.impartire(p1) << "\n";
+	return 0;
+}
+
+Repository::Repository(int a, int b)
+{
+	x = a;
+	y = b;
+}
+
+void Repository::afis()
+{
+	cout << "\n Numerele sunt: \n" << "\t\t" << x << " \n\t\t" << y;
+}
+
+int Mathemathics::adunare(Repository p1)
+{
+	return p1.x + p1.y;
+}
+
+int Mathemathics::scadere(Repository p1)
+{
+	return p1.x - p1.y;
+}
+
+int Mathemathics::inmultire(Repository p1)
+{
+	return p1.x * p1.y;
+}
+
+double Mathemathics::impartire(Repository p1)
+{
+	if (p1.y != 0) // numitorul trebuie sa fie diferit de zero
+		return (double)p1.x / p1.y;
+	else
+	{
+		cout << "\nNu se poate imparti la 0!";
+		return 0;
+	}
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 8 - 4.Scrieţi o aplicaţie  C/C++ care defineşte într-o clasă variabila publică contor var_static
+de tip static întreg. Aceasta se va incrementa în cadrul constructorului. După o serie de 
+instanţieri, să se afişeze numarul de obiecte create (conţinutul variabilei var_static).
+*/
+
+#define CRT_SECURE_NO_WARNINGS
+#include<iostream>
+
+using namespace std;
+
+class Clasa
+{
+	int nr;
+public:
+	static int var_static;
+	Clasa(int x); //constructor
+	int getNr();
+};
+
+int Clasa::var_static; // redeclaram variabila statica in afara clasei
+
+int main()
+{
+	int nr;
+	cout << "\n Introduceti o valoare intreaga: ";
+	cin >> nr;
+	Clasa ob1(nr);
+	Clasa ob2(nr);
+	Clasa ob3(nr);
+	Clasa ob4(nr);
+	Clasa ob5(nr);
+	cout << "\n Numarul de obiecte create este: " << ob5.var_static;
+	return 0;
+}
+
+Clasa::Clasa(int x)
+{
+	nr = x;
+	var_static++;
+}
+
+int Clasa::getNr()
+{
+	return nr;
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 8 - 5.Rezolvaţi problema 4 în cazul în care variabila statică este de tip
+private. Definiţi o  metodă  accesor  care returnează valoarea contorului.
+*/
+
+#define CRT_SECURE_NO_WARNINGS
+#include<iostream>
+
+using namespace std;
+
+class Class {
+	int nr;
+	static int varStatic;
+public:
+	Class(int x);
+	int getNr();
+	int getStatic();
+};
+
+int Class::varStatic;
+
+int main()
+{
+	int nr;
+	cout << "Introduceti o valoare: ";
+	cin >> nr;
+	Class ob1(nr);
+	Class ob2(nr);
+	Class ob3(nr);
+	Class ob4(nr);
+	Class ob5(nr);
+	cout << "\nNumarul de obiecte create este: " << ob5.getStatic();
+	return 0;
+}
+
+Class::Class(int x)
+{
+	nr = x;
+	varStatic++;
+}
+
+int Class::getNr()
+{
+	return nr;
+}
+
+int Class::getStatic()
+{
+	return varStatic;
+}
+
+/*
+Croitoru Rares, 18.04.2021, grupa 2011
+Lab 8 - 6.Scrieţi o aplicaţie C/C++ în care să implementați clasa Punct cu atributele private x si y.
+Implementați o funcție friend care să calculeze aria și perimetrul a  doua  forme  geometrice definite
+de două puncte, considerând că aceasta are doua puncte ca si parametri P0(x0,y0)și P1(x1, y1).
+Adăugați funcției un parametru întreg figura prin care să indicați cele doua figuri geometrice
+ce sunt definite de punctele (x0,y0)si (x1, y1). Astfel, pentru un cerc, figura=1,  coordonatele 
+(x0,y0)și (x1,  y1)vor  reprezenta  două puncte  complementare pe  cerc (diametrul). Dacă este 
+triunghi dreptunghic, punctele definesc ipotenuza iar figura va fi =2; Celelalte laturi ale triunghiului
+se  vor  determina  pornind  de la  cele  doua  puncte.Coordonatele punctelor si apoi selecția figurii 
+geometrice se va realiza introducând de la tastatura parametrii.
+*/
+
+#define CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+const double PI = 3.1415;
+
+class Punct 
+{
+private:
+	int x;
+	int y;
+public:
+	void setPoints(int oriz, int vert)
+	{
+		x = oriz;
+		y = vert;
+	}
+	int getX() { return x; }
+	int getY() { return y; }
+	friend double aria(Punct P0, Punct P1, int forma);
+};
+
+int main() 
+{
+	Punct P0, P1;
+	cout << "Introduceti coordonatele punctelor\n";
+	int p0x, p0y, p1x, p1y;
+	cout << "p0x: "; cin >> p0x;
+	cout << "p0y: "; cin >> p0y;
+	cout << "p1x: "; cin >> p1x;
+	cout << "p1y: "; cin >> p1y;
+	P0.setPoints(p0x, p0y);
+	P1.setPoints(p1x, p1y);
+	cout << "\n\nIntroduceti un cod: \n1 pentru cerc \n2 pentru triunghi dreptunghic\n\n";
+	int forma;
+	cin >> forma;
+	if (forma == 1)
+		cout << "E un cerc." << endl;
+	else
+		cout << "E un triunghi dreptunghic.";
+	aria(P0, P1, forma);
+	cout << "\nAria = " << aria(P0, P1, forma);
+	return 0;
+}
+
+double aria(Punct P0, Punct P1, int forma) 
+{
+	double nr = 0.0;
+	if (forma == 1) 
+	{
+		double raza;
+		raza = sqrt((P1.x - P0.x) * (P1.x - P0.x) + (P1.y - P0.y) * (P1.y - P0.y));
+		raza /= 2;
+		nr = PI * PI * raza;
+	}
+	if (forma == 2) 
+	{
+		double ipotenuza, cateta1, cateta2;
+		cateta1 = sqrt((P0.x) * (P0.x) + (P0.y) * (P0.y));
+		cateta2 = sqrt((P1.x) * (P1.x) + (P1.y) * (P1.y));
+		ipotenuza = sqrt((P1.x - P0.x) * (P1.x - P0.x) + (P1.y - P0.y) * (P1.y - P0.y));
+		nr = (cateta1 * cateta2) / ipotenuza;
+	}
+	return nr;
+}

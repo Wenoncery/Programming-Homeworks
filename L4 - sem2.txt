@@ -1,0 +1,736 @@
+/*
+Croitoru Rares, 28.03.2021, grupa 2011
+Lab 4 - 1.Implementaţi metoda bulelor (Bubble-Sort) care foloseşte un indicator flagşi optimizează ciclul interior.
+Se cere atât scrierea funcţiei, cât şi partea de program care face citireaşi afişarea şirului iniţial şi a celui ordonat.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+void citire(int* p, int n);
+void afisare(int* p, int n);
+void bubble_optimizat(int* p, int n);
+
+int main()
+{
+	int* p, n;
+	cout << "\nIntroduceti dim. sir: " << endl;
+	cin >> n;
+	p = new int[n];
+	citire(p, n);
+	cout << "\nSirul inainte de sortare: " << endl;
+	afisare(p, n);
+	bubble_optimizat(p, n);
+	cout << "\nSirul dupa sortare: " << endl;
+	afisare(p, n);
+	if (p)
+		delete[]p;
+	return 0;
+}
+
+void citire(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << "p[" << " " << i << " " << "]=";
+		cin >> p[i];
+		cout << endl;
+	}
+}
+
+void afisare(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+		cout << p[i] << " ";
+}
+
+void bubble_optimizat(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		int flag = 0;
+		for (int j = 1; j < n - i; j++)
+		{
+			if (p[j - 1] > p[j]) 
+			{
+				int temp = p[j];
+				p[j] = p[j - 1];
+				p[j - 1] = temp;
+				flag = 1;
+			}
+		}
+		if (flag == 0)
+			break;
+	}
+}
+
+/*
+Croitoru Rares, 28.03.2021, grupa 2011
+Lab 4 - 2.Modificaţi programul care exemplifică metoda de sortare rapidă (Quick-Sort)
+aşa încât să ordoneze şirul iniţial în ordine descrescătoare.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+void citire(int* p, int n);
+void afisare(int* p, int n);
+void quickSort(int* p, int prim, int ultim);
+
+int main()
+{
+	int* p, n;
+	cout << "\nIntroduceti dim. sir: " << endl;
+	cin >> n;
+	p = new int[n];
+	citire(p, n);
+	cout << "\nSirul inainte de sortare: " << endl;
+	afisare(p, n);
+	quickSort(p, 0, n - 1);
+	cout << "\nSirul dupa sortare: " << endl;
+	afisare(p, n);
+	if (p)
+		delete[]p;
+	return 0;
+}
+
+void citire(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << "p[" << " " << i << " " << "]=";
+		cin >> p[i];
+		cout << endl;
+	}
+}
+
+void afisare(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+		cout << p[i] << " ";
+}
+
+void quickSort(int* p, int prim, int ultim)
+{
+	int i, j, pivot, temp;
+	i = prim;
+	j = ultim;
+	pivot = p[ultim];
+	do {
+		while (p[i] > pivot)
+			i++;
+		while (p[j] < pivot)
+			j--;
+		if (i < j)
+		{
+			temp = p[i];
+			p[i] = p[j];
+			p[j] = temp;
+		}
+		if (i <= j)
+		{
+			j--;
+			i++;
+		}
+	} while (i < j);
+	if (prim < j)
+		quickSort(p, prim, j);
+	if (i < ultim)
+		quickSort(p, i, ultim);
+}
+
+/*
+Croitoru Rares, 28.03.2021, grupa 2011
+Lab 4 - 3.Folosiţi funcţiile de bibliotecă pentru sortări (qsort()) pentru a aranja un şir de 
+înregistrări cu nume, prenume, cod numeric personal, data angajării după două câmpuri la alegere 
+(un exemplu ar fi: crescător după nume şi descrescător după data angajării).
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+struct Angajat
+{
+	char nume[50];
+	char prenume[50];
+	double CNP;
+	struct data_angajarii
+	{
+		int zi;
+		int luna;
+		int an;
+	}data_ang;
+};
+
+void afisare(struct Angajat* p, int n);
+void citire(struct Angajat* p, int n);
+int compare(const Angajat* a, const Angajat* b);
+
+int main()
+{
+	int n;
+	cout << "\nIntroduceti numarul de angajati:\n";
+	cin >> n;
+	Angajat* p = new Angajat[n];
+	citire(p, n);
+	qsort((Angajat*)p, n, sizeof(p[0]), (int(*)(const void*, const void*))compare);
+	afisare(p, n);
+	return 0;
+}
+
+void afisare(struct Angajat* p, int n)
+{
+	cout << "\nDatele sortate:\n";
+	for (int i = 0; i < n; i++)
+	{
+		cout << "\nNume: " << p[i].nume;
+		cout << "\nPreume: " << p[i].prenume;
+		cout << "\nAn angajare: " << p[i].data_ang.an;
+		cout << "\nLuna angajare: " << p[i].data_ang.luna;
+		cout << "\nZi angajare: " << p[i].data_ang.zi;
+		cout << "\n";
+	}
+}
+
+void citire(struct Angajat* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << "\n**********************\n";
+		cout << "\nNume angajat: ";
+		cin >> p[i].nume;
+		cout << "\nPrenume angajat: ";
+		cin >> p[i].prenume;
+		cout << "\nCNP angajat: ";
+		cin >> p[i].CNP;
+		cout << "\nData nasterii: ";
+		cout << "\nZiua: ";
+		cin >> p[i].data_ang.zi;
+		cout << "\nLuna: ";
+		cin >> p[i].data_ang.luna;
+		cout << "\nAn: ";
+		cin >> p[i].data_ang.an;
+	}
+}
+
+int compare(const struct Angajat* a, const Angajat* b)
+{
+	if (a->data_ang.an > b->data_ang.an) return 1;
+	else
+		if (a->data_ang.an < b->data_ang.an) return -1;
+		else {
+			if (a->data_ang.luna > b->data_ang.luna) return 1;
+			else if (a->data_ang.luna < b->data_ang.luna) return -1;
+			else {
+				if (a->data_ang.zi > b->data_ang.zi)
+					return 1;
+				else if (a->data_ang.zi < b->data_ang.zi)
+					return -1;
+				else
+					if ((strcmp(a->nume, b->nume) > 0)) return 1;
+					else if ((strcmp(a->nume, b->nume) < 0)) return -1;
+				return 0;
+			}
+		}
+}
+
+/*
+Croitoru Rares, 28.03.2021, grupa 2011
+Lab 4 - 4.Scrieţi o aplicaţie C/C++ in care plecând de la două tablouri (unidimensionale) de
+numere naturale să se obţină un al treilea tabloucare să conţinătoate elementele tablourilor
+sursă fără a se repeta, aranjate în ordine crescătoare.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+void facere(int* p, int& n);
+
+int main()
+{
+	int i, j, m, n, nr;
+	int a[30], b[30], c[30];
+	printf("Numarul de elemente pentru sirul 1 este :");
+	scanf("%d", &n);
+	for (i = 0; i < n; i++)
+	{
+		printf("a[%d]=", i);
+		scanf("%d", &a[i]);
+		c[i] = a[i];
+	}
+	printf("Numarul de elemente pentru sirul 2 este :");
+	scanf("%d", &m);
+	for (j = 0; j < m; j++)
+	{
+		printf("b[%d]=", j);
+		scanf("%d", &b[j]);
+	}
+	j = 0;
+	for (i = n; i < n + m; i++)
+	{
+		c[i] = b[j];
+		j++;
+	}
+	nr = n + m;
+	facere(c, nr);
+	for (i = 0; i < nr; i++)
+		printf(" %d ", c[i]);
+	return 0;
+}
+
+void facere(int* p, int &n) //sortam si dupa eliminam ce se repeta
+{
+	for (int i = 0; i < n; i++) 
+	{
+		int flag = 0;
+		for (int j = 1; j < n - i; j++)
+		{
+			if (p[j - 1] > p[j]) 
+			{
+				int aux = p[j - 1];
+				p[j - 1] = p[j];
+				p[j] = aux;
+			}
+			if (flag = 0) 
+				break;
+		}
+	}
+	for (int i = 0; i < n; i++)
+	{
+		if (p[i] == p[i + 1]) {
+			for (int j = i; j < n; j++) 
+				p[j] = p[j + 1];
+			n--;
+		}
+	}
+}
+
+/*
+Croitoru Rares, 28.03.2021, grupa 2011
+Lab 4 - 5.Completati codul problemeidate ca exemplu(2)cu alte metode de sortare 
+(sortarea prin selectie, sortarea shell, etc.). Cititide la tastatura numarul de 
+elemente al sirurilor de valori si apoi trimiteţi-l ca parametrula fiecare functie. 
+Comparati timpii de lucru ai fiecarui algoritm.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <time.h>
+#include <iostream>
+
+using namespace std;
+
+void init(int numere[], int);
+void afis(int numere[], int);
+void bubble(int numere[], int);
+void quick(int numere[], int);
+int comparare(const void *arg1, const void *arg2);
+void insert_sort(int numere[], int dim);
+void selection_sort(int numere[], int dim);
+
+int main()
+{
+	int dim, *numere;
+	cout<<"\nIntrodu nr. elemente: ";
+	cin >> dim;
+	numere = new int[dim];
+	init(numere, dim);
+	bubble(numere, dim);
+	init(numere, dim);
+	quick(numere, dim);
+	insert_sort(numere, dim);
+	selection_sort(numere, dim);
+	delete[]numere;
+}
+
+void insert_sort(int numere[], int dim)
+{
+	clock_t start, end;
+	double dif;
+	int i, j, temp;
+	start = clock();
+	for (i = 1; i < dim; i++)
+	{
+		temp = numere[i];
+		for (j = i - 1; j >= 0; j--)
+		{
+			if (numere[j] > temp)
+				numere[j + 1] = numere[j];
+			else
+				break;
+		}
+		numere[j + 1] = temp;
+	}
+	end = clock();
+	dif = (double)(end - start);
+	cout << "\nOrdonarea cu \"insert sort\" a numerelor a durat (clicks) " << dif << " si (seconds) " << ((float)dif) / CLOCKS_PER_SEC << endl;
+}
+
+void selection_sort(int numere[], int dim)
+{
+	clock_t start, end;
+	double dif;
+	int i, j, pozmin, temp;
+	start = clock();
+	for (i = 0; i < dim; i++)
+	{
+		pozmin = i;
+		for (j = i + 1; j < dim; j++)
+		{
+			if (numere[pozmin] > numere[j])
+				pozmin = j;
+		}
+		temp = numere[pozmin];
+		numere[pozmin] = numere[i];
+		numere[i] = temp;
+	}
+	end = clock();
+	dif = (double)(end - start);
+	cout << "\nOrdonarea cu \"select sort\" a numerelor a durat (clicks) " << dif << " si (seconds) " << ((float)dif) / CLOCKS_PER_SEC << endl;
+}
+
+void init(int numere[], int dim)
+{
+	clock_t start, end;
+	double dif;
+	start = clock();
+	srand((unsigned)time(NULL));
+	for (int i = 0; i<dim; i++) 
+	{
+		numere[i] = rand();
+	}
+	end = clock();
+	dif = (double)(end -start);
+	cout<< "\nGenerarea numerelor a durat (clicks) " << dif << " si (seconds) " << ((float)dif) / CLOCKS_PER_SEC << endl;
+}
+
+void afis(int numere[], int dim)
+{
+	clock_t start, end;
+	double dif;start = clock();
+	for (int i = 0; i<dim; i++)
+		cout << " " << numere[i];
+	end = clock(); dif = (double)(end - start); 
+	cout << "\nAfisarea numerelor a durat (clicks) " << dif << "  si (seconds) " << ((float)dif) / CLOCKS_PER_SEC << endl;
+}
+
+void bubble(int numere[], int dim) 
+{
+	clock_t start, end;
+	double dif; int aux, ok; start = clock();
+	do {
+		ok = 1; 
+		for (int i = 0; i < dim - 1; i++) 
+		{ 
+			if (numere[i] > numere[i + 1]) 
+			{ 
+				aux = numere[i]; numere[i] = numere[i + 1]; numere[i + 1] = aux; ok = 0; 
+			} 
+		} 
+	} while (ok == 0);
+	end = clock();
+	dif = (double)(end - start); 
+	cout << "\nOrdonarea cu \"bubble sort\" a numerelor a durat (clicks) " << dif << " si (seconds) " << ((float)dif) / CLOCKS_PER_SEC << endl; 
+}
+
+void quick(int numere[], int dim) 
+{ 
+	clock_t start, end; double dif; start = clock(); 
+	qsort((int*)numere, dim, sizeof(int), comparare); 
+	end = clock(); 
+	dif = (double)(end - start); 
+	cout << "\nOrdonarea cu \"quick sort\" a numerelor a durat (clicks) " << dif << " si (seconds) " << ((float)dif) / CLOCKS_PER_SEC << endl; 
+}
+
+int comparare(const void* arg1, const void* arg2) 
+{ 
+	if (*(int*)arg1 < *(int*)arg2)
+		return -1; 
+	if (*(int*)arg1 == *(int*)arg2)
+		return 0; 
+	if (*(int*)arg1 > *(int*)arg2)
+		return 1; 
+}
+
+/*
+Croitoru Rares, 28.03.2021, grupa 2011
+Lab 4 - 6.Cititi de la tastatura m elementede tip intreg intr-un tablou unidimensional si o valoare intreaga n<m.
+Impartiti tabloulcitit in doua sub-tablori astfel:
+a) primul subtablouva contineprimele nelemente din tabloul initial 
+b)  al doilea subtablouva contine restul elementelor din tablul initial. 
+Sa se realizeze urmatoarele operatii:
+1. sa se ordonezecrescator cele doua subtablouri
+2. sa se sorteze tabloul initial, prin interclasarea celor doua subtabloriordonate. (merge-sort)
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+
+void bubble_optimizat(int* p, int n);
+void subtablouri(int m, int n, int* p, int a[], int b[]);
+void interclasare(int* a, int* b, int* c, int n, int m, int& k);
+
+int main()
+{
+    int m, n, * p;
+    printf("\nNumarul de elemente din sir: ");
+    scanf_s("%d", &m);
+    p = (int*)malloc(m * sizeof(int));
+    for (int i = 0; i < m; i++)
+    {
+        printf("\na[%d]= ", i);
+        scanf_s("%d", (p + i));
+    }
+    printf("\nn= ");
+    scanf_s("%d", &n);
+	int a[100], b[100];
+	subtablouri(m, n, p, a, b);
+	bubble_optimizat(a, n);
+	bubble_optimizat(b, n);
+	int k = 0;
+	interclasare(a, b, p, n, m - n, k);
+	for (int i = 0; i < m; i++)
+		printf("\na[%d]= %d", i, *(p + i));
+	if (p)
+		free(p);
+    return 0;
+}
+
+void bubble_optimizat(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		int flag = 0;
+		for (int j = 1; j < n - i; j++)
+		{
+			if (p[j - 1] > p[j])
+			{
+				int temp = p[j];
+				p[j] = p[j - 1];
+				p[j - 1] = temp;
+				flag = 1;
+			}
+		}
+		if (flag == 0)
+			break;
+	}
+}
+
+void subtablouri(int m, int n, int* p, int a[], int b[])
+{
+	for (int i = 0; i < n; i++)
+		a[i] = *(p + i);
+	for (int i = n; i < m; i++)
+		b[i - n] = *(p + i);
+}
+
+void interclasare(int* a, int* b, int* c, int n, int m, int& k) 
+{
+	int i = 0, j = 0;
+	while (i < n && j < m)
+	{
+		if (a[i] < b[j])
+		{
+			*(c + k) = *(a + i);
+			k++;
+			i++;
+		}
+		else
+		{
+			*(c + k) = *(b + i);
+			k++;
+			j++;
+		}
+	}
+	if (i <= n)
+	{
+		for (int p = i; p < n; p++)
+		{
+			*(c + k) = *(a + p);
+			k++;
+		}
+	}
+	if (j <= m)
+	{
+		for (int p = j; p < m; p++)
+		{
+			*(c + k) = *(b + p);
+			k++;
+		}
+	}
+}
+
+/*
+Croitoru Rares, 28.03.2021, grupa 2011
+Lab 4 - 7.Să se scrie un program care permite sortarea unui stoc de calculatoare. Acestea să se reprezinte în
+programca o structură formată din caracteristicile calculatoarelor (nume(sir caractere), tip  de  procesor(sir 
+caractere), frecventa  de  tact(long  int),  dimensiunea  memoriei  RAM(int), preț (float).  Sortarea  se  va 
+face,  la  alegerea utilizatorului, după: pret, memorie, tact sau tip de procesor. Folosiți, de preferință,
+funcțiade bibliotecă pentru sortări qsort()sau o altă metodă la alegere. Sortați apoi considerând un câmp sir
+de caractere si unul numeric. Afișați rezultatele.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include <stdlib.h>
+
+using namespace std;
+
+struct calc {
+	char nume[30];
+	char proc[20];
+	double frec;
+	int ram;
+	float pret;
+};
+
+void citire(struct calc* d);
+void afisare(struct calc* d);
+int cmp1(const calc* b, const calc* c);
+int cmp2(const calc* b, const calc* c);
+int cmp3(const calc* b, const calc* c);
+int cmp4(const calc* b, const calc* c);
+
+int main()
+{
+	struct calc* a;
+	int i, n, m;
+	cout << "Numarul de elemente(de calculatoare): ";
+	cin >> n;
+	a = new calc[n];
+	for (i = 0; i < n; i++)
+		citire(a + i);
+	cout << "\nsortarea dupa pret m=1: ";
+	cout << "\nsortarea dupa memorie m=2: ";
+	cout << "\nsortarea dupa procesor m=3: ";
+	cout << "\nsortarea dupa frecventa m=4: ";
+	cout << "\nIntroduceti m: ";
+	cin >> m;
+	if (m == 1) qsort((void*)a, n, sizeof(struct calc), (int (*)(const void*, const void*))cmp1);
+	if (m == 2) qsort((void*)a, n, sizeof(struct calc), (int (*)(const void*, const void*))cmp2);
+	if (m == 3) qsort((void*)a, n, sizeof(struct calc), (int (*)(const void*, const void*))cmp3);
+	if (m == 4) qsort((void*)a, n, sizeof(struct calc), (int (*)(const void*, const void*))cmp4);
+	for (i = 0; i < n; i++)
+		afisare(a + i);
+	delete[]a;
+	return 0;
+}
+
+void citire(struct calc* d)
+{
+	cout << "Nume calculator: ";
+	cin >> d->nume;
+	cout << "Procesor: ";
+	cin >> d->proc;
+	cout << "Frecventa de tact: ";
+	cin >> d->frec;
+	cout << "RAM: ";
+	cin >> d->ram;
+	cout << "Pret: ";
+	cin >> d->pret;
+}
+
+void afisare(struct calc* d)
+{
+	cout << "\nNume calculator:  " << d->nume << endl;
+	cout << "Procesor:  " << d->proc << endl;
+	cout << "Frecventa:  " << d->frec << endl;
+	cout << "RAM:  " << d->ram << endl;
+	cout << "Pret:  " << d->pret << endl;
+}
+
+int cmp1(const calc* b, const calc* c)
+{
+	if (b->pret < c->pret) return -1;
+	else if (b->pret > c->pret) return 1;
+	return 0;
+}
+
+int cmp2(const calc* b, const calc* c)
+{
+	if (b->ram < c->ram) return -1;
+	else if (b->ram > c->ram) return 1;
+	return 0;
+}
+
+int cmp3(const calc* b, const calc* c)
+{
+	int pr;
+	pr = _stricmp(b->proc, c->proc);
+	if (pr < 0) return -1;
+	else if (pr > 0) return 1;
+	return 0;
+}
+
+int cmp4(const calc* b, const calc* c)
+{
+	if (b->frec < c->frec) return -1;
+	else if (b->frec > c->frec) return 1;
+	return 0;
+}
+
+/*
+Croitoru Rares, 28.03.2021, grupa 2011
+Lab 4 - 8.Preluați din două fișiere doua tablouri unidimensionalece conținvalori reale. Generați
+un al treilea tablou care să conțină toate valorile din cele  doua tablouriși toate valorile 
+obținute prin medierea valorilor de pe aceeași poziție  din  cele  doua  tablouri  inițiale.  Dacă
+numărul  de  elemente  ale tablourilordiferă,  media  se  va  face considerând valoarea 0.0 pentru
+elementele lipsă. Ordonați al treilea tablou și numărați câte valori neunice sunt în șir. 
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<malloc.h>
+
+const double DIM = 100;
+
+int main()
+{
+    FILE* f1, * f2;
+    f1 = fopen("test1.txt", "r");
+    f2 = fopen("test2.txt", "r");
+    double* p = (double*)malloc(DIM * sizeof(double));
+    int i = 0;
+    while (!feof(f1))
+    {
+        fscanf(f1, "%lf", (p + i));
+        i++;
+    }
+    fclose(f1);
+    int j = i;
+    while (!feof(f2))
+    {
+        fscanf(f2, "%lf", (p + j));
+        j++;
+    }
+    fclose(f2);
+    int nr = (i > j - i ? i : j - i);
+    for (int k = 0; k < nr; k++)
+    {
+        if (k < i && k < j)
+            *(p + j + k) = (*(p + i + k) + *(p + k)) / 2.0;
+        else
+        {
+            int x = (i < j - i ? i : j - i);
+            *(p + j + k) = (*(p + x + k)) / 2.0;
+        }
+    }
+    for (int i = 0; i < nr + j - 1; i++)
+        for (int l = i; l < nr + j; l++)
+        {
+            double y = *(p + i);
+            *(p + i) = *(p + l);
+            *(p + l) = y;
+        }
+    printf("\nSirul ordonat este:\n");
+    for (int i = 0; i < nr + j; i++)
+        printf("%lf ", *(p + i));
+    free(p);
+    return 0;
+}

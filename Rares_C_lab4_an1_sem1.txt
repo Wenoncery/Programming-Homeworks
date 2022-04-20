@@ -1,0 +1,154 @@
+/*
+Croitoru Rares, program de calculare a mediei aritmetice a 3 numere neintregi
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+using namespace std;
+
+int main()
+{
+	float a, b, c, med;
+	printf("introduceti cele 3 numere neintregi ");
+	scanf_s("%f", &a);
+	scanf_s("%f", &b);
+	scanf_s("%f", &c);
+	med = (a + b + c) / 3;
+	printf("media aritmetica:%f", med);
+	return 0;
+}
+
+/*
+Croitoru Rares, program de calculare a mediei geometrice a 2 numere intregi
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<math.h>
+int main()
+{
+	int x, y;
+	float  medgeom;
+	printf("introduceti cele 2 numere intregi: \n");
+	scanf_s("%d", &x);
+	scanf_s("%d", &y);
+	medgeom = sqrt(x * y);
+	printf("media geometrica:%f", medgeom);
+	return 0;
+}
+
+/*
+Croitoru Rares, program de afisare a rezultatului cu ajutorul supraîncărcării operatorului << şi a lui cout
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+
+using namespace std;
+
+int main()
+{
+	int n;
+	n = 10;
+	cout << "Numarul este " << n << '\n';
+	n = 20;
+	cout << "Numarul este " << n << '\n';
+	n = 30;
+	cout << "Numarul este " << n << '\n';
+	return 0;
+}
+
+/*
+Croitoru Rares, program de afisare a unui sir de caractere
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <iostream>
+
+using namespace std;
+
+int main() {
+	char s[50];
+	gets_s (s);
+	cout << s<<'\n';
+	cout << "Acesta este un sir de caractere\nscris pe 2 randuri";
+	return 0;
+}
+
+/*
+Croitoru Rares, program de calculare a sumei ponderate a 3 numere intregi, cu ponderile subunitare
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+using namespace std;
+
+int main() {
+	int a, b, c;
+	float p1, p2, p3,sumapond;
+	printf("introduceti 3 numere intregi:\n");
+	scanf_s("%d", &a);
+	scanf_s("%d", &b);
+	scanf_s("%d", &c);
+	printf("introduceti 3 ponderi subunitare, a caror suma e egala cu 1:\n");
+	scanf_s("%f", &p1);
+	scanf_s("%f", &p2);
+	scanf_s("%f", &p3);
+	sumapond = (float)p1 * a + p2 * b + p3 * c;
+	printf("suma ponderata a celor 3 numere introduse cu ponderile specifice este:%f", sumapond);
+	return 0;
+}
+
+/*
+Croitoru Rares, program de afisare a unor constante de tipul int, float, char
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+const int x = 1;
+const double PI = 3.14;
+const char s = 'a';
+
+using namespace std;
+
+int main()
+{
+	cout << x << '\n';
+	cout << PI << '\n';
+	cout << s << '\n';
+	return 0;
+}
+
+/*
+Croitoru Rares, program de calculare a formulei 1/a+1/b+1/c
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	float a, b, c;
+	printf("introduceti 3 numere reale: ");
+	scanf_s("%f", &a);
+	scanf_s("%f", &b);
+	scanf_s("%f", &c);
+	printf("%f\n", 1 / a + 1 / b + 1 / c);
+	int x, y, z;
+	printf("introduceti 3 numere intregi: ");
+	scanf_s("%d", &x);
+	scanf_s("%d", &y);
+	scanf_s("%d", &z);
+	printf("%f\n", (float)1 / x + 1 / y + 1 / z);
+	return 0;
+}//end main

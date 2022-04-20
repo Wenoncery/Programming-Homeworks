@@ -1,0 +1,28 @@
+//access to bytes for an intand float
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+void baza2(unsigned int);
+
+int main()
+{
+	int n, * pn;
+	float r, * pr;
+	printf("\nIntroduceti un numar intreg pozitiv: ");
+	scanf("%d", &n);
+	pn = &n;
+	printf("\nReprezentarea in memorie a lui %d este in hexa %x si pe bytes: 0x%02x%02x%02x%02x\n", n, n, *((unsigned char*)pn + 3), *((unsigned char*)pn + 2), *((unsigned char*)pn + 1), *((unsigned char*)pn));
+	printf("\n Bitiibaza2 : ");
+	baza2(n);
+	printf("\nIntroduceti un numar real: ");
+	scanf("%f", &r);
+	pr = &r;
+	printf("\nReprezentarea in memorie a lui %f este in hexa %a si pe bytes: 0x%02x%02x%02x%02x\n", r, r, *((unsigned char*)pr + 3), *((unsigned char*)pr + 2), *((unsigned char*)pr + 1), *((unsigned char*)pr));
+}//main
+
+void baza2(unsigned int a)
+{
+	if (a != 0)
+		baza2(a >> 1);
+	printf("%d ", a % 2);
+}//baza2

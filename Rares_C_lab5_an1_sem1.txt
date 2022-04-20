@@ -1,0 +1,266 @@
+/*
+Croitoru Rares, program de calculare a rezistentei in serie si in paralel
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+using namespace std;
+
+//definire antet functii
+float serie(int x, int y);
+float paralel(int x, int y);
+
+int main() {
+	int R1, R2;
+	float RS, RP;
+	printf("introduceti 2 valori intregi pentru rezistente:");
+	scanf_s("%d", &R1);
+	scanf_s("%d", &R2);
+	RS = serie(R1, R2);
+	RP = paralel(R1, R2);
+	printf("Rezistenta echivalenta in serie este %.3f\n", RS);
+	printf("Rezistenta echivalenta in paralel este %.3f\n", RP);
+	return 0;
+}//end main
+
+float serie(int x, int y)
+{
+	return (float)x + y;
+}
+
+float paralel(int x, int y)
+{
+	return (float)x * y / (x + y);
+}
+
+/*
+Croitoru Rares, program de calculare a capacitatii echivalente grupării serie-paralel
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+using namespace std;
+
+//definire antet functii
+float serie(float C1, float C2);
+float paralel(float C1, float C2);
+
+int main() {
+	float C1, C2;
+	float CS, CP;
+	printf("introduceti 2 valori pentru capacitati:");
+	scanf_s("%f", &C1);
+	scanf_s("%f", &C2);
+	CS = serie(C1, C2);
+	CP = paralel(C1, C2);
+	printf("Capacitatea echivalenta in serie este %-.4f\n", CS);
+	printf("Rezistenta echivalenta in paralel este %-.4f\n", CP);
+	return 0;
+}//end main
+
+float serie(float C1, float C2)
+{
+	return C1 + C2;
+}
+
+float paralel(float C1, float C2)
+{
+	return C1 * C2 / (C1 + C2);
+}
+
+/*
+Croitoru Rares, program de calculare a ipotenuzei unui triunghi dreptunghic si aflarea perimetrului
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<math.h>
+
+int main()
+{
+	int c1, c2;
+	float ip, p;
+	printf("Introduceti lungimea primei catete: ");
+	scanf_s("%d", &c1);
+	printf("Introduceti lungimea celei de-a doua catete: ");
+	scanf_s("%d", &c2);
+	ip =(float) sqrt((c1 * c1) + (c2 * c2));
+	printf("Ipotenuza are  valoarea:%f\n",ip);
+	p =(float) c1 + c2 + ip;
+	printf("Perimetrul are valoarea:%f",p);
+	return 0;
+}//end main
+
+/*
+Croitoru Rares, program de rezolvare a unei ecuatii de tipul ax+b=0, a!=0
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+int main()
+{
+	int a, b;
+	printf("Introduceti valoarea lui a: ");
+	scanf_s("%d", &a);
+	printf("Introduceti valoarea lui b: ");
+	scanf_s("%d", &b);
+	float x;
+	x =(float) -b / a;
+	printf("Rezultatul este %f", x);
+	return 0;
+}
+
+/*
+Croitoru Rares, program de calculare Rezistenta serie-paralel si Capacitate serie-paralel
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+using namespace std;
+
+//definire antet subprograme
+float serie(float a, float b);
+float paralel(float a, float b);
+
+int main()
+{
+	float c1, c2, r1, r2;
+	printf("Introduceti prima valoare pentru capacitate:");
+	scanf_s("%f", &c1);
+	printf("Introduceti a doua valoare pentru capacitate:");
+	scanf_s("%f", &c2);
+	printf("Introduceti prima valoare pentru rezistenta:");
+	scanf_s("%f", &r1);
+	printf("Introduceti a doua valoare pentru rezistenta:");
+	scanf_s("%f", &r2);
+	float ser_cap, par_cap, ser_rez, par_rez;
+	ser_cap = serie(c1, c2);
+	par_cap = paralel(c1, c2);
+	ser_rez = serie(r1, r2);
+	par_rez = paralel(r1, r2);
+	printf("\nCapacitatea echivalenta gruparii serie este: %.4f", ser_cap);
+	printf("\nCapacitatea echivalenta gruparii paralel este: %.4f", par_cap);
+	printf("\nRezistenta echivalenta gruparii serie este:  %.4f", ser_rez);
+	printf("\nRezistenta echivalenta gruparii paralel este:  %.4f", par_rez);
+	return 0;
+}//end main
+
+float serie(float a, float b)
+{
+	return a + b;
+}
+
+float paralel(float a, float b)
+{
+	return a * b / (a + b);
+}
+
+/*
+Croitoru Rares, program de calculare a mediei notelor alor 2 elevi
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+//definire antet subprogram
+float medie(float nota1, float nota2);
+
+int main()
+{
+	char nume1[21], nume2[21];
+	float nota1, nota2;
+	printf("Nume student 1: ");
+	gets_s(nume1);
+	printf("\nNume student 2: ");
+	gets_s(nume2);
+	printf("\nNota student 1: ");
+	scanf_s("%f", &nota1);
+	printf("\nNota student 2: ");
+	scanf_s("%f", &nota2);
+	printf("\nPrimul student: %20s", nume1);
+	printf("\nAl doilea student: %-20s", nume2);
+	printf("\nMedia notelor este %.3f", medie(nota1, nota2));
+	return 0;
+}//end main
+
+float medie (float nota1, float nota2)
+{ 
+	return (nota1 + nota2) / 2;
+}
+
+/*
+Croitoru Rares, program de calculare a lungimii si ariei cercului
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+const double pi = 3.141; // definirea constantei PI cu 3 zecimale
+
+int main()
+{
+	int raza;
+	double lungimea, aria;
+	printf("Introduceti raza cercului, nr intreg: ");
+	scanf_s("%d", &raza);
+	lungimea = 2 * pi * raza;
+	printf("\nLungimea cercului este: %10.3f", lungimea);
+	aria = pi * raza * raza;
+	printf("\nAria cercului este: %10.3f", aria);
+	return 0;
+}//end main
+
+/*
+Croitoru Rares, program de calculare a timpului cu trenul de la Cluj la Brasov
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+int main()
+{
+	int ora_plec, ora_sosi, min_plec, min_sosi,timp;
+	printf("introduceti ora plecarii: ");
+	scanf_s("%d", &ora_plec);
+	printf("introduceti minutul plecarii: ");
+	scanf_s("%d", &min_plec);
+	printf("introduceti ora sosirii: ");
+	scanf_s("%d", &ora_sosi);
+	printf("introduceti minutul sosirii: ");
+	scanf_s("%d", &min_sosi);
+	timp = (ora_sosi-ora_plec)*60-min_plec+min_sosi;
+	if (timp < 0)
+		timp = 24 * 60 - (-timp);
+	printf("timpul trecut este %d ore si %d minute", timp / 60, timp % 60);
+	return 0;
+}//end main
+
+/*
+Croitoru Rares, program de calculare a timpului dupa care se intalnesc 2 masini aflate la 100km
+07.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+int main()
+{
+    double vit1, vit2;
+    printf("Masina 1 merge cu v1(km/h): ");
+    scanf_s("%lf", &vit1);
+    printf("Masina 2 merge cu v2(km/h): ");
+    scanf_s("%lf", &vit2);
+    double t = (double)100 / (vit1 + vit2);
+    // formula este: 100(km) = vit1(km/h) * t(h) + vit2(km/h) * t(h) <=> t = 100/(vit1+vit2)
+    printf("Cele doua mobile se vor intalni dupa %.2f minute", t * 60);
+    return 0;
+}

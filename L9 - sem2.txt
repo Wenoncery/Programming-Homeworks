@@ -1,0 +1,826 @@
+/*
+Croitoru Rares, 05.05.2021, grupa 2011
+Lab 9 - 2.Pornind de la exemplul 5 verificati/implementati următoarele cerințe:
+a.citirea/scrierea unei matrici, unde dimensiunile sunt preluate de la tastatură
+b.testați  toți  operatorii  supraîncărcați. Implementati  variante  in  care  se  folosesc  metode  membre  la supraincarcare.
+c.afișați elementele de pe diagonala principală și secundară
+d.implementati operatiile cu matrici folsind metode membre.
+*/
+
+//main
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+using namespace std;
+#include "Matrix.h"
+
+int nc, nl;
+
+int main()
+{
+	int i, j;
+	cout << "\n Supraincarcare operatorului ():  \n";
+	cout << "\n";
+	cout << "Numarul de linii: ";
+	cin >> nl;
+	cout << "Numarul de coloane: ";
+	cin >> nc;
+	Matrix m(nl, nc);
+	cout << "\n Dati prima matrice: \n";
+	m.citire();
+	cout << "\n Matricea este: \n";
+	m.afisare();
+	cout << "\n Supraincarcarea operatorului =";
+	Matrix n = m;
+	cout << "\n";
+	for (int i = 0; i < nl; i++)
+	{
+		cout << "\n";
+		for (j = 0; j < nc; j++)
+			cout << n(i, j) << "\t";
+		Matrix m1(nl, nc);
+		cout << "\n Dati a 2-a matrice: \n";
+		m1.citire();
+		cout << "\n Matricea este:" << "\n";
+		m1.afisare();
+		Matrix m2(nl, nc);
+		cout << "\n Supraincarcarea operatorului +";
+		m2 = m + m1;
+		cout << "\n Matricea rezultata din suma celor doua matrici este:\n";
+		m2.afisare();
+		cout << "\n\n Supraincarcarea operatorului -";
+		m2 = m - m1;
+		cout << "\n Matricea rezultanta din diferenta celor 2 matrici este:";
+		m2.afisare();
+		Matrix m3(nc, nl);
+		cout << "\n Dati matricea pentru produs(inmultim prima matrice cu cea care urmeaza sa fie data):\n";
+		m3.citire();
+		cout << "\n Matricea este:" << "\n";
+		m3.afisare();
+		Matrix m4(nl, nl);
+		cout << "\n Supraincarcarea operatorului *";
+		m4 = m * m3;
+		cout << "\n Matricea rezultata din produselor celor(prima si cea care a fost data) 2 matrici este:\n";
+		m4.afisare();
+	}
+	return 0;
+}
+
+//Matrix.h
+
+#pragma once
+
+class Matrix
+{
+private:
+	const int rows;
+	const int cols;
+	int* elems;
+public:
+	Matrix(const int rows, const int cols);
+	Matrix(const Matrix&);
+	~Matrix(void) { delete elems; }
+	int& operator () (const int row, const int col);
+	Matrix& operator=(const Matrix&);
+	friend Matrix operator+(Matrix&, Matrix&);
+	friend Matrix operator-(Matrix&, Matrix&);
+	friend Matrix operator*(Matrix&, Matrix&);
+	const int Rows(void)
+	{
+		return rows;
+	}
+	const int Cols(void)
+	{
+		return cols;
+	}
+	void citire();
+	void afisare();
+};
+
+Matrix::Matrix(const int r, const int c) : rows(r), cols(c)
+{
+	if (rows > 0 && cols > 0)
+		elems = new int[rows * cols];
+}
+
+Matrix::Matrix(const Matrix& m) : rows(m.rows), cols(m.cols)
+{
+	int n = rows * cols;
+	if (rows > 0 && cols > 0)
+		elems = new int[n];
+	for (int i = 0; i < n; i++)
+		elems[i] = m.elems[i];
+}
+
+int& Matrix::operator () (const int row, const int col)
+{
+	if (row >= 0 && row < rows)
+		if (col >= 0 && col < cols)
+			return elems[row * cols + col];
+}
+
+Matrix& Matrix::operator = (const Matrix& m)
+{
+	if (this == &m)
+	{
+		printf("Auto-atribuire!");
+	}
+	else
+	{
+		if (rows == m.rows && cols == m.cols)
+		{
+			int n = rows * cols;
+			for (int i = 0; i < n; i++)
+				elems[i] = m.elems[i];
+		}
+		return *this;
+	}
+}
+
+Matrix operator + (Matrix& p, Matrix& q)
+{
+	if (p.rows == q.rows && p.cols == q.cols)
+	{
+		Matrix m(p.rows, p.cols);
+		for (int r = 0; r < p.rows; ++r)
+			for (int c = 0; c < p.cols; ++c)
+				m(r, c) = p(r, c) + q(r, c);
+		return m;
+	}
+}
+
+Matrix operator - (Matrix& p, Matrix& q)
+{
+	if (p.rows == q.rows && p.cols == q.cols)
+	{
+		Matrix m(p.rows, p.cols);
+		for (int r = 0; r < p.rows; ++r)
+			for (int c = 0; c < p.cols; ++c)
+				m(r, c) = p(r, c) - q(r, c);
+		return m;
+	}
+}
+
+Matrix operator * (Matrix& p, Matrix& q)
+{
+	if (p.cols == q.rows)
+	{
+		Matrix m(p.rows, q.cols);
+		for (int r = 0; r < p.rows; ++r)
+			for (int c = 0; c < q.cols; ++c)
+			{
+				m(r, c) = 0.0;
+				for (int i = 0; i < p.cols; ++i)
+					m(r, c) += p(r, i) * q(i, c);
+			}
+		return m;
+	}
+}
+
+void Matrix::citire()
+{
+	for (int i = 0; i < rows; i++)
+		for (int j = 0; j < cols; j++)
+		{
+			cout << "\n" << "Dati elementele de pe linia " << i + 1 << " si coloana " << j + 1 << " :";
+			cin >> elems[cols * i + j];
+		}
+}
+
+void Matrix::afisare()
+{
+	for (int i = 0; i < rows; i++)
+	{
+		cout << "\n";
+		for (int j = 0; j < cols; j++)
+		{
+			cout << elems[cols * i + j] << "\t";
+		}
+	}
+}
+
+/*
+Croitoru Rares, 05.05.2021, grupa 2011
+Lab 9 - 3.Să  se supraîncarce  operatorul []astfel  încât,  folosit  fiind  asupra  unor  obiecte 
+din  clasaDepartament,  ce contine un tablou de obiecte de tip Angajat (clasa Angajatcontine 
+variabilele nume(şir de caractere) şisalariu (double)),să returneze toată informaţia legată de 
+angajatul al cărui număr de ordine este trimis ca parametru.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+using namespace std;
+#include<string.h>
+
+class Departament;
+
+class Angajat
+{
+	char nume[20];
+	float salariu;
+public:
+	friend class Departament;
+	Angajat() {};
+	void afisare();
+	char* getN();
+	float getS();
+};
+
+class Departament
+{
+	int n;
+	Angajat* ang;
+
+public:
+	Departament(int nr);//constructor
+	void citire();
+	Angajat operator[](int);//supraincarcarea  operatorului de indexare
+};
+
+char* Angajat::getN()
+{
+	return nume;
+}
+
+float Angajat::getS()
+{
+	return salariu;
+}
+
+void Angajat::afisare()
+{
+	cout << "\n Numele angajatului: " << nume << "\n";
+	cout << " Salariul: " << salariu;
+}
+
+Departament::Departament(int nr)  //constructor
+{
+	n = nr;
+	ang = new Angajat[n];
+}
+void Departament::citire()  //initializam tabloul angajat
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << "\n Introduceti numele angajatului " << i + 1 << ": ";
+		cin >> ang[i].nume;
+		cout << "\n Introduceti salariul " << i + 1 << ": ";
+		cin >> ang[i].salariu;
+	}
+}
+Angajat Departament::operator[](int index)  //suparaincarcarea operatorului []
+{
+	return ang[index - 1];
+}
+
+int main()
+{
+	int nr, ind;
+	cout << "\n Dati numarul de angajati: ";
+	cin >> nr;
+
+	Departament ob(nr);
+	ob.citire();
+
+	cout << "\n Dati numarul de ordine al angajatului pentru care doriti informatii: ";
+	cin >> ind;
+
+	if ((ind >= 1) && (ind <= nr))
+
+	{
+		cout << "\n Angajatul cu numarul de ordine " << ind << " este:\n";
+		ob[ind].afisare();
+		cout << endl;
+	}
+	else
+		cout << "\n Numarul de ordine este mai mare sau mai mic decat numarul de angajati introdusi anterior";
+	return 0;
+}
+
+/*
+Croitoru Rares, 05.05.2021, grupa 2011
+Lab 9 - 4.Să se supraîncarce operatorii newşi deleteîntr-una din clasele cu care s-a lucrat 
+anterior, în vederea alocarii şi eliberarii de memorie pentru un obiect din clasa respectivă.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include<string.h>
+#include<malloc.h>
+
+using namespace std;
+
+class Departament;
+
+class Angajat
+{
+	char nume[20];
+	float salariu;
+public:
+	friend class Departament;
+	Angajat() {};
+	Angajat(char*, float s);
+	void afis();
+	char* genN();
+	float getS();
+
+	void* operator new(size_t marime);//supraincarcarea operatorului new
+	void operator delete(void* a);
+	void* operator new[](size_t marime);//supraincarcarea operatorului de indexare
+	void operator delete[](void* a);
+};
+
+class Departament
+{
+	int n;
+public:
+	Angajat* ang;
+	Departament(int nr);
+	Departament();
+	void citire();
+	Angajat operator[](int);
+
+	void* operator new[](size_t marime);
+	void operator delete[](void* a);
+};
+
+int main()
+{
+	int nr, ind;
+	cout << "\n Introduceti numarul de angajati: ";
+	cin >> nr;
+	char sir[4] = "Pop";
+	Angajat* a = new Angajat(sir, 525.0);
+	cout << "\n Informatia despre angajat: ";
+	a->afis();
+
+	Departament ob(nr);
+	Departament* ob2 = new Departament[2];
+	ob2[0] = Departament(1);
+	ob2[1] = Departament(2);
+
+	ob.citire();
+	cout << "\n Introduceti numarul de ordine al angajatului pentru care doriti informatii: ";
+	cin >> ind;
+	if ((ind >= 1) && (ind <= nr))
+	{
+		cout << "\n Angajatul cu numarul de ordine " << ind << " este:\n";
+		ob[ind].afis();
+	}
+	else
+		cout << "\n Numarul de ordine este prea mare sau prea mic";
+	delete a;
+	delete[]ob2;
+	return 0;
+}
+
+
+Angajat::Angajat(char* n, float s)
+{
+	strcpy_s(nume, n);
+	salariu = s;
+}
+
+char* Angajat::genN()
+{
+	return nume;
+}
+
+float Angajat::getS()
+{
+	return salariu;
+}
+
+void Angajat::afis()
+{
+	cout << "\n Nume: " << nume << "\n";
+	cout << " Salariu: " << salariu;
+}
+
+void* Angajat::operator new(size_t marime)
+{
+	cout << "\n Supraincarc local operatorul new pentru clasa Angajat";
+	return malloc(marime);
+}
+
+void Angajat::operator delete(void* a)
+{
+	cout << "\n Supraincarc local operatorul delete pentru clasa Angajat";
+	free(a);
+}
+
+void* Angajat::operator new[](size_t marime)
+{
+	cout << "\n Supraincarc local operatorul new[] pentru clasa Angajat";
+	return malloc(marime);
+}
+
+void Angajat::operator delete[](void* a)
+{
+	cout << "\n Supraincarc local operatorul delete[] pentru clasa Angajat";
+	free(a);
+}
+
+Departament::Departament() {}//constructor vid
+
+Departament::Departament(int nr)  //constructor cu un parametru
+{
+	n = nr;
+	for (int i = 0; i < n; i++)
+		ang = new Angajat[n];
+	if (!ang)
+	{
+		cout << "\n Nu am putut aloca memorie pentru angajat";
+		exit(0);
+	}
+}
+
+void Departament::citire()  //initializam tabloul angajat
+{
+	for (int i = 0; i < n; i++)
+	{
+		cout << "\n Introduceti numele angajatului " << i + 1 << " : ";
+		cin >> ang[i].nume;
+		cout << "\n Introduceti salariul " << i + 1 << " : ";
+		cin >> ang[i].salariu;
+	}
+}
+
+Angajat Departament::operator[](int index)  //suparaincarcarea operatorului []
+{
+	return ang[index - 1];
+}
+
+void* Departament::operator new[](size_t marime)
+{
+	cout << "\n Supraincarc local operatorul new[] pt clasa Departament.";
+	return malloc(marime);
+}
+
+void Departament::operator delete[](void* a)
+{
+	cout << "\n Supraincarc local operatorul delete[] pt clasa Departament.";
+	free(a);
+}
+
+/*
+Croitoru Rares, 05.05.2021, grupa 2011
+Lab 9 - 5.Să  se scrie  programul  care considera  o  clasa MyClass cu trei atribute  de  tip int. 
+Clasa considera  pe  baza mecanismului  desupraincarcare  metode  publiceint  myFunction(...),care 
+în  funcţie de numărul de parametri primiţi,  returnează  fie  valoarea  primită(1  parametru), 
+fie  produsul  variabilelor  de  intrare(0-toti, 2,  3parametrii).Instantiati  un obiect  din clasa
+in main(),setati  atributele cu  metode  setter  adecvatedinclasa si afisativalorile la apelurile metodelor.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+
+using namespace std;
+
+class MyClass
+{
+	int a, b, c;
+public:
+	MyClass() {}//constructor vid
+	MyClass(int x, int y, int z)//constructor cu parametri
+	{
+		a = x;
+		b = y;
+		c = z;
+	}
+	int myFunction(int x)
+	{
+		return x;
+	}
+	int myFunction(int x, int y)
+	{
+		return x * y;
+	}
+	int myFunction(int x, int y, int z)
+	{
+		return x * y * z;
+	}
+};
+
+int main()
+{
+	int a, b, c;
+	cout << "\na: ";
+	cin >> a;
+	cout << "\nb: ";
+	cin >> b;
+	cout << "\nc: ";
+	cin >> c;
+	MyClass f(a, b, c);
+	cout << "\nFirst parameter: " << f.myFunction(a);
+	cout << "\nProduct of the first 2: " << f.myFunction(a, b);
+	cout << "\nProduct of all 3: " << f.myFunction(a, b, c);
+	return 0;
+}
+
+/*
+Croitoru Rares, 05.05.2021, grupa 2011
+Lab 9 - 7.Să se  definească clasa Studentavând  cadate  membre  private: numele(șir de caractere), 
+note(pointer  de  tip întreg) și nr_note(int). Clasa mai conține un constructor cu parametri, un 
+constructor de copiere, o metodade supraîncărcare a operatorului de atribuire, o metodă de setare 
+a notelor, o metodă de afișare a atributelor și un destructor.  Să se instanțieze obiecte folosind
+constructorul  cu  parametri,  un  alt  obiect va  fi  obtinut folosind constructorul  de  copiere,
+afișând de fiecare data atributele obiectului creat.Realizați o operație de copiere  a unui  obiect
+în  alt obiect,  ambele  fiind  create  in  prealabil.  Afișati  rezultatul  copierii. Analizati 
+metodele utilizate.Realizati o alta implementare in care numele e dat printr-un pointer catre 
+un sir de caractere.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+#include<string.h>
+
+using namespace std;
+
+class Student
+{
+	char nume[20];
+	int* note;
+	int nr_note;
+public:
+	Student(char n[], int* p, int nr);//constructor cu paramteri
+	Student(Student& ob1);//constructor de copiere
+	Student& operator =(Student& s);//metoda de supraincarcare a operatorului de atribuire
+	void setNote(char n[], int* p, int nr);//metoda de setare a notelor
+	void afis();// metoda de afisare a atributelor
+	~Student(void);//destructor
+};
+
+int main()
+{
+	char num[20];
+	int vec[20];
+	int* p = &vec[0];
+	int nr;
+	cout << "\n Introduceti numele studentului 1: ";
+	cin >> num;
+	cout << "\n Dati numarul de note: ";
+	cin >> nr;
+	cout << "\n Dati notele:";
+	for (int i = 0; i < nr; i++)
+		cin >> *(p + i);
+	Student ob1(num, p, nr);  //instantiem obiectul1 cu constructorul cu parametri
+	ob1.afis();
+	Student ob2(ob1);  //instantiem obiectul 2 cu constructorul de copiere
+	cout << "\n Am creat un al doilea obiect cu aceleasi caracteristici ca si primul:\n";
+	ob2.afis();
+	//cream un nou obiect pe care il initializam cu constructorul cu parametri
+	cout << "\n Dati numele studentului 2: ";
+	cin >> num;
+	cout << "\n Dati numarul de note ale studentului: ";
+	cin >> nr;
+	cout << "\n Dati notele studentului: ";
+	for (int i = 0; i < nr; i++)
+		cin >> *(p + i);
+
+	Student ob3(num, p, nr);
+	ob3.afis();
+
+	ob3 = ob1;
+	ob3.afis();
+	return 0;
+}
+
+Student::Student(char n[], int* p, int nr)
+{
+	strcpy_s(nume, n);  //copiaza din n in nume
+	nr_note = nr;
+	note = new int[nr_note];
+	for (int i = 0; i < nr_note; i++)
+		*(note + i) = p[i];
+}
+Student::Student(Student& ob1)   //constructor de copiere
+{
+	cout << "\nConstructor de copiere\n";
+	strcpy_s(nume, ob1.nume);//copiaza din ob1.nume in nume
+	nr_note = ob1.nr_note;
+	note = new int[nr_note];
+	for (int i = 0; i < nr_note; i++)
+		*(note + i) = ob1.note[i];
+}
+
+Student& Student::operator =(Student& s)//metoda de supraincarcare a operatorului de atribuire
+{
+	cout << "\nCopiere prin utilizarea supraincarcarii operatorului de atribuire!\n";
+	if (this != &s)
+	{
+		strcpy_s(nume, s.nume);
+		nr_note = s.nr_note;
+		for (int i = 0; i < nr_note; i++)
+			note[i] = s.note[i];
+	}
+	return *this;
+}
+void Student::setNote(char n[], int* p, int nr)
+{
+	strcpy_s(nume, n);
+	note = p;
+	nr_note = nr;
+}
+
+
+void Student::afis()
+{
+	cout << "\n Numele studentului este:" << nume;
+	cout << "\n Acesta a obtinut urmatoarele note:";
+	for (int i = 0; i < nr_note; i++)
+		cout << *(note + i) << " ";
+	cout << "\n";
+}
+
+Student::~Student(void)
+{
+	delete[]note;
+}
+
+/*
+Croitoru Rares, 05.05.2021, grupa 2011
+Lab 9 - 8.Să  se  implementeze  clasa Complexcare  supraîncarcă  operatorii  aritmetici  cu 
+scopul  de  a  efectua  adunări, scăderi, inmulţiri şi împărţiri de numere complexe(folosind 
+metode membre (+,-) și funcții friend(*,/)).Observaţie: numerele complexe vor fi definite ca 
+având o parte reală şi una imaginară, ambii coeficienţi fiind reprezentațiprin numere reale.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+class Complex
+{
+public:
+	double real;
+	double imag;
+	//constructor
+	Complex(double re=0, double img=0)
+	{
+		real = re;
+		imag = img;
+	}
+
+	//overloaders
+	friend Complex operator+ (Complex, Complex);
+	friend Complex operator- (Complex, Complex);
+	friend Complex operator* (Complex, Complex);
+	friend Complex operator/ (Complex, Complex);
+
+};
+
+int main()
+{
+	Complex z1(3, 5);
+	Complex z2(1, 4);
+	Complex rez;
+
+	cout << "\nAddition\n";
+	rez = z1 + z2;
+	cout << "Real part: " << rez.real << endl;
+	cout << "Imaginary part: " << rez.imag << endl;
+
+	cout << "\nSubstraction\n";
+	rez = z1 - z2;
+	cout << "Real part: " << rez.real << endl;
+	cout << "Imaginary part: " << rez.imag << endl;
+
+	cout << "\nMultiplication\n";
+	rez = z1 * z2;
+	cout << "Real part: " << rez.real << endl;
+	cout << "Imaginary part: " << rez.imag << endl;
+
+	cout << "\nDivision\n";
+	rez = z1 / z2;
+	cout << "Real part: " << rez.real << endl;
+	cout << "Imaginary part: " << rez.imag << endl;
+	return 0;
+}
+
+Complex operator+(Complex z1, Complex z2)
+{
+	Complex rez;
+	rez.real = z1.real + z2.real;
+	rez.imag = z1.imag + z2.imag;
+	return rez;
+}
+
+Complex operator-(Complex z1, Complex z2)
+{
+	Complex rez;
+	rez.real = z1.real - z2.real;
+	rez.imag = z1.imag - z2.imag;
+	return rez;
+}
+
+Complex operator*(Complex z1, Complex z2)
+{
+	Complex rez;
+	rez.real = z1.real * z2.real - z1.imag * z2.imag;
+	rez.imag = z1.real * z2.imag + z1.imag * z2.real;
+	return rez;
+}
+
+Complex operator/(Complex z1, Complex z2)
+{
+	Complex rez;
+	rez.real = (z1.real * z2.real + z1.imag * z2.imag) / (z2.real * z2.real + z2.imag * z2.imag);
+	rez.imag = (z2.real * z1.imag - z1.real * z2.imag) / (z2.real * z2.real + z2.imag * z2.imag);
+	return rez;
+}
+
+/*
+Croitoru Rares, 05.05.2021, grupa 2011
+Lab 9 - 9.Definţi o clasă numită Numbercare  are  o  variabilă private de  tip double. Clasa mai
+conţine un constructor explicit vid și unul cu un parametruşi o metodă accesor careafişează 
+valoarea variabileidin clasă. Scrieţi o clasă numită Mathemathics, care supraîncarcă operatorii 
+specifici operațiilor aritmetice elementare (+, -, *, /).Clasa  are  ca  atribut un  obiect  
+instanțiat din  prima  clasa.Operațiile  artimetice  se  efectuează  asupra datelor obținute 
+din obiectul de tip Number.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+class Number
+{
+private:
+	double num;
+public:
+	//Number();
+	Number(double x = 0)
+	{
+		num = x;
+	}
+	double getNum()
+	{
+		return num;
+	}
+
+	void setNum(double setter)
+	{
+		num = setter;
+	}
+};
+
+class Mathematics
+{
+private:
+	Number x;
+public:
+	friend Number operator+(Number, Number);
+	friend Number operator-(Number, Number);
+	friend Number operator*(Number, Number);
+	friend Number operator/(Number, Number);
+};
+
+int main()
+{
+	Number primul(5), doilea(3), treilea(0);
+	cout << "Numbers: " << primul.getNum() << ", " << doilea.getNum() << endl;
+
+	treilea = primul + doilea;
+	cout << "\nAdding: " << treilea.getNum() << endl;
+
+	treilea = primul - doilea;
+	cout << "\nSubstracting: " << treilea.getNum() << endl;
+
+	treilea = primul * doilea;
+	cout << "\nMultiplying: " << treilea.getNum() << endl;
+
+	treilea = primul / doilea;
+	cout << "\nDividing: " << treilea.getNum() << endl;
+	return 0;
+}
+
+Number operator+(Number primul, Number doilea)
+{
+	Number x;
+	x.setNum(primul.getNum() + doilea.getNum());
+	return x;
+}
+
+Number operator-(Number primul, Number doilea)
+{
+	Number x;
+	x.setNum(primul.getNum() - doilea.getNum());
+	return x;
+}
+
+Number operator*(Number primul, Number doilea)
+{
+	Number x;
+	x.setNum(primul.getNum() * doilea.getNum());
+	return x;
+}
+
+Number operator/(Number primul, Number doilea)
+{
+	Number x;
+	x.setNum(primul.getNum() / doilea.getNum());
+	return x;
+}

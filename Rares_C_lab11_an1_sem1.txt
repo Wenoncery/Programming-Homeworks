@@ -1,0 +1,670 @@
+/*
+Croitoru Rares, program care calculeaza suma elementelor negative dintr-un tablou unidimensional alocat dinamic
+14.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+
+float suma(float* p, int n);
+void citire(float* p, int n);
+
+int main()
+{
+	int n;
+	float* p;
+	printf("\nIntroduceti numarul de elemente:\n");
+	scanf_s("%d", &n);
+	p = (float*)malloc(n * sizeof(float));
+	citire(p, n);
+	printf("\nSuma elementelor negative este %f\n", suma(p, n));
+	free(p);
+	return 0;
+}
+
+float suma(float* p, int n)
+{
+	float s = 0;
+	for (int i = 0; i < n; i++)
+		*(p + i) < 0 ? s += *(p + i) : true;
+	return s;
+}
+
+void citire(float* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("v[%d]= ", i);
+		scanf_s("%f", (p + i));
+	}
+}
+
+/*
+Croitoru Rares, program care respecta cerinta:
+Fie o aplicaţie de gestiune distribuită care consideră că tratează activitatea din 5 oraşe diferite 
+în fiecare oraş fiind 3 birouri de vânzare pe teritoriul respectiv. Să se creeze în cadrul unei funcţii un 
+tablou de 5 pointeri către date de tip flotant, fiecare pointer din acest tablou referind o zonă în heap 
+alocată dinamic de 3 date flotante ce reprezintă situaţia vânzărilor la sfărşitul unei zile. 
+Se cere prelucrarea datelor din fiecare oraş, respectiv din fiecare birou de vânzare, prelucrare ce va include:
+-funcţie  care  permite  introducerea  datelor  pentru  cele  5  oraşe  şi  respectiv pentru fiecare 
+oraş pentru cele 3 magazine din oraş;
+-funcţie ce permite  determinarea totalului de vânzări pe fiecare oraş în parte, valoare pe care o va returna astfel 
+căîn programul principal se va calcula şi afişa media vânzărilor din toate cele 5 oraşe;
+-funcţie care va permite eliberarea spaţiului de memorie alocat dinamic astfel încât dacă aceeaşi 
+firmă are alte 3 magazine în cele 5 oraşe de profil diferit să poată realocaun  spaţiu  echivalent  pentru  
+noile  prelucrări  pe  care  le  va efectua.
+23.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+
+void creare(float* []);
+void citire(float* []);
+float calculare(float*);
+void eliberare(float* []);
+
+int main()
+{
+	float* v[5], sum = 0;
+	creare(v);
+	citire(v);
+	for (int i = 0; i < 5; i++)
+	{
+		sum += calculare(v[i]);
+	}
+	sum = (float)sum / 5.0;
+	printf("\nValoarea medie a vanzarilor este %.2f", sum);
+	eliberare(v);
+	return 0;
+}
+
+void creare(float* v[])
+{
+	for (int i = 0; i < 5; i++)
+		if (*(v + i) = (float*)malloc(3 * sizeof(float)));
+		else printf("Alocare esuata!");
+}
+
+void citire(float* v[])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		printf("\nOrasul %d ", i + 1);
+		for (int j = 0; j < 3; j++)
+		{
+			printf("\nSituatia vanzarilor din magazinul %d:", j + 1);
+			scanf_s("%f", (v[i] + j));
+		}
+		putchar('\n');
+	}
+}
+
+float calculare(float* v)
+{
+	float suma = 0;
+	for (int j = 0; j < 3; j++)
+		suma += *(v + j);
+	return suma;
+}
+
+void eliberare(float* v[])
+{
+	for (int i = 0; i < 5; i++)
+	{
+		free(v[i]);
+	}
+	free(v);
+}
+
+/*
+Croitoru Rares, program care citeste 2 matrici, le afiseaza si calculeaza suma lor (alocate dinamic)
+17.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+
+int* suma_mat(int* p1, int* p2, int* ps, int m, int n);
+void cit_mat(int* p, int m, int n);
+void afis_mat(int* p, int m, int n);
+
+int main()
+{
+	int* p1, * p2, m, n, x, y;
+	printf("\nIntroduceti nr de linii pt prima matrice: ");
+	scanf_s("%d", &m);
+	printf("\nIntroduceti nr de coloane pt prima matrice: ");
+	scanf_s("%d", &n);
+	printf("\nIntroduceti nr de linii pt a doua matrice: ");
+	scanf_s("%d", &x);
+	printf("\nIntroduceti nr de coloane pt a doua matrice: ");
+	scanf_s("%d", &y);
+	p1 = (int*)malloc(m * n * sizeof(int));
+	p2 = (int*)malloc(x * y * sizeof(int));
+	printf("\nIntroduceti elementele primei matrice:\n");
+	cit_mat(p1, m, n);
+	printf("\nIntroduceti elementele celei de-a doua matrice:\n");
+	cit_mat(p2, x, y);
+	printf("\nPrima matrice este:\n");
+	afis_mat(p1, m, n);
+	printf("\nA doua matrice este:\n");
+	afis_mat(p2, x, y);
+	if (m == x && n == y)
+	{
+		int* ps = (int*)malloc(m * n * sizeof(int));
+		ps = suma_mat(p1, p2, ps, m, n);
+		printf("\nSuma matricelor este:\n");
+		afis_mat(ps, m, n);
+		free(ps);
+	}
+	else
+		printf("\nMatricile nu au aceleasi dimensiuni, deci nu putem calcula matricea suma!\n");
+	free(p1);
+	free(p2);
+	return 0;
+}
+
+void cit_mat(int* p, int m, int n)
+{
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++)
+		{
+			printf("v[%d][%d]= ", i, j);
+			scanf_s("%d", (p + i * n + j));
+		}
+}
+
+int* suma_mat(int* p1, int* p2, int* ps, int m, int n)
+{
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++)
+			*(ps + i * n + j) = *(p1 + i * n + j) + *(p2 + i * n + j);
+	return ps;
+}
+
+void afis_mat(int* p, int m, int n)
+{
+	for (int i = 0; i < m; i++)
+	{
+		for (int j = 0; j < n; j++)
+			printf("%6d", *(p + i * n + j));
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares, program care alocă dinamic memorie pentru "n" şiruri de caractere, care se vor citi de la tastatură
+17.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+const int DIM = 100;
+
+int main()
+{
+	int n;
+	printf("\nIntroduceti numarul de siruri de caractere:");
+	scanf_s("%d", &n);
+	char* p[DIM];
+	for (int i = 0; i < n; i++)
+		p[i] = (char*)malloc(255 * sizeof(char) + 1);
+	for (int i = 0; i < n; i++)
+	{
+		printf("\nIntroduceti sirul cu numarul %d:\n", i);
+		scanf("%s", p[i]);
+	}
+	for (int i = 0; i < n; i++)
+		printf("\nSirul cu numarul %d este: %s ", i, p[i]);
+	for (int i = 0; i < n; i++)
+		free(p[i]);
+	return 0;
+}
+
+/*
+Croitoru Rares, program care respecta cerinta:
+Declaraţi un pointer global de tip float. În funcţia main()citiţi o valoare întreagă N care  reprezintă  dimensiunea
+tabloului  de  numere  reale.  Alocaţi  memoria  necesară pentru  stocarea  tabloului  şi  citiţi  elementele
+de  la  tastatură.  Determinaţi  valoarea medie a celor N elemente şi calculaţiMn=(sum(pow((xi-xmed),n))/N, unde n=1,2,3.
+Afişaţi  rezultatele  şi  apoi eliberaţi memoria.  Folosiţi funcţiile malloc()şi free().Generaţi numerele din  
+tablou folosind funcţia de bibliotecă care generează numere aleatoare  şi  determinaţi  pentru  acestea  media  
+valorilor  şi Mn. Realizati  aceeasi aplicatiefolosindoperatorii newşi delete.
+23.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <time.h>
+#include <stdio.h>
+#include <malloc.h>
+#include <math.h>
+#include <stdlib.h>
+
+float medie(float*, int);
+float Mn(float*, int, int);
+void getRandom(int N);
+
+float* p;
+
+int main()
+{
+	int N;
+	printf("\nIntroduceti lungimea sirului:");
+	scanf_s("%d", &N);
+	if (p = (float*)malloc(N * sizeof(float)))
+		getRandom(N);
+	else
+		printf("\nAlocare nereusita!\n");
+	printf("\n\nMN(T)=(sum(pow((xi-xmed),T))/N, unde T=1,2,3.\n\n ");
+	printf("\nValoarea medie din tablou este %.3f", medie(p, N));
+	printf("\nMN(1)=  %.3f", Mn(p, N, 1));
+	printf("\nMN(2)=  %.3f", Mn(p, N, 2));
+	printf("\nMN(3)=  %.3f", Mn(p, N, 3));
+	if (p)
+		free(p);
+	return 0;
+}
+
+void getRandom(int N)
+{
+	srand((unsigned)time(NULL));
+	for (int i = 0; i < N; i++)
+		*(p + i) = rand() % 101;
+}
+
+float medie(float* p, int n)
+{
+	float medie = 0;
+	for (int i = 0; i < n; i++) medie += p[i];
+	medie = medie / n;
+	return medie;
+}
+
+float Mn(float* p, int n, int k)
+{
+	float val = 0;
+	for (int i = 0; i < n; i++)
+		val += pow(p[i] - medie(p, n), k);
+	val = val / n;
+	return val;
+}
+
+/*
+Croitoru Rares, program care calculeaza determinantul unei matrice folosind regula lui Sarrus
+23.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+
+int main()
+{
+	int n, m, * p;
+	printf("\nIntr dim matricei din [1,3]:\n");
+	scanf_s("%d%d", &n, &m);
+	p = (int*)malloc(m * n * sizeof(int));
+	for (int i = 0; i < m; i++)
+		for (int j = 0; j < n; j++)
+		{
+			printf("a[%d][%d]=", i, j);
+			scanf_s("%d", (p + i * n + j));
+		}
+	int det = 0;
+	if (m == n)
+	{
+		if (m == 1)
+			det = *(p);
+		if (m == 2)
+			det = *p * *(p + 3) - *(p + 1) * *(p + 2);
+		if (m == 3)
+		{
+			det = det + *(p) * *(p + 4) * *(p + 8);
+			det = det + *(p + 1) * *(p + 5) * *(p + 6);
+			det = det + *(p + 2) * *(p + 3) * *(p + 7);
+			det = det - *(p + 2) * *(p + 4) * *(p + 6);
+			det = det - *(p) * *(p + 5) * *(p + 7);
+			det = det - *(p + 1) * *(p + 3) * *(p + 8);
+		}
+	}
+	printf("\nDeterminantul matricei este egal cu %d\n", det);
+	free(p);
+	return 0;
+}
+
+/*
+Croitoru Rares, program care alocă dinamic memorie necesară pentru stocarea a 10.000 de numere întregi.
+Programul iniţializează numerele cu valori aleatoare între 1 şi 100 (folosiţi funcţiile srand()şi/saurand()în VC++).
+Scrieţi o funcţie care afişează cele mai frecvente 10 numere şi numărul lor de apariţii în tabloul iniţial.
+17.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+#include <stdlib.h>
+#include <time.h>
+
+void getRandom(int* p, int* fr);
+void frecv(int* p, int* fr);
+
+int main()
+{
+	int* p, * fr;
+	p = (int*)malloc(10000 * sizeof(int));
+	fr = (int*)calloc(100, sizeof(int));
+	getRandom(p, fr);
+	//for (int i = 0; i < 100; i++)
+		//(fr + i) ? printf("nr %d de %4d\n", i + 1, *(fr + i)) : true;
+	frecv(p, fr);
+	free(p);
+	free(fr);
+	return 0;
+}
+
+void getRandom(int* p, int* fr)
+{
+	srand((unsigned)time(NULL));
+	for (int i = 0; i < 10000; i++)
+	{
+		*(p + i) = rand() % 100 + 1;
+		*(fr + *(p + i) - 1) = *(fr + *(p + i) - 1) + 1;
+	}
+}
+
+void frecv(int* p, int* fr)
+{
+	printf("\nS-au generat 10.000 numere aleatoare din intervalul [1,100].\n");
+	printf("\nCele mai frecvente 10 si numarul lor de aparitii sunt:\n");
+	for (int i = 0; i < 10; i++)
+	{
+		int max = *fr, poz = 0;
+		for (int j = 1; j < 100; j++)
+			if (*(fr + j) > max)
+			{
+				max = *(fr + j);
+				poz = j;
+			}
+		printf("\nNumarul %d apare de %d ori.\n", poz + 1, max);
+		*(fr + poz) = 0;
+	}
+}
+
+/*
+Croitoru Rares, program care aloca dinamic un tablou unidimensional, creeaza un nou tablou alocat dinamic
+format din radicalii elementelor primului tablou si afiseaza ambele tablouri
+14.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+#include <math.h>
+
+void suma(int* p, int n, float* r);
+void citire(int* p, int n);
+void afisare(int* p, int n, float* r);
+
+int main()
+{
+	int n;
+	int* p;
+	float *r;
+	printf("\nIntroduceti numarul de elemente:\n");
+	scanf_s("%d", &n);
+	p = (int*)malloc(n * sizeof(int));
+	r = (float*)malloc(n * sizeof(float));
+	citire(p, n);
+	suma(p, n, r);
+	afisare(p, n, r);
+	free(p);
+	free(r);
+	return 0;
+}
+
+void suma(int* p, int n, float* r)
+{
+	for (int i = 0; i < n; i++)
+		*(r + i) = (float)sqrt(*(p + i));
+}
+
+void citire(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		printf("v[%d]= ", i);
+		scanf_s("%d", (p + i));
+	}
+}
+
+void afisare(int* p, int n, float* r)
+{
+	printf("\nSirul initial este:\n");
+	for (int i = 0; i < n; i++)
+		printf("\np[%d]= %d", i, *(p + i));
+	printf("\nSirul al doilea este:\n");
+	for (int i = 0; i < n; i++)
+		printf("\nr[%d]= %f", i, *(r + i));
+}
+
+/*
+Croitoru Rares, program in care se citesc n şiruri de caractere şi se concatenează într-un alt şir,  alocat  dinamic.
+Repetaţi  operaţia  de  câte  ori  doreşte utilizatorul. 
+După  fiecare afişare a şirului obţinut prin concatenare eliberaţi memoria alocată dinamic.
+23.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <conio.h>
+#include <stdio.h>
+#include <malloc.h>
+#include <string.h>
+#define MAX 100
+
+int main()
+{
+	int n;
+	char car, s[MAX], * final;
+	do
+	{
+		printf("\nIntroduceti numarul de siruri: ");
+		scanf_s("%d", &n);
+		if (final = (char*)malloc(MAX * sizeof(char)))
+		{
+			memset(final, NULL, MAX);
+			for (int i = 0; i < n; i++)
+			{
+				scanf("%s", s);
+				strcat(final, s);
+			}
+		}
+		else printf("\n!Alocare esuata!\n");
+		printf("\n\nSirul concatenat este: "); 
+		printf("%s", final);
+		printf("\nDoriti sa continuati? \n(Apasati ENTER pentru continuare, sau alta tasta pentru a iesi).\n");
+		car = _getch();
+		if (final)
+			free(final);
+	} while (car == 13);
+	printf("\nAti iesit din program!\n");
+	return 0;
+}
+
+/*
+Croitoru Rares, program care alocă dinamic memorie pentru stocarea elementelor unei matrici de dimensiune nxn.
+Să se scrie o funcţie care calculează suma numerelor pozitive pare de sub diagonala principală şi o funcţie
+pentru afişarea  matricei. Să se afişeze matricea şi suma cerută. Eliberaţi memoria alocată dinamic.
+17.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+
+int suma_mat(int* p, int n);
+void cit_mat(int* p, int n);
+void afis_mat(int* p, int n);
+
+int main()
+{
+	int* p, n;
+	printf("\nIntroduceti dimensiunea matricei patratice: ");
+	scanf_s("%d", &n);
+	p = (int*)malloc(n * n * sizeof(int));
+	printf("\nIntroduceti elementele matricei:\n");
+	cit_mat(p, n);
+	printf("\nMatricea este:\n");
+	afis_mat(p, n);
+	printf("\nSuma elementelor pozitive pare de sub diagonala principala este %d\n", suma_mat(p, n));
+	free(p);
+	return 0;
+}
+
+void cit_mat(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+		for (int j = 0; j < n; j++)
+		{
+			printf("v[%d][%d]= ", i, j);
+			scanf_s("%d", (p + i * n + j));
+		}
+}
+
+int suma_mat(int* p, int n)
+{
+	int nr = 0;
+	for (int i = 0; i < n * n; i++)
+		(*(p + i) > 0) && (!(*(p + i) % 2)) && (i % n < i / n) ? nr += *(p + i) : true;
+	//elementele de sub diagonala principala respecta (i % n < i / n)
+	return nr;
+}
+
+void afis_mat(int* p, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n; j++)
+			printf("%6d", *(p + i * n + j));
+		putchar('\n');
+	}
+}
+
+/*
+Croitoru Rares, program care genereaza un tablou de pointeri către șiruri constante  folosind
+funcția strdup()sau  o altă funcție specifică. Afișați valorile pare din tablou.
+23.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+#include <string.h>
+
+int main()
+{
+	const char* s1[3] = { "String" ,"Fructe","Legume" };
+	for (int i = 0; i < 3; i = i + 2)
+	{
+		char* s2 = _strdup(s1[i]);
+		puts(s2);
+		free(s2);
+	}
+	return 0;
+}
+
+/*
+Croitoru Rares, program care respecta cerinta:
+Scrieți o aplicație C/C ++ care citește de la tastatură un tabloude până la 10 numere întregi valori în
+intervalul 2, ..., 10. Dimensiunea reală este introdusă de la tastatură, tabloul fiind alocat dinamic.
+Definiți două funcții care consideră tabloulcaparametru și  returnează  valorile  minime  și  maxime  din tablou. 
+Definiți  oaltă  funcție  care returnează valoareamedie a elementelor tablouluiintroduse.Definiți o altă funcție,
+Olympic_filter(...),care care considerătabloulinițial, returnând adresa unui tablou alocat dinamic fără prima 
+apariție a valorii minime și maxime.În main()se afișează, de asemenea, tablouinițial, valoarea minimă și maximă, 
+media elementelor tabloului inițial,elementele tablouluinou  obținute de  funcția Olympic_filter(... )si
+media obținută dupa aplicareafiltruluiolimpic.Validați  introducerea datelor în  conformitate  cu  cerințele 
+problemei  (dimensiunea tabloului, elementele introduse cu reluare). Operațiile cu elementele tablourilor se vor 
+face folosind pointeri.
+23.12.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <malloc.h>
+#define MAX 10
+
+int minim(int n, int * v);
+int maxim(int n, int * v);
+float Olympic_filter(int n, int* v, int minim_v, int maxim_v);
+
+int main()
+{
+	int* v, n;
+	printf("\nIntroduceti numarul de elemente din tablou (maxim 10): ");
+	scanf_s("%d", &n);
+	while (n < 1 || n>10)
+	{
+		printf("\nValoarea introdusa nu e corecta. Introduceti o valoare intre 1 si 10: ");
+		scanf_s("%d", &n);
+	}
+	v = (int*)calloc(n, sizeof(int));
+	printf("Introduceti elemente din intervalul [2,10]. \n");
+	for (int i = 0; i < n; i++)
+	{
+		printf("Introduceti elementul cu numarul %d: ", i + 1);
+		scanf_s("%d", v + i);
+		while (*(v+i) < 2 || *(v+i)>10)
+		{
+			printf("\nValoarea introdusa nu e corecta. Introduceti o valoare din intervalul [2,10]:");
+			scanf_s("%d", (v+i));
+		}
+	}
+	printf("Elementele tabloului sunt:\n");
+	for (int i = 0; i < n; i++)
+		printf("%d ", *(v+i));
+	printf("\nMinimul din tablou este %d\n", minim(n, v));
+	printf("\nMaximul din tablou este %d\n", maxim(n, v));
+	printf("\nMedia numerelor din tablou, fara prima aparitie a minimului si maximului este %.2f", Olympic_filter(n, v, minim(n, v), maxim(n, v)));
+	free(v);
+	return 0;
+}
+
+int minim(int n, int * v)
+{
+	int minimul = v[0];
+	for (int i = 1; i < n; i++)
+		*(v+i) < minimul ? minimul = *(v+i) : true;
+	return minimul;
+}
+
+int maxim(int n, int * v)
+{
+	int maximul = v[0];
+	for (int i = 1; i < n; i++)
+		*(v+i) > maximul ? maximul = *(v+i) : true;
+	return maximul;
+}
+
+float Olympic_filter(int n, int * v, int minim_v, int maxim_v)
+{
+	int suma = 0, nr = 0, ok1 = 1, ok2 = 1;
+	for (int i = 0; i < n; i++)
+	{
+		if (*(v+i) > minim_v && *(v+i) < maxim_v)
+		{
+			if (!((ok1 == 0 && *(v+i) == minim_v) || (ok2 == 0 && *(v+i) == maxim_v)))
+			{
+				suma += *(v+i);
+				nr++;
+			}
+			if (*(v+i) == minim_v)
+				ok1 = 0;
+			if (*(v+i) == maxim_v)
+				ok2 = 0;
+		}
+	}
+	return (float)suma / nr;
+}

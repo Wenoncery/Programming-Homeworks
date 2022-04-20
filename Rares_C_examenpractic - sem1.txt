@@ -1,0 +1,158 @@
+/*
+Croitoru Rares, 18.01.2021, grupa 2011
+Examen - proba practica
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+
+const int DIM = 100;
+
+struct Student
+{
+    char nume[31];
+    int nota;
+    double media;
+};
+
+void afisare(Student* b, int n);
+void citire(Student* b, int n);
+void afisare_fisier(int n, Student* p, char sir[50]);
+void scriere_fisier(int n, Student* p, char sir[50]);
+void desc_nota(Student* b, int n);
+void desc_medie(Student* b, int n);
+
+
+int main()
+{
+    int n;
+    do {
+        printf("\nIntroduceti numarul studentilor: ");
+        scanf_s("%d", &n);
+        if (n <= 2 || n >= DIM) printf("\nNumar invalid. Introduceti un numar din [3,%d]\n", DIM);
+    } while (n <= 2 || n >= DIM);
+    Student* p;
+    if (p = new Student[n]);
+    else
+    {
+        printf("Alocare nereusita!");
+        exit(1);
+    }
+    citire(p, n);
+    afisare(p, n);
+    desc_medie(p, n);
+    puts("\nStudentii ordonati descrescator dupa medie sunt:\n");
+    afisare(p, n);
+    desc_nota(p, n);
+    puts("\nStudentii ordonati descrescator dupa note sunt:\n");
+    afisare(p, n);
+    char sir[50];
+    printf("\nIntroduceti numele fisierului: ");
+    scanf_s("%s", sir, 50);
+    printf("\nStudentii au fost scrisi in fisierul binar %s\n", sir);
+    scriere_fisier(n, p, sir);
+    afisare_fisier(n, p, sir);
+    if (p)
+        delete[]p;
+    return 0;
+}
+
+void citire(Student* b, int n)
+{
+    printf("\nIntroduceti datele celor %d studenti.\n\n", n);
+    for (int i = 0; i < n; i++)
+    {
+        printf("\nIntroduceti numele studentlui %d: ", i + 1);
+        scanf_s("%s", (b[i].nume), 30);
+        printf("Introduceti nota studentului %d: ", i + 1);
+        scanf_s("%d", &(b[i].nota));
+        printf("Introduceti media studentului %d: ", i + 1);
+        scanf_s("%lf", &(b[i].media));
+    }
+}
+
+void desc_medie(Student* b, int n)
+{
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i; j < n; j++)
+        {
+            if ((b + i)->media < (b + j)->media)
+            {
+                Student x;
+                x = *(b + i);
+                *(b + i) = *(b + j);
+                *(b + j) = x;
+            }
+        }
+}
+
+void desc_nota(Student* b, int n)
+{
+    for (int i = 0; i < n - 1; i++)
+        for (int j = i; j < n; j++)
+        {
+            if ((b + i)->nota < (b + j)->nota)
+            {
+                Student x;
+                x = *(b + i);
+                *(b + i) = *(b + j);
+                *(b + j) = x;
+            }
+        }
+}
+
+void afisare(Student* b, int n)
+{
+    for (int i = 0; i < n; i++)
+    {
+        printf("%s\n", (b + i)->nume);
+        printf("%.02lf\n", (b + i)->media);
+        printf("%d\n", (b + i)->nota);
+        putchar('\n');
+    }
+}
+
+void scriere_fisier(int n, Student* p, char sir[50])
+{
+    FILE* file;
+    errno_t err;
+    err = fopen_s(&file, sir, "wb");
+    if (err != 0)
+    {
+        puts("\n N-am putut deschide fisierul.");
+        exit(1);
+    }
+    fseek(file, 0L, SEEK_SET);
+    for (int i = 0; i < n; i++)
+    {
+        fwrite(p + i, sizeof(Student), 1, file);
+    }
+    if (file)
+        fclose(file);
+}
+
+void afisare_fisier(int n, Student* p, char sir[50])
+{
+    FILE* file;
+    errno_t err;
+    err = fopen_s(&file, sir, "rb");
+    if (err != 0)
+    {
+        puts("\n N-am putut deschide fisierul.");
+        exit(1);
+    }
+    fseek(file, 0L, SEEK_SET);
+    puts("\nPrimii 3 studentim, cititi din fisierul binar, sunt:\n\n");
+    for (int i = 0; i < 3; i++)
+    {
+        Student x;
+        fread(&x, sizeof(Student), 1, file);
+        printf("%s\n", x.nume);
+        printf("%.02lf\n", x.media);
+        printf("%d\n", x.nota);
+        putchar('\n');
+    }
+    if (file)
+        fclose(file);
+}

@@ -1,0 +1,221 @@
+/*
+Croitoru Rares, 21.05.2021, grupa 2011
+Lab 12 - 1.Scrieţi un program C++ în care afişaţi diferite valori în zecimal, 
+octal şi hexazecimal. Afişaţi valorile  aliniate  la  dreapta,  respectiv  la 
+stângaîntr-un  câmp  de  afişare  cu  dimensiunea  15. Utilizaţi manipulatorul 
+setfill()pentru stabilirea caracterului de umplere şi metodele width()şi precision()
+pentru stabilirea dimensiunii câmpului de afişare şi a preciziei. 
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+const int nr = 150;
+
+int main()
+{
+	cout << dec << nr << endl;
+	cout << hex << nr << endl;
+	cout << oct << nr << endl;
+
+	cout << dec;
+	cout.setf(ios::right);
+	cout << "\nAliniere la dreapta!\n";
+	cout << setfill('X') << setw(15) << setprecision(4);
+	cout << nr;
+	cout.unsetf(ios::right);
+
+	cout.setf(ios::left);
+	cout << "\nAliniere la stanga!\n";
+	cout << setfill('X') << setw(15) << setprecision(4);
+	cout << nr;
+	return 0;
+}
+
+/*
+Croitoru Rares, 21.05.2021, grupa 2011
+Lab 12 - 2.Scrieti o aplicatie C++ in carese citescde la tastatura date
+de diferite tipuri, urmand a fi afisatepe ecran utilizand manipulatorii standard.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+const int DIM = 20;
+
+int main()
+{
+	float numar;
+	cout << "introduceti un numar: ";
+	cin >> numar;
+	cout << "numarul dupa folosirea manipulatorilor: ";
+	cout << setw(6) << setfill('^') << setprecision(3);
+	cout << numar;
+
+	char* sir = new char[DIM];
+	cout << "\n\nintroduceti un sir: ";
+	cin >> sir;
+	cout << "sirul dupa folosirea manipulatorilor: ";
+	cout << setw(DIM) << setfill('~');
+	cout << sir;
+
+	delete[] sir;
+	return 0;
+}
+
+/*
+Croitoru Rares, 21.05.2021, grupa 2011
+Lab 12 - 3.Considerati achizitia de date de la un dispozitiv electronic (10 date). 
+Afisati folosind un mesaj adecvat  datele  primite  considerand  un  formatminimal  
+(partea  intreaga).  Determinati  media acestor valori, iar daca depaseste un prag 
+stabilit anterior, afisati aceste date in format detaliat considerand ca avem date 
+de tip real, cu o precizie de 8 digiti.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+double media_aritm(double*);
+
+int main()
+{
+	double* datele = new double[10];
+	cout << "\nIntroduceti cele 10 valori: ";
+	for (int i = 0; i < 10; i++)
+		cin >> datele[i];
+
+	cout << "\nFormatul minim: \n";
+	for (int i = 0; i < 10; i++)
+	{
+		cout << setprecision(0);
+		cout << datele[i] << endl;
+	}
+
+	double val_max;
+	cout << "\nValoare maxima: ";
+	cin >> val_max;
+
+	cout << "\nMedia este: " << media_aritm(datele);
+
+	if (media_aritm(datele) > val_max)
+	{
+		cout << "\nMedia mai mare decat valoarea maxima, acesta este formatul numerelor: \n";
+		for (int i = 0; i < 10; i++)
+		{
+			cout << setprecision(8);
+			cout.setf(ios::scientific);
+			cout << datele[i] << endl;
+			cout.unsetf(ios::scientific);
+		}
+	}
+	delete[]datele;
+	return 0;
+}
+
+double media_aritm(double* sir)
+{
+	double suma = 0;
+	for (int i = 0; i < 10; i++)
+	{
+		suma += sir[i];
+	}
+	return suma / 10.0;
+}
+
+/*
+Croitoru Rares, 21.05.2021, grupa 2011
+Lab 12 - 4.Definiti o clasa numita MiscareAcceleratacare contine atributele private
+dc(distanta curenta, vc(viteza curenta)si a(acceleratia).Atributele dc, vc si a 
+sunt initializate in constructor iar valoarea lor este cea data de d0 si v0,
+si a0 ca si parametri. In clasa sunt supraincarcati operatorii de extractie si
+de inserție pentru a se puteainitializa si afisa caracteristicile unei instante.
+Implementati metoda determinaMiscareacare re-calculeaza variabilele dc si vc, pe 
+baza unui numar de secunde primit ca parametru si avand in vedere legea 
+miscarii rectilinii uniform accelerate cu acceleratie a0.Instantiati clasa si apoi 
+folositi membrii definiti. 
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+class MiscareAccelerata {
+private:
+	int dc, vc, a;
+public:
+	MiscareAccelerata(int d0 = 0, int v0 = 0, int a0 = 0) {
+		dc = d0;
+		vc = v0;
+		a = a0;
+	}
+	friend void determineMovement(int timpul, int accel, MiscareAccelerata& obiect1);
+	friend ostream& operator<< (ostream& stream, MiscareAccelerata& obiect1);
+	friend istream& operator>> (istream& stream, MiscareAccelerata& obiect1);
+	void setVC(int x) {
+		vc = x;
+	}
+	void setDC(int x) {
+		dc = x;
+	}
+	int getVC() {
+		return vc;
+	}
+	int getDC() {
+		return dc;
+	}
+	int getA() {
+		return a;
+	}
+};
+
+int main()
+{
+	int timpul, a0;
+	cout << "intr timpul: ";
+	cin >> timpul;
+	cout << "intr acceleratia: ";
+	cin >> a0;
+	MiscareAccelerata obiect1;
+	cin >> obiect1;
+	cout << obiect1;
+	determineMovement(timpul, a0, obiect1);
+	cout << obiect1;
+	return 0;
+}
+
+void determineMovement(int timpul, int accel, MiscareAccelerata& obiect1)
+{
+	obiect1.setVC(timpul * accel);
+	obiect1.setDC(timpul * obiect1.getVC());
+}
+
+ostream& operator<< (ostream& stream, MiscareAccelerata& obiect1) 
+{
+	stream << "\nValorile din obiect1: ";
+	stream << "\nDistanta: " << obiect1.dc;
+	stream << "\nViteza: " << obiect1.vc;
+	stream << "\nAcceleratia: " << obiect1.a;
+	stream << "\n";
+	return stream;
+}
+
+istream& operator>> (istream& stream, MiscareAccelerata& obiect1) 
+{
+	cout << "\nintr distanta dc: ";
+	stream >> obiect1.dc;
+	cout << "intr viteza vc: ";
+	stream >> obiect1.vc;
+	cout << "intr acceleratia a: ";
+	stream >> obiect1.a;
+	return stream;
+}

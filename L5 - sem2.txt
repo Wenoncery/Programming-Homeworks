@@ -1,0 +1,507 @@
+/*
+Croitoru Rares, 31.03.2021, grupa 2011
+Lab 5 - 1.Să se scrie o aplicaţie C/C++ care foloseşte o structură de date cu numele Scerc care
+conţine razaca şi o variabilă de tip întreg. Într-un program C/C++, declaraţi două variabilec1,
+c2de tip Scercşi calculaţi aria şi circumferinţa lor pentru valori alerazei introduse de la tastatură
+cu două metode definite. Aceleaşi cerinţe vor fi implementate înaceiasi aplicaţie folosind o clasă 
+numită Cerccu atributul razade tipprivate, clasăce va conţine pe lângă metodele de calcul ale ariei
+şi perimetrului un constructor explicit cu parametru, undestructor şi o metodă de afişare raza.
+Extindeţi aplicaţia astfel încât să definiţi mai multe obiecte de tip Cercla care să accesaţi 
+metodele specifice folosind obiectele instanţiate, pointeri la obiecte, referinţe la obiecte. 
+Introduceţi o metodă de tip accesor, getRaza()care permite accesul la data privată razasi care
+sa o folositi pentru a afisa in main()raza obiectelor.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<iostream>
+
+using namespace std;
+
+const double PI = 3.1415;
+
+class Scircle {
+private:
+    int radius;
+public:
+    Scircle(int);
+    ~Scircle();
+    int getRadius();
+    double calcArea();
+    double calcPerimeter();
+    void setRadius(int);
+};
+
+int main()
+{
+    Scircle c1 = Scircle(14), c2 = Scircle(20);
+    cout << "Area of c1: " << c1.calcArea() << endl;
+    cout << "Area of c2: " << c2.calcArea() << endl;
+    cout << "Perimeter of c1: " << c1.calcPerimeter() << endl;
+    cout << "Perimeter of c2: " << c2.calcPerimeter() << endl;
+    cout << "Radius of c1: " << c1.getRadius() << endl;
+    cout << "Radius of c2: " << c2.getRadius() << endl;
+    cout << "\n";
+    Scircle* pc = new Scircle(20);
+    if (pc == NULL)
+    {
+        exit(1);
+    }
+    cout << "Area of circle using pointer: " << pc->calcArea() << endl;
+    cout << "Perimeter of circle using pointer: " << pc->calcPerimeter() << endl;
+    cout << "The radius is: " << pc->getRadius() << endl;
+    cout << "\n";
+    delete pc;
+    Scircle& pcref = c1;
+    pcref.setRadius(15);
+    cout << "New radius is: " << pcref.getRadius() << endl;
+    cout << "Area is: " << pcref.calcArea() << endl;
+    cout << "Perimeter: " << pcref.calcPerimeter() << endl;
+    cout << "\n\n";
+    return 0;
+}
+
+Scircle::Scircle(int val)
+{
+    radius = val;
+};
+double Scircle::calcArea()
+{
+    return PI * radius * radius;
+}
+double Scircle::calcPerimeter()
+{
+    return 2 * PI * radius;
+}
+Scircle::~Scircle()
+{
+    cout << "Destructor was called\n";
+}
+int Scircle::getRadius()
+{
+    return radius;
+}
+void Scircle::setRadius(int x)
+{
+    radius = x;
+}
+
+/*
+Croitoru Rares, 31.03.2021, grupa 2011
+Lab 5 - 2.Să se definească o clasă numită myString(într-un fişier numit strClass.h) care să fie compusă 
+din metodele specifice care efectuează următoarele operaţii pe şiruri de caractere:
+-determină lungimea şirului primit la intrare.
+-determină ultima poziţie de apariţie a unui anumit caracter din şirul de intrare.
+-returnează şirul primit laintrare, scris cu caractere majuscule.
+-returnează şirul primit laintrare, scris cu caractere minuscule.
+-returnează numărul de apariţii ale unui anumit caracter din şirul primit.
+*/
+
+//strClass.h
+
+#pragma once
+
+class myString {
+private:
+	char s[256];
+public:
+	void getString(char x[256]);
+	void displayString();
+	int getlen();
+	int ult_apar(char);
+	void uppcase();
+	void lowcase();
+	int nrapar(char);
+	~myString();
+};
+
+void myString::displayString() {
+	cout << s;
+}
+
+void myString::getString(char x[256]) {
+	strcpy(s, x);
+}
+
+int myString::getlen() {
+	int i = 0;
+	while (s[i] != '\0')
+		i++;
+	return i;
+}
+
+int myString::ult_apar(char x) {
+	int poz = -1;
+	for (int i = 0; i < strlen(s); i++)
+		if (s[i] == x)
+			poz = i;
+	return poz;
+}
+
+void myString::uppcase() {
+	for (int i = 0; i < strlen(s); i++)
+		s[i] = toupper(s[i]);
+}
+
+void myString::lowcase() {
+	for (int i = 0; i < strlen(s); i++)
+		s[i] = tolower(s[i]);
+}
+
+int myString::nrapar(char x) {
+	int nr = 0;
+	for (int i = 0; i < strlen(s); i++)
+		if (s[i] == x)
+			nr++;
+	return nr;
+}
+
+myString::~myString() {
+	cout << "Destructor was called!\n";
+}
+
+/*
+Croitoru Rares, 31.03.2021, grupa 2011
+Lab 5 - 3.Să se scrie programul care citeşte de la tastatură un şir de maxim 10 caractere 
+şi care, pe baza clasei implementate anterior, efectuează asupra şirului de intrare 
+operaţiile definite în cadrul clasei.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <string.h>
+using namespace std;
+#include "strClass.h"
+
+int main()
+{
+    myString s;
+    char sir[256], c;
+    cout << "Introduceti un sir de caractere: ";
+    cin.getline(sir, 256);
+    s.getString(sir);
+    cout << "Introduceti un caracter: ";
+    cin >> c;
+    cout << "Lungimea sirului initial este " << s.getlen()<<endl;
+    cout << "Ultima pozitie a caracterului in sir este " << s.ult_apar(c)<<endl;
+    s.uppcase();
+    cout << "Sirul cu caractere majuscule: ";
+    s.displayString();
+    cout << endl;
+    s.lowcase();
+    cout << "Sirul cu caractere minuscule: ";
+    s.displayString();
+    cout << endl << "Numarul de aparitii ale caracterului este " << s.nrapar(c) << endl;
+    return 0;
+}
+
+/*
+Croitoru Rares, 31.03.2021, grupa 2011
+Lab 5 - 4.Să se scrie programul care implementează clasa Numarcu un atribut de tip int val şi care, în
+cadrul funcţiei main(), declară un obiect  de  tipul clasei şi apoi un pointer la acesta, prin intermediul
+cărora se va afişa pe ecran rezultatul adunării a două numere de  tip Numarcu valorile preluate  de  la 
+tastatură in  cadrul  unor  obiecte Numar. Implementatimetodaint suma_nr(Numar)care  realizeaza  suma în
+cadrul clasei şi o returneaza ca un int, metoda care insumeaza  cele  doua  obiecte(curent  si  parametru).
+Implementati  metoda  in  cadrul  clasei  si alta metoda cu acelas scop, dar nume diferit, inafara clasei.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+
+using namespace std;
+
+class Numar {
+private:
+	int a, b;
+public:
+	void setNumar(int x, int y) {
+		a = x;
+		b = y;
+	}
+	int sum_nr() {
+		return a + b;
+	}
+	int sum_Numar();
+};
+
+int Numar::sum_Numar() {
+	return a + b;
+}
+
+int main() 
+{
+	int x, y;
+	Numar nr1, * p = &nr1;
+	cout << "Introduceti numerele: ";
+	cin >> x >> y;
+	p->setNumar(x, y);
+	cout << "\nSuma cu metoda inauntrul clasei: ";
+	cout << "\nPentru numerele " << x << " si " << y << " este: " << p->sum_nr();
+	cout << "\n\nSuma prin metoda definita in afara clasei: ";
+	cout << "\nPentru numerele " << x << " si " << y << " este: " << p->sum_Numar();
+	return 0;
+}
+
+/*
+Croitoru Rares, 31.03.2021, grupa 2011
+Lab 5 - 5.Să se definească o clasă care implementeazămetodele:
+-int plus(int x, int y), care returnează suma valorilor primite la apelul metodei;
+-int minus(int x, int y), care returnează diferenta valorilor primite la apelul metodei;
+-int inmultit(int x, int y), care returnează produsulvalorilor primite la apelul metodei;
+-float impartit(int x, int y), care returnează catulvalorilor primite la apelul metodei;
+şi apoi să se scrie aplicaţia care utilizează această clasă. Considerati si cazul in care 
+in cadrul clasei aveti atributele de tip int xsi y,caz in care metodele nu vor mai avea 
+parametrii.Observaţie: În cazul împărţirii, trebuie verificată validitatea operaţiei 
+(împărţitor diferit de zero). În cazul în care operaţia este imposibilă, trebuie afişat un mesaj de eroare.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+using namespace std;
+
+class Operations
+{
+private:
+	int x, y;
+public:
+	void getValori(int x, int y)
+	{
+		x = x;
+		y = y;
+	}
+
+	int plus()
+	{
+		return x + y;
+	}
+
+	int minus()
+	{
+		return x - y;
+	}
+
+	int inmultit()
+	{
+		return x * y;
+	}
+
+	float impartit()
+	{
+		if (y == 0)
+		{
+			cout << "\nY nu poate fi 0!";
+			exit(1);
+		}
+		if (y != 0) 
+			return x / y;
+	}
+};
+
+int main()
+{
+	Operations Obj;
+	Obj.getValori(0, 2);
+	cout << "Suma: " << Obj.plus();
+	cout << "\nDiferenta: " << Obj.minus();
+	cout << "\nProdusul: " << Obj.inmultit();
+	cout << "\nCatul: " << Obj.impartit();
+	return 0;
+}
+
+/*
+Croitoru Rares, 31.03.2021, grupa 2011
+Lab 5 - 6.Să se creeze o clasă care să modeleze numerele complexe. Scrieţi un program 
+care utilizează această clasă si defineste doua obiecte afisand caracteristicile obiectelor 
+si rezultatele operatiilor definite(Folositi exemplul 3 cu rezultat in obiectul curent).
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+using namespace std;
+
+class Complex
+{
+private:
+	float re;
+	float im;
+
+public:
+	void setters(float r, float i) {
+		re = r;
+		im = i;
+	}
+
+	float getRe()
+	{
+		return re;
+	}
+
+	float getIm()
+	{
+		return im;
+
+	}
+	double getModul()
+	{
+		return sqrt((double)re * re + (double)im * im);
+	}
+
+	double getFaza()
+	{
+		return atan2((double)re, (double)im);
+	}
+
+};
+
+
+
+int main()
+{
+	Complex obj1, obj2;
+	obj1.setters(7, 4);
+	cout << "Numarul este " << obj1.getRe() << " + " << obj1.getIm() << "i";
+	cout << "\n\nModulul: " << obj1.getModul();
+	cout << "\nFaza: " << obj1.getFaza();
+	obj2.setters(15, 10);
+	cout << "\nNumarul este " << obj2.getRe() << " + " << obj2.getIm() << "i";
+	cout << "\n\nModulul: " << obj2.getModul();
+	cout << "\nFaza: " << obj2.getFaza();
+	return 0;
+}
+
+/*
+Croitoru Rares, 31.03.2021, grupa 2011
+Lab 5 - 7.Să se scrie un program care implementează clasa Aritmetica cu două atribute a și b de  tip
+numeric (int, floatsau double)si metode setter si getter adecvate.Implementați metoda suma()în interiorul
+clasei și metoda diferenta()ce apartine de asemenea clasei,dar e definitaîn afara clasei, metode  care
+vor fi apelate  prin intermediul unui obiect  al  clasei Aritmetica. În funcțiaprincipală main()instanțiați
+trei obiecte de tip Aritmetica.Modificati atributele a si b la fiecare obiect  in  parte  folsind  metodele
+de  tip  setter.  Aplicați asupra lor operațiile de adunare și scădere pe care le-ați implementat prin metodele
+suma()și diferenta().Metodele  returneaza valorile numerice  corespunzatoare  operatiei  folosind cele  doua  
+atribute  ale  claseivalori ce le veti  afisa  in main().La  fiecare  grup  de  operatiiadunare/scadereafisati 
+valorile  atributelor obiectului folosind metodele de tip getter.
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+using namespace std;
+
+class Aritmetica
+{
+private:
+	int a, b;
+
+public:
+	void setter(int n1, int n2)
+	{
+		a = n1;
+		b = n2;
+	}
+	int getA()
+	{
+		return a;
+	}
+	int getB()
+	{
+		return b;
+	}
+	int suma()
+	{
+		return a + b;
+	}
+	int diferenta();
+};
+
+int Aritmetica::diferenta()
+{
+	return a - b;
+}
+
+int main()
+{
+	Aritmetica Obj1, Obj2, Obj3;
+	Obj1.setter(15, 9);
+	Obj2.setter(55, 3);
+	Obj3.setter(44, 19);
+	cout << "Suma:\n";
+	cout << "\n" << Obj1.suma();
+	cout << "\n" << Obj2.suma();
+	cout << "\n" << Obj3.suma();
+	cout << "\n\nDiferenta:\n";
+	cout << "\n" << Obj1.diferenta();
+	cout << "\n" << Obj2.diferenta();
+	cout << "\n" << Obj3.diferenta();
+	return 0;
+}
+
+/*
+Croitoru Rares, 31.03.2021, grupa 2011
+Lab 5 - 9.Declarati o clasa Fractiecare are doua atribute intregi de tip private a si b 
+pentru numarator si numitor.  Definiti doua  metode  de  tip set()respectiv get()pentru
+fiecare  din atributele  clasei. Instantiati  doua  obiecte  de  tip Fractiesi  afisati 
+atributele  initiale  si  cele  obtinute  dupa folosirea  metodelor set().  Definiti  o  
+metoda simplifica()apelata  cuun  obiect pentrucare  au fost  apelate  metodele  de  tip 
+set(),care  determina  divizorii  numitorului  si  numaratorului,  ii afiseaza si realizeaza 
+simplificarea fractiei, afisand in metoda si rezultatul obtinut(noua fractie numarator/numitor).
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+using namespace std;
+
+class Fractie
+{
+private:
+	int a, b;
+
+public:
+	int getA()
+	{
+		return a;
+	}
+	int getB()
+	{
+		return b;
+	}
+	void setA(int set)
+	{
+		a = set;
+	}
+	void setB(int set)
+	{
+		b = set;
+	}
+	void simplifica();
+};
+
+void Fractie::simplifica()
+{
+	int temp = 1;
+	cout << "Divizori: \n";
+	int	numar = Fractie::getA();
+	int	numit = Fractie::getB();
+
+	for (int i = 1; i <= numit; i++)
+	{
+		if ((numar % i == 0) && (numit % i == 0))
+		{
+			temp = i;
+			cout << temp << endl;
+		}
+	}
+	Fractie::setA(numar / temp);
+	Fractie::setB(numit / temp);
+	cout << "\nNoua fractie este: " << Fractie::getA() << "/" << Fractie::getB();
+}
+
+int main()
+{
+	Fractie f1, f2;
+	f1.setA(6);
+	f1.setB(3);
+	f2.setA(28);
+	f2.setB(6);
+	f1.simplifica();
+	cout << endl;
+	f2.simplifica();
+	return 0;
+}

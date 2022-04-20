@@ -1,0 +1,497 @@
+/*
+Croitoru Rares, program de calculare a ariei dreptunghiului si verificare a diagonalei
+17.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+int main()
+{
+	double a, b, c, aria;
+
+	printf("\n Introduceti valoarea primei laturi: ");
+	scanf_s("%lf", &a);
+	printf("\n Introduceti valoarea laturii 2: ");
+	scanf_s("%lf", &b);
+	printf("\n Introduceti valoarea pentru diagonala: ");
+	scanf_s("%lf", &c);
+	aria = a * b;
+	printf("Aria dreptunghiului este %lf \n", aria);
+	if (c * c == a * a + b * b)
+		printf("\n Valoarea introdusa corespunde valorii diagonalei.");
+	else
+		printf("\n Valoarea introdusa nu corespunde valorii diagonalei.");
+	return 0;
+}
+
+/*
+Croitoru Rares, program care determina daca un numar este patrat perfect
+17.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include <math.h>
+
+int main()
+{
+	int x;
+	printf("Introduceti un numar: ");
+	scanf_s("%d", &x);
+	sqrt(x) == floor(sqrt(x)) ? printf("Numarul este patrat perfect.") : printf("Numarul nu este patrat perfect.");
+	return 0;
+}
+
+/*
+Croitoru Rares, program care realizeaza a^n folosind inmultiri repetate
+17.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+int main()
+{
+	int a=4, n,x=1;
+	printf("Introduceti de cate ori sa se inmulteasca numarul 4: ");
+	scanf_s("%d", &n);
+	for (int i = 1; i <= n; i++)
+		x *= a;
+	printf("Numarul obtinut in urma inmultirii repetate de %d ori a numarului 4 este: %d\n",n, x);
+	return 0;
+}
+
+/*
+Croitoru Rares, program care calculeaza n! -n factorial
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+long factorial(long n);
+
+int main()
+{
+	long n;
+	printf("\nIntroduceti n: ");
+	scanf_s("%d", &n);
+	printf("%d", factorial(n));
+	return 0;
+}
+
+long factorial(long n)
+{
+	long p = 1;
+	for (long i = 2; i <= n; i++)
+		p *= i;
+	return p;
+}
+
+/*
+Croitoru Rares, program care afiseaza cel mai mare nr prim mai mic decat n si toate nr prime mai mici decat n
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+bool prim(long n);
+void mareprim(long n);
+void toateprim(long n);
+
+int main()
+{
+	long n;
+	printf("Va rugam introduceti o valoare intreaga: ");
+	scanf_s("%d", &n);
+	mareprim(n);
+	toateprim(n);
+	return 0;
+}
+
+bool prim(long n)
+{
+	if (n == 1 || n == 0 || (n % 2 == 0 && n != 2))
+		return 0;
+	else for (long i = 2; i <= n / 2; i = i + 2)
+		if (n % i == 0)
+			return 0;
+	return 1;
+}
+
+void mareprim(long n)
+{
+	long i;
+	for (i = n - 1; i >= 2; i--)
+		if (prim(i))
+		{
+			printf("Cel mai mare numar prim mai mic decat %d este %d\n", n, i);
+			i=0;
+		}
+	n<3 ? printf("Nu exista un numar prim mai mic decat %d\n", n) : true;
+}
+
+void toateprim(long n)
+{
+	bool ok = 1;
+	for (long i=2;i<n;i++)
+		if (prim(i))
+		{
+			ok ? printf("Toate numerele prime mai mici decat %d, in ordine crescatoare sunt: \n", n) : true;
+			printf("%d ", i);
+			ok = 0;
+		}
+}
+
+/*
+Croitoru Rares, program care calculeaza cmmdc al 2 numere intregi
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+long cmmdc(long a, long b);
+
+int main()
+{
+	long a, b;
+	printf("Va rugam introduceti prima valoare intreaga: ");
+	scanf_s("%d", &a);
+	printf("Va rugam introduceti cea de-a doua valoare intreaga: ");
+	scanf_s("%d", &b);
+	printf("Cmmdc al celor 2 numere este %d \n", cmmdc(a, b));
+	return 0;
+}
+
+long cmmdc(long a, long b)
+{
+	while (a != b)
+		if (a > b)
+			a = a - b;
+		else
+			b = b - a;
+	return a;
+}
+
+/*
+Croitoru Rares, program care afiseaza toti divizorii unui numar
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+void divizori(long n);
+
+int main()
+{
+	long x;
+	printf("\nVa rugam introduceti un numar: ");
+	scanf_s("%d", &x);
+	divizori(x);
+	return 0;
+}//end main
+
+void divizori(long n)
+{
+	if (n != 0)
+	{
+		printf("\nDivizorii numarului %d sunt: \n", n);
+		n < 0 ? n = -n : true;
+		printf("-%d ", n);
+		for (long i = -n / 2; i <= -1; i++)
+			!(n % i) ? printf("%d ", i) : true;
+		for (long i = 1; i <= n / 2; i++)
+			!(n % i) ? printf("%d ", i) : true;
+		printf("%d\n", n);
+	}
+	else printf("\nToate numerele existente, in afara de 0, il divid pe 0.\n");
+}
+
+/*
+Croitoru Rares, program care calculeaza produsul, folosind adunari repetate
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+int main()
+{
+	long a, b, x = 0;
+	printf("introduceti primul numar: ");
+	scanf_s("%d", &a);
+	printf("introduceti al doilea numar: ");
+	scanf_s("%d", &b);
+	if (a < 0)
+	{
+		a = -a;
+		b = -b;
+	}
+	for (long i = 1; i <= a; i++)
+		x += b;
+	printf("Produsul celor 2 numere, folosind adunari repetate, este egal cu %d", x);
+	return 0;
+}
+
+/*
+Croitoru Rares, program care calculeaza catul, folosind scaderi repetate
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+int main()
+{
+	long a, b, x = 0;
+	printf("introduceti deimpartitul: ");
+	scanf_s("%d", &a);
+	printf("introduceti impartitorul (diferit de 0): ");
+	scanf_s("%d", &b);
+	while (a >= b)
+	{
+		x++;
+		a -= b;
+	}
+	printf("Catul celor 2 numere, folosind scaderi repetate, este egal cu %d\n", x);
+	return 0;
+}
+
+/*
+Croitoru Rares, program care calculeaza numarul de cifre al unui numar intreg
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<math.h>
+
+int main()
+{
+	long n;
+	printf("\nVa rugam introduceti o valoare intreaga: ");
+	scanf_s("%d", &n);
+	if (n != 0)
+	{
+		n < 0 ? n = -n : true;//-n are acelasi nr de cifre ca n
+		printf("\nNumarul are %d cifre.\n", (long)floor(log10(n)) + 1);
+		//floor(log10(nr))+1 determina cate cifre are un numar
+	}
+	else printf("\nNumarul are o cifra.\n");//si numarul 0 are o cifra
+	return 0;
+}
+
+/*
+Croitoru Rares, program care afiseaza numerele impare dintr-un sir cu n elemente citite de la tastatura
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(int &n, long v[100]);
+void impar(int n, long v[100]);
+
+int main()
+{
+	int n;
+	long v[100];
+	citire(n, v);
+	printf("\nNumerele impare din sir sunt: \n");
+	impar(n, v);
+	return 0;
+}
+
+void citire(int &n, long v[100])
+{
+	printf("\nIntroduceti cate numere se vor citi: ");
+	scanf_s("%d", &n);
+	for (int i = 0; i < n; i++)
+	{
+		printf("\nIntroduceti numarul %d: ", i+1);
+		scanf_s("%d", &v[i]);
+	}
+}
+
+void impar(int n, long v[100])
+{
+	if (n > 0)
+		impar(n - 1, v);
+	v[n] % 2 ? printf("%d ", v[n]) : true;
+}
+
+/*
+Croitoru Rares, program care afiseaza suma care il depaseste pe un nr citit, si numarul de elemente care au format suma
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+int main()
+{
+	int n, nr = 0;
+	double x, s = 0;
+	printf("Introduceti numarul n: ");
+	scanf_s("%d", &n);
+	while (s <= n)
+	{
+		printf("Introduceti un numar pentru suma: ");
+		scanf_s("%lf", &x);
+		s += x;
+		++nr;
+	}
+	printf("Suma numerelor este %.2lf \n\nNumarul numerelor citite este %d\n", s, nr);
+	return 0;
+}
+
+/*
+Croitoru Rares, program care calculeaza cmmmc al 2 numere
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+int cmmdc(int a, int b);
+int cmmmc(int a, int b);
+
+int main()
+{
+	int x, y;
+	printf("\nIntroduceti o valoare: ");
+	scanf_s("%d", &x);
+	printf("\nIntroduceti inca o valoare: ");
+	scanf_s("%d", &y);
+	printf("\nCmmmc al celor 2 numere este egal cu %d\n", cmmmc(x, y));
+	return 0;
+}
+
+int cmmdc(int a, int b)
+{
+	while (a != b)
+	{
+		if (a > b)
+			a = a - b;
+		else
+			b = b - a;
+	}
+	return a;
+}
+
+int cmmmc(int a, int b)
+{
+	return a * b / cmmdc(a, b);
+}
+
+/*
+Croitoru Rares, program care afiseaza numerele divizibile cu 3 dintr-un sir citit de la tastatura
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+
+void citire(int &n, int v[100]);
+void afisare(int n, int v[100]);
+
+int main()
+{
+	int n, v[100];
+	citire(n, v);
+	afisare(n, v);
+	return 0;
+}
+
+void citire(int &n, int v[100])
+{
+	printf("\nIntroduceti numarul de numere din sir: ");
+	scanf_s("%d", &n);
+	for (int i = 0; i < n; i++)
+	{
+		printf("Introduceti elementul cu nr %d din sir:", i + 1);
+		scanf_s("%d", &v[i]);
+	}
+}
+
+void afisare (int n, int v[100])
+{
+	printf("\nNumerele divizibile cu 3 sunt: \n");
+	for (int i = 0; i < n; i++)
+		v[i] % 3 == 0 ? printf("%d ", v[i]) : true;
+}
+
+/*
+Croitoru Rares, program care afiseaza un caracter citit de la tastatura pe n linii si n coloane
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+
+void matrice(int n, char ch);
+void facere(int &x, char &ch);
+
+int main()
+{
+	int x;
+	char ch;
+	facere(x, ch);
+	return 0;
+}
+
+void matrice(int n, char ch)
+{
+	for (int i = 1; i <= n; i++)
+	{
+		for (int j = 1; j <= n; j++)
+			printf("%c ", ch);
+		printf("\n");
+	}
+}
+
+void facere(int &x, char &ch)
+{
+	printf("\nIntroduceti numarul de linii si coloane: ");
+	scanf_s("%d", &x);
+	printf("\nIntroduceti caracterul de afisat: ");
+	scanf(" %c", &ch);
+	printf("\nMatricea va fi: \n\n");
+	matrice(x, ch);
+}
+
+/*
+Croitoru Rares, program care citeste numere pana la apasarea ESCAPE si afiseaza media numerelor impare pozitive citite
+21.11.2020, grupa 2011
+*/
+
+#define _CRT_SECURE_NO_WARNINGS
+#include<stdio.h>
+#include<conio.h>
+
+int main()
+{
+	int x, s = 0, nr = 0;
+	char c;
+	printf("\nIntroduceti numere si apoi tasta escape.\n");
+	while (true)
+	{
+		printf("\nIntroduceti un numar: ");
+		scanf_s("%d", &x);
+		if (x > 0 && x % 2 == 1)
+		{
+			s += x;
+			nr++;
+		}
+		printf("\nApasati orice tasta pt a continua sau escape pentru a finaliza. \n");
+		c = _getch();
+		if (c == 27)
+			break;
+	}
+	printf("\nMedia numerelor impare pozitive este %lf\n", (double)s / nr);
+	return 0;
+}
